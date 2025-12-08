@@ -15,5 +15,6 @@ export const LOCALES_SETTING: LocaleSetting = {
   },
   ja: {
     label: "日本語",
+    lang: "ja-JP",
   },
 };

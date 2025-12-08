@@ -1,5 +1,8 @@
 site-name: Blue Triangle's Website
-site-description: "Blue Trinagle's personal hobby website."
+site-description: "Blue Trinagle's personal hobby website. Mainly explores frontend, server, and minecraft."
 
 homepage:
   profile: Profile
+
+error: 
+  untranslated: <Untranslated>
