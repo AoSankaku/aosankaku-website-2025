@@ -3,10 +3,10 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div>
-  <Icon name="twemoji:flag-japan" width=" 36" height=" 36" />
-  <Icon name="mdi:blog" width=" 36" height=" 36" />
+  <Icon name="twemoji:flag-japan" width="36" height="36" />
+  <Icon name="mdi:blog" width="36" height="36" />
   <button id="themeToggle" aria-label="Toggle light and dark theme">
-    <Icon class="sun" name="solar:sun-2-bold" width=" 36" height=" 36" />
+    <Icon class="sun" name="solar:sun-2-bold" width="36" height="36" />
     <Icon class="moon" name="solar:moon-bold" width="36" height="36" />
   </button>
 </div>
@@ -55,16 +55,19 @@ import { Icon } from "astro-icon/components";
   }
 
   .sun {
-    fill: black;
+    color: black;
+    display: none;
   }
   .moon {
-    fill: transparent;
+    color: black;
+    display: block;
   }
 
   :global(.dark) .sun {
-    fill: transparent;
+    color: white;
+    display: block;
   }
   :global(.dark) .moon {
-    fill: white;
+    display: none;
   }
 </style>
