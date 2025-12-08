@@ -1,11 +1,17 @@
 ---
+import { LOCALES, type Lang } from "@/types/i18n";
 import { Image } from "astro:assets";
 import profileicon from "../assets/profileicon250.png";
+import { useTranslator } from "@/i18n/utils";
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
+<p>{t("homepage.profile.title")}</p>
 <div>
   <Image src={profileicon} alt="プロフィール画像" />
 </div>
+<p>{t("homepage.profile.name")}</p>
+<p>{t("homepage.profile.subname")}</p>
 
 <style>
   div {

@@ -1,0 +1,23 @@
+---
+import { LOCALES, type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+const t = useTranslator(Astro.currentLocale as Lang);
+---
+
+<h1>
+  {t("hidden-h1")}
+</h1>
+
+<style>
+  h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>

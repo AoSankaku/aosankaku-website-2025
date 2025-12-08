@@ -2,7 +2,11 @@ site-name: AoSankaku's Iroiro Blog
 site-description: "あおさんかくが個人で運営している趣味サイトです。フロントエンド、サーバー、マインクラフトについて主に色々書いています。"
 
 homepage:
-  profile: プロフィール
+  hidden-h1: AoSankaku's Iroiro Blog フロントエンド、サーバー、マインクラフト
+  profile: 
+    title: プロフィール
+    name: あおさんかく
+    subname: Blue Triangle
 
 error: 
   untranslated: <未翻訳>

@@ -2,7 +2,7 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 import type { Multilingual } from "@/types/i18n";
-import { tAll } from "@/lib/i18n";
+import { tAll } from "@/i18n/utils";
 
 export const SITE_TITLE: string | Multilingual = tAll("site-name");
 

@@ -4,7 +4,7 @@ const translations: Record<string, any> = {};
 
 for (const locale of Object.keys(LOCALES_SETTING)) {
   try {
-    translations[locale] = (await import(`./locales/${locale}.yml`)).default;
+    translations[locale] = (await import(`../i18n/${locale}.yml`)).default;
   } catch (err) {
     console.warn(`[i18n] Missing translation file for locale "${locale}"`);
     translations[locale] = {};
