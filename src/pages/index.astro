@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import SpinningTetrahedron from "../components/SpinningTetrahedron.astro";
 import ProfileIcon from "../components/ProfileIcon.astro";
 import HiddenH1 from "@/components/HiddenH1.astro";
+import RandomVideo from "@/components/RandomVideo.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -13,5 +14,17 @@ import HiddenH1 from "@/components/HiddenH1.astro";
 	<Header />
 	<HiddenH1 />
 	<SpinningTetrahedron />
+	<RandomVideo />
 	<ProfileIcon />
 </Layout>
+
+<style>
+	:global(h2) {
+		text-align: center;
+		margin: 60px 20px 20px 20px;
+	}
+
+	:global(h1, h2, h3, h4, h5, h6, p) {
+		word-break: auto-phrase;
+	}
+</style>

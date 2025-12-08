@@ -1,0 +1,84 @@
+---
+import { YouTube } from "astro-embed";
+import { type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+const t = useTranslator(Astro.currentLocale as Lang);
+import { getMonthlySeed } from "@/utils/random";
+import { seededRandom } from "three/src/math/MathUtils.js";
+
+const videoIds = [
+  "nZtMQEcHaMg", // 間違いだらけのきみを見せて
+  "p1CzZ698LMM", // 湾岸通り
+  "v1YDUnSMKUk", // 風上
+  "zKk9zeVO38k", // 街の汀
+  "MJPxyPE5Z3Y", // 型落ち
+  "BXboO2UdJk4", // ジベタトラベル
+  "VHgiGuVdLEA", // ロンリーユニバース
+  "MvNZ8drPVzA", // ペイメント
+  "BZ6LGjR4E8s", // 忘れるくじら
+  "7C-Ls05GLXU", // Survey Ship
+  "nWNKuoMTYNU", // ぼくらの自転車
+  "4houEo1_9mI", // Good Morning
+  "J-OkuS3Yslw", // 徒花の涙
+  "1UwtJzu7MM8", // Here comes the exiles
+  "FRm1GyK-LkA", // In Originium Covered Fields
+  "5BannlJXsus", // Dramatic Walk
+  "owmJ3D7Ubl0", // 夢続きドロップス
+  "8PVwoWoxUz8", // Youthful Finder
+  "Onxo_lBjAPc", // Simple
+  "LhH98PzSJKs", // ゼロの国
+  "Gp5Wh0Ikjio", // Dress
+  "NYzQVwmOb8I", // SUN
+  "7RWmT7r6p8Q", // Starlight
+  "6RrYb5nNrEI", // 夕焼けグレイスとオレンジドロップ
+  "GFccVvyACm4", // よりみち
+  "4OeLlWLodOY", // 天使
+  "dO5rq6BNAYw", // morse
+  "q6KeXbtxYTo", // flare
+  "T670plyMvvA", // 相対感覚丑ノ刻
+  "l4o9lyTY6AQ", // summer history
+  "C_qu2aP-E_c", // Clouds
+  "ABsRQk5W_s0", // On My Way Home Rhapsody
+  "QdJaBpLqzQ4", // 花と記憶
+  "741Mt64oOLU", // 2018
+  "ql7JTTHWbqY", // ゲジ
+  "IE3Ws5gpooY", // Liekki (Hatsune Miku)
+  "dmA2Od7J6ic", // はらぺこのルベル
+  "zCJLG07QHj0", // 君と魔法の物語を
+  "16GbAKc1yms", // ブラックゴールド
+  "Q3RSYXSrspc", // 弦
+  "A6QjHKulI3w", // セントライト
+  "j7rohSzhfqE", // before the sun
+  "U-JEzERLw0A", // NightGale
+  "lNxATBuwNgY", // ウルトラプラネット
+  "tb22OKCYjAw", // プラネタリウム
+  "jdQWia3fwMU", // Again
+  "yE6y4QCodK8", // かはたれのうた
+  "cj3itYWAw9A", // よるをおどる
+  "bDqlrqweZFo", // 夜を飼う
+  "Gexhf83mq3M", // 蛍
+  "rXyOJph-9IU", // hubble
+];
+
+const seed = getMonthlySeed();
+const random = seededRandom(seed);
+const randomIndex = Math.floor(random * videoIds.length);
+const randomVideoId = videoIds[randomIndex];
+---
+
+<h2>{t("homepage.random-video")}</h2>
+<div>
+  <YouTube class="video" id={randomVideoId} posterQuality="high" />
+</div>
+<p>{t("homepage.random-video-desc")}</p>
+
+<style>
+  .video {
+    margin: auto;
+    text-align: center;
+  }
+
+  p {
+    text-align: center;
+  }
+</style>
