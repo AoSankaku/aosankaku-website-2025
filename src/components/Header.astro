@@ -1,0 +1,70 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div>
+  <Icon name="twemoji:flag-japan" width=" 36" height=" 36" />
+  <Icon name="mdi:blog" width=" 36" height=" 36" />
+  <button id="themeToggle" aria-label="Toggle light and dark theme">
+    <Icon class="sun" name="solar:sun-2-bold" width=" 36" height=" 36" />
+    <Icon class="moon" name="solar:moon-bold" width="36" height="36" />
+  </button>
+</div>
+
+<script>
+  // Get the HTML element and button
+  const htmlElement = document.documentElement;
+  const themeToggle = document.getElementById("themeToggle") as HTMLElement;
+
+  // Function to save and apply the new theme
+  function toggleAndSetTheme() {
+    // Check if the HTML element currently has the 'dark' class
+    const isDark = htmlElement.classList.contains("dark");
+
+    // Determine the new theme
+    const newTheme = isDark ? "light" : "dark";
+
+    // Toggle the class on the HTML element
+    if (newTheme === "dark") {
+      htmlElement.classList.add("dark");
+    } else {
+      htmlElement.classList.remove("dark");
+    }
+
+    // Save the new preference to localStorage
+    localStorage.setItem("theme", newTheme);
+  }
+
+  // Button Click Listener
+  themeToggle.addEventListener("click", toggleAndSetTheme);
+</script>
+
+<style>
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #themeToggle {
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .sun {
+    fill: black;
+  }
+  .moon {
+    fill: transparent;
+  }
+
+  :global(.dark) .sun {
+    fill: transparent;
+  }
+  :global(.dark) .moon {
+    fill: white;
+  }
+</style>
