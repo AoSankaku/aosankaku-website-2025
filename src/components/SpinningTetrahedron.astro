@@ -38,6 +38,21 @@
   pointLight.position.set(0, 6, 7);
   scene.add(pointLight);
 
+  const updateLightIntensity = () => {
+    const isDarkMode = document.documentElement.classList.contains("dark");
+
+    let newIntensity;
+    if (isDarkMode) {
+      newIntensity = 0.3;
+    } else {
+      newIntensity = 8;
+    }
+
+    ambientLight.intensity = newIntensity;
+  };
+
+  updateLightIntensity();
+
   const radius = 1;
   const detail = 0;
   const geometry = new THREE.TetrahedronGeometry(radius, detail);
@@ -77,6 +92,10 @@
     camera.aspect = newWidth / newHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(newWidth, newHeight, false);
+  });
+
+  document.addEventListener("click", () => {
+    updateLightIntensity();
   });
 
   animate();
