@@ -1,11 +1,26 @@
+---
+import {
+	useTranslations,
+	getLocalePaths,
+	LOCALES,
+	DEFAULT_LOCALE,
+	type Lang,
+} from "@/types/i18n";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+
+const t = useTranslations(Astro.currentLocale as Lang);
+const langs = Object.keys(LOCALES);
+const defaultLocale = DEFAULT_LOCALE;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang={DEFAULT_LOCALE}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{t(SITE_TITLE)}</title>
 		<script is:inline>
 			const getThemePreference = () => {
 				// 1. Check for saved preference in localStorage
@@ -34,6 +49,8 @@
 		</script>
 	</head>
 	<body>
+		<p>{DEFAULT_LOCALE}</p>
+		<p>{JSON.stringify(SITE_TITLE)}</p>
 		<slot />
 	</body>
 </html>

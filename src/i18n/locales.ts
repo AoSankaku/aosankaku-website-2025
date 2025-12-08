@@ -1,4 +1,4 @@
-export const DEFAULT_LOCALE_SETTING: string = "en";
+export const DEFAULT_LOCALE_SETTING: string = "ja";
 
 interface LocaleSetting {
   [key: Lowercase<string>]: {
@@ -9,12 +9,12 @@ interface LocaleSetting {
 }
 
 export const LOCALES_SETTING: LocaleSetting = {
-  en: {
-    label: "English",
-    lang: "en-US",
-  },
   ja: {
     label: "日本語",
     lang: "ja-JP",
+  },
+  en: {
+    label: "English",
+    lang: "en-US",
   },
 };
