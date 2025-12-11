@@ -9,7 +9,7 @@ import { Icon } from "astro-icon/components";
     name="icon-park-twotone:triangle"
     color="var(--color-primary)"
     size="1.3em"
-    class="icon"
+    class="footer-icon"
     id="rainbow-icon"
   />
 </footer>
@@ -31,7 +31,7 @@ import { Icon } from "astro-icon/components";
     padding-bottom: 100px;
   }
 
-  .icon {
+  .footer-icon {
     display: inline;
     vertical-align: text-bottom;
     cursor: pointer;
@@ -69,13 +69,8 @@ import { Icon } from "astro-icon/components";
     }
   }
 
-  .icon.rainbow {
+  .footer-icon.rainbow {
     color: transparent;
     animation: rainbow-cycle 3s linear infinite;
-  }
-
-  .icon.rainbow :global(svg, svg path, svg g) {
-    fill: currentColor !important;
-    stroke: currentColor !important;
   }
 </style>
