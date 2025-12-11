@@ -1,10 +1,10 @@
 ---
 import {
-	useTranslations,
-	getLocalePaths,
-	LOCALES,
-	DEFAULT_LOCALE,
-	type Lang,
+  useTranslations,
+  getLocalePaths,
+  LOCALES,
+  DEFAULT_LOCALE,
+  type Lang,
 } from "@/types/i18n";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 
@@ -15,79 +15,83 @@ const defaultLocale = DEFAULT_LOCALE;
 
 <!doctype html>
 <html lang={DEFAULT_LOCALE}>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{t(SITE_TITLE)}</title>
-		<script is:inline>
-			const getThemePreference = () => {
-				// 1. Check for saved preference in localStorage
-				if (
-					typeof localStorage !== "undefined" &&
-					localStorage.getItem("theme")
-				) {
-					return localStorage.getItem("theme");
-				}
-				// 2. Fallback to system preference
-				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-					return "dark";
-				}
-				// 3. Default to 'light'
-				return "light";
-			};
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{t(SITE_TITLE)}</title>
+    <script is:inline>
+      const getThemePreference = () => {
+        // 1. Check for saved preference in localStorage
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        // 2. Fallback to system preference
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        // 3. Default to 'light'
+        return "light";
+      };
 
-			const theme = getThemePreference();
+      const theme = getThemePreference();
 
-			// Apply the class before the browser renders the content
-			if (theme === "dark") {
-				document.documentElement.classList.add("dark");
-			} else {
-				document.documentElement.classList.remove("dark");
-			}
-		</script>
-	</head>
-	<body>
-		<slot />
-	</body>
+      // Apply the class before the browser renders the content
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		background-color: var(--color-background);
-		color: var(--color-text);
-		transition:
-			background-color 0.5s ease,
-			color 0.5s ease;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition:
+      background-color 0.5s ease,
+      color 0.5s ease;
+  }
 
-	:root,
-	.dark {
-		transition:
-			--color-text 0.3s ease,
-			--color-background 0.3s ease,
-			--color-primary 0.3s ease,
-			--color-surface 0.3s ease;
-	}
+  :global(a) {
+    color: var(--color-primary);
+  }
 
-	/* Light theme */
-	:root {
-		--color-text: #1a1a1a;
-		--color-background: #ffffff;
-		--color-primary: #007bff;
-		--color-surface: #f4f4f4;
-	}
+  :root,
+  .dark {
+    transition:
+      --color-text 0.3s ease,
+      --color-background 0.3s ease,
+      --color-primary 0.3s ease,
+      --color-surface 0.3s ease;
+  }
 
-	/* Dark theme */
-	.dark {
-		--color-text: #f0f0f0;
-		--color-background: #1a1a1a;
-		--color-primary: #8ab4f8;
-		--color-surface: #2c2c2c;
-	}
+  /* Light theme */
+  :root {
+    --color-text: #1a1a1a;
+    --color-background: #ffffff;
+    --color-primary: #007bff;
+    --color-surface: #f4f4f4;
+  }
+
+  /* Dark theme */
+  .dark {
+    --color-text: #f0f0f0;
+    --color-background: #1a1a1a;
+    --color-primary: #8ab4f8;
+    --color-surface: #2c2c2c;
+  }
 </style>
