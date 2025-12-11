@@ -1,7 +1,27 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
 <footer>
   Copyright © 2025 Blue Triangle<br />
-  Made with <a href="https://astro.build" target="_blank">Astro</a> and ❤
+  Made with <a href="https://astro.build" target="_blank">Astro</a> and
+  <Icon
+    name="icon-park-twotone:triangle"
+    color="var(--color-primary)"
+    size="1.3em"
+    class="icon"
+    id="rainbow-icon"
+  />
 </footer>
+
+<script>
+  const icon = document.getElementById("rainbow-icon");
+  if (icon) {
+    icon.addEventListener("click", () => {
+      icon.classList.toggle("rainbow");
+    });
+  }
+</script>
 
 <style>
   footer {
@@ -9,5 +29,53 @@
     line-height: 2.1em;
     text-align: center;
     padding-bottom: 100px;
+  }
+
+  .icon {
+    display: inline;
+    vertical-align: text-bottom;
+    cursor: pointer;
+    transition: color 0.5s ease;
+  }
+
+  /* ------------------------------------- */
+  /* 🌈 RAINBOW ANIMATION STYLES 🌈 */
+  /* ------------------------------------- */
+
+  @keyframes rainbow-cycle {
+    0% {
+      color: var(--color-primary);
+    }
+    15% {
+      color: #0000ff;
+    }
+    30% {
+      color: #9400d3;
+    }
+    45% {
+      color: #ff0000;
+    }
+    60% {
+      color: #ff7f00;
+    }
+    75% {
+      color: #ffff00;
+    }
+    85% {
+      color: #00ff00;
+    }
+    100% {
+      color: var(--color-primary);
+    }
+  }
+
+  .icon.rainbow {
+    color: transparent;
+    animation: rainbow-cycle 3s linear infinite;
+  }
+
+  .icon.rainbow :global(svg, svg path, svg g) {
+    fill: currentColor !important;
+    stroke: currentColor !important;
   }
 </style>
