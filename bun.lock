@@ -7,7 +7,9 @@
         "@astrojs/react": "^4.4.2",
         "@iconify-json/carbon": "^1.2.15",
         "@iconify-json/fa6-brands": "^1.2.6",
+        "@iconify-json/fluent-emoji-high-contrast": "^1.2.5",
         "@iconify-json/game-icons": "^1.2.3",
+        "@iconify-json/hugeicons": "^1.2.20",
         "@iconify-json/icon-park-twotone": "^1.2.4",
         "@iconify-json/logos": "^1.2.10",
         "@iconify-json/mdi": "^1.2.3",
@@ -189,7 +191,11 @@
 
     "@iconify-json/fa6-brands": ["@iconify-json/fa6-brands@1.2.6", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-twL3X4KWcxAhbc1vz/mIDsVr+CAItk1/EIfxKUVQtpv6O4eydk5KNYqTZWdvJNHGInUgd6vKg21aWfVgb5DXEg=="],
 
+    "@iconify-json/fluent-emoji-high-contrast": ["@iconify-json/fluent-emoji-high-contrast@1.2.5", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-z+bl7GZDrJaX/jf9oaJ+eCvP8XaorGJc6aLNY9JibWDQHKSYRcuq+9YRst8usFExw0pEXIMCuoM1iK8TtsSsZQ=="],
+
     "@iconify-json/game-icons": ["@iconify-json/game-icons@1.2.3", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-JnrHQjNI/2nJxlnEAPlU4ta6S44XTX7RJnBUyBV27GbVhJhfwpY9kqzkTqmPs4nyAJaGUjZwOcnBUQ9Dc21nlA=="],
+
+    "@iconify-json/hugeicons": ["@iconify-json/hugeicons@1.2.20", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-ZyEw6QUR13+f3ofw+RfHd5T9kx/WT70hSm6+pPJOtV4Xeag//nSDa7fksEgxxYer95TF8N8mX0IurDpOT67Vjg=="],
 
     "@iconify-json/icon-park-twotone": ["@iconify-json/icon-park-twotone@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-AhnGngG6DxuIZMsz4FMrv0QWTRM/CZ3NnEeaceV6psKSgt/axW+hft7oQ6pIAFN9KB95Kp3hbJuhlhG3ao60eQ=="],
 
