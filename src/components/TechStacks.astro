@@ -1,0 +1,40 @@
+---
+import ProfileInfoContainer from "./atoms/ProfileInfoContainer.astro";
+import { Icon } from "astro-icon/components";
+const iconSize = "2.8em";
+---
+
+<ProfileInfoContainer
+  title="使ったことあるやつ"
+  icon="mdi:code-tags"
+  boxType="large"
+>
+  <div class="tech-stack-icons">
+    <Icon name="skill-icons:html" size={iconSize} />
+    <Icon name="skill-icons:javascript" size={iconSize} />
+    <Icon name="skill-icons:typescript" size={iconSize} />
+    <Icon name="skill-icons:react-dark" size={iconSize} />
+    <Icon name="skill-icons:gatsby" size={iconSize} />
+    <Icon name="skill-icons:graphql-dark" size={iconSize} />
+    <Icon name="skill-icons:astro" size={iconSize} />
+    <Icon name="skill-icons:vite-dark" size={iconSize} />
+    <Icon name="skill-icons:materialui-dark" size={iconSize} />
+    <Icon name="skill-icons:nodejs-dark" size={iconSize} />
+    <Icon name="skill-icons:npm-dark" size={iconSize} />
+    <Icon name="skill-icons:yarn-dark" size={iconSize} />
+    <Icon name="skill-icons:bun-dark" size={iconSize} />
+    <Icon name="skill-icons:python-dark" size={iconSize} />
+    <Icon name="simple-icons:googleappsscript" size={iconSize} />
+    <Icon name="skill-icons:netlify-dark" size={iconSize} />
+    <Icon name="skill-icons:cloudflare-dark" size={iconSize} />
+    <Icon name="skill-icons:git" size={iconSize} />
+    <Icon name="skill-icons:github-dark" size={iconSize} />
+    <Icon name="skill-icons:linux-light" size={iconSize} />
+    <Icon name="skill-icons:ubuntu-dark" size={iconSize} />
+    <Icon name="skill-icons:mint-dark" size={iconSize} />
+    <Icon name="skill-icons:markdown-dark" size={iconSize} />
+    <Icon name="skill-icons:vscode-dark" size={iconSize} />
+    <Icon name="skill-icons:obsidian-dark" size={iconSize} />
+    <Icon name="skill-icons:vim-dark" size={iconSize} />
+  </div>
+</ProfileInfoContainer>
