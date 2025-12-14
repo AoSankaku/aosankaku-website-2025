@@ -1,0 +1,100 @@
+---
+import { Icon } from "astro-icon/components";
+import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
+---
+
+<div>
+  <ProfileSocialIconButton
+    icon_name="simple-icons:misskey"
+    size={50}
+    label="Misskey"
+    link="https://misskey.systems/@ao_sankaku"
+  />
+  <Icon name="simple-icons:github" width={50} height={50} />
+  <Icon name="simple-icons:twitter" width={50} height={50} />
+  <Icon
+    name="icon-park-twotone:more-two"
+    id="show_more_icons_button"
+    width={50}
+    height={50}
+  />
+</div>
+<div id="more_social_icons">
+  <Icon name="fa6-brands:square-x-twitter" width={50} height={50} />
+  <Icon name="fa6-brands:youtube" width={50} height={50} />
+  <Icon name="fa6-brands:bluesky" width={50} height={50} />
+  <Icon name="simple-icons:keybase" width={50} height={50} />
+  <Icon name="simple-icons:zenn" width={50} height={50} />
+  <Icon name="simple-icons:qiita" width={50} height={50} />
+  <Icon name="simple-icons:note" width={50} height={50} />
+</div>
+
+<style>
+  div {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 20px;
+  }
+
+  #show_more_icons_button {
+    cursor: pointer;
+  }
+
+  #more_social_icons {
+    animation: slideDown 0.3s ease-out;
+    margin-top: 20px;
+  }
+
+  #more_social_icons.hidden {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+</style>
+
+<script>
+  const showMoreIconsButton = document.getElementById(
+    "show_more_icons_button",
+  ) as HTMLElement;
+  const moreSocialIcons = document.getElementById(
+    "more_social_icons",
+  ) as HTMLElement;
+
+  moreSocialIcons.style.display = "none";
+  moreSocialIcons.classList.add("hidden");
+
+  showMoreIconsButton.addEventListener("click", () => {
+    if (moreSocialIcons.style.display === "none") {
+      moreSocialIcons.style.display = "flex";
+      moreSocialIcons.classList.remove("hidden");
+    } else {
+      moreSocialIcons.classList.add("hidden");
+      setTimeout(() => {
+        moreSocialIcons.style.display = "none";
+      }, 300);
+    }
+  });
+</script>

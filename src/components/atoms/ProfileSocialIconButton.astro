@@ -1,0 +1,39 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  link?: string;
+  icon_name: string;
+  size: number;
+  label: string;
+}
+
+const { link, icon_name, size, label } = Astro.props;
+
+const isLink = link && link.length > 0;
+---
+
+<li class="icon_element">
+  {
+    isLink ? (
+      <a href={link} aria-label={label}>
+        <Icon name={icon_name} width={size} height={size} />
+      </a>
+    ) : (
+      <Icon name={icon_name} width={size} height={size} aria-label={label} />
+    )
+  }
+</li>
+
+<style>
+  .icon_element {
+    list-style: none;
+  }
+
+  .icon_element > a,
+  .icon_element > svg {
+    display: block;
+    line-height: 0;
+    color: var(--color-text);
+  }
+</style>

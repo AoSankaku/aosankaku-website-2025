@@ -1,0 +1,26 @@
+---
+import ProfileInfoContainer from "./atoms/ProfileInfoContainer.astro";
+---
+
+<ProfileInfoContainer title="基本情報" icon="carbon:user-profile-alt">
+  <ul>
+    <li>性別：図形のため存在しない</li>
+    <li>年齢：お酒が飲める歳<br />（強いとは言ってない）</li>
+    <li>職業：フロントエンドエンジニア<br />その他いろいろ</li>
+  </ul>
+</ProfileInfoContainer>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    text-align: left;
+  }
+
+  li {
+    margin-bottom: 8px;
+    text-indent: -3em;
+    padding-left: 4em;
+  }
+</style>

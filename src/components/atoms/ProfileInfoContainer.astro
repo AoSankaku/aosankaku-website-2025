@@ -1,0 +1,69 @@
+---
+import { Icon } from "astro-icon/components";
+
+// Define the component props
+interface Props {
+  title: string;
+  boxType?: "large" | "normal";
+  icon: string;
+}
+
+const { title, boxType = "normal", icon } = Astro.props;
+
+// 💡 Determine CSS class based on boxType prop
+const boxClass =
+  boxType === "large" ? "outer-container large" : "outer-container normal";
+---
+
+<section class="info-box-wrapper">
+  <h2><Icon name={icon} />{title}</h2>
+
+  {/* 💡 The HTML element using the dynamic class */}
+  <div class={boxClass}>
+    {/* 💡 The slot renders any content passed into the component */}
+    <slot />
+  </div>
+</section>
+
+<style>
+  /* Local styles for the Astro wrapper */
+  .info-box-wrapper {
+    padding: 0 20px;
+    margin: 80px auto 40px;
+    text-align: center;
+    max-width: 380px;
+  }
+
+  h2 {
+    margin: 0 auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-background);
+    transform: translateY(0.6em);
+    padding: 0 1em;
+  }
+
+  /* --- Base Container Styles --- */
+  .outer-container {
+    border: 2px solid var(--color-text);
+    padding: 32px 10px 16px;
+    background-color: var(--color-background); /* Use theme variable */
+    border-radius: 8px;
+    transition: all 0.3s ease; /* Ensure smooth theme transition */
+  }
+
+  /* --- Normal Box (Default) --- */
+  .outer-container.normal {
+    min-height: 100px;
+  }
+
+  /* --- Large Box (Specific Styles) --- */
+  .outer-container.large {
+    min-height: 250px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Example of a visual difference for the large box */
+    border-color: var(--color-primary);
+  }
+</style>
