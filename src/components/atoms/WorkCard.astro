@@ -1,0 +1,53 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  title: string;
+  icon: string;
+}
+
+const { title, icon } = Astro.props;
+---
+
+<section class={`info-box-wrapper`}>
+  <div class="outer-container normal">
+    <h2>
+      <Icon name={icon} color="var(--color-background)" size="7.5em" />{title}
+    </h2>
+    <slot />
+  </div>
+</section>
+
+<style>
+  /* Local styles for the Astro wrapper */
+  .info-box-wrapper {
+    padding: 0 20px;
+    margin: 0 0 18px;
+    text-align: center;
+    width: 280px;
+    box-sizing: border-box;
+  }
+
+  h2 {
+    margin: 16px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 70px;
+    transform: translateY(0.6em);
+    padding: 0 1em;
+  }
+
+  /* --- Base Container Styles --- */
+  .outer-container {
+    border: none;
+    padding: 32px 10px 16px;
+    background-color: var(--color-text-sub);
+    color: var(--color-background);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    height: 520px;
+  }
+</style>
