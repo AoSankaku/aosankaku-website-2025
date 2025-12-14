@@ -1,0 +1,59 @@
+---
+import ProfileInfoContainer from "../components/atoms/ProfileInfoContainer.astro";
+---
+
+<div class="container">
+  <ProfileInfoContainer
+    title="サイト作りとか"
+    icon="streamline-sharp:graphic-template-website-ui-remix"
+  >
+    <p>
+      このサイトも自分で1から錬成しました。<br />
+      Reactが好きですが、Next.jsもGatsbyもi18n入れた静的ビルドがしんどいのでAstro使っています。
+    </p>
+  </ProfileInfoContainer>
+
+  <ProfileInfoContainer
+    title="その他趣味開発"
+    icon="streamline-sharp:browser-code-2-solid"
+  >
+    <p>思いついたときに作りたいものを作っています。そういう人間です。</p>
+  </ProfileInfoContainer>
+
+  <ProfileInfoContainer title="英語がﾁｮｯﾄできます" icon="mdi:alphabet-e-box">
+    <p>1級取れてないのがコンプレックスです。モチベがありません。</p>
+  </ProfileInfoContainer>
+
+  <ProfileInfoContainer title="趣味が狭いです" icon="mdi:minecraft">
+    <p>
+      基本マイクラばっかりしてます。気が向いたときにアークナイツやコンパスとかやってたりします。
+    </p>
+  </ProfileInfoContainer>
+
+  <ProfileInfoContainer
+    title="ダル絡み歓迎"
+    icon="fluent-emoji-high-contrast:call-me-hand"
+  >
+    <p>
+      リアクションシューティング・いいね爆撃や頭を使わない会話も好きです。でも常識的な範囲でね。初対面なのにグイグイ来られるのは誰でも嫌だよ。
+    </p>
+  </ProfileInfoContainer>
+
+  <ProfileInfoContainer
+    title="音楽の好み"
+    icon="mdi:music-box-multiple-outline"
+  >
+    <p>
+      電子音、声を張ったボーカル、ギターが好きです。そういう曲を薦めると喜びます。
+    </p>
+  </ProfileInfoContainer>
+</div>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    max-width: 980px;
+    margin: 60px auto 120px;
+  }
+</style>

@@ -15,8 +15,13 @@ const boxClass =
   boxType === "large" ? "outer-container large" : "outer-container normal";
 ---
 
-<section class="info-box-wrapper">
-  <h2><Icon name={icon} />{title}</h2>
+<section class={`info-box-wrapper ${boxType}`}>
+  <h2 class={boxType}>
+    <Icon
+      name={icon}
+      color={boxType == "normal" ? "var(--color-primary)" : "var(--color-text)"}
+    />{title}
+  </h2>
 
   {/* 💡 The HTML element using the dynamic class */}
   <div class={boxClass}>
@@ -29,9 +34,15 @@ const boxClass =
   /* Local styles for the Astro wrapper */
   .info-box-wrapper {
     padding: 0 20px;
-    margin: 80px auto 40px;
+    margin: 36px auto;
     text-align: center;
     max-width: 380px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .info-box-wrapper.normal {
+    text-align: left;
   }
 
   h2 {
@@ -45,25 +56,31 @@ const boxClass =
     padding: 0 1em;
   }
 
+  h2.normal {
+    padding-left: 0;
+  }
+
   /* --- Base Container Styles --- */
   .outer-container {
-    border: 2px solid var(--color-text);
+    border: none;
     padding: 32px 10px 16px;
     background-color: var(--color-background); /* Use theme variable */
     border-radius: 8px;
     transition: all 0.3s ease; /* Ensure smooth theme transition */
+    height: 100%;
+    box-sizing: border-box;
   }
 
   /* --- Normal Box (Default) --- */
   .outer-container.normal {
-    min-height: 100px;
+    text-align: left;
+    padding-top: 16px;
+    padding-left: 1.5em;
   }
 
   /* --- Large Box (Specific Styles) --- */
   .outer-container.large {
     min-height: 250px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Example of a visual difference for the large box */
-    border-color: var(--color-primary);
+    border: 2px solid var(--color-text);
   }
 </style>
