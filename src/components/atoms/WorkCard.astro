@@ -24,8 +24,12 @@ const { title, icon } = Astro.props;
     padding: 0 20px;
     margin: 0 0 18px;
     text-align: center;
-    width: 280px;
     box-sizing: border-box;
+    width: 280px;
+
+    @media (min-width: 768px) {
+      width: 380px;
+    }
   }
 
   h2 {
@@ -49,5 +53,9 @@ const { title, icon } = Astro.props;
     transition: all 0.3s ease;
     box-sizing: border-box;
     height: 520px;
+
+    @media (min-width: 768px) {
+      height: 640px;
+    }
   }
 </style>
