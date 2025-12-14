@@ -2,15 +2,26 @@
 import ProfileInfoContainer from "./atoms/ProfileInfoContainer.astro";
 ---
 
-<ProfileInfoContainer title="基本情報" icon="carbon:user-profile-alt">
-  <ul>
-    <li>性別：図形のため存在しない</li>
-    <li>年齢：お酒が飲める歳<br />（強いとは言ってない）</li>
-    <li>職業：フロントエンドエンジニア<br />その他いろいろ</li>
-  </ul>
-</ProfileInfoContainer>
+<div class="container">
+  <ProfileInfoContainer
+    title="基本情報"
+    icon="carbon:user-profile-alt"
+    boxType="large"
+  >
+    <ul>
+      <li>呼称：ぶるとら あおさんかく あおさん　等お好みでどうぞ</li>
+      <li>性別：図形のため存在しない</li>
+      <li>年齢：お酒が飲める歳<br />（強いとは言ってない）</li>
+      <li>職業：フロントエンドエンジニア<br />その他いろいろ</li>
+    </ul>
+  </ProfileInfoContainer>
+</div>
 
 <style>
+  .container {
+    margin-top: 80px;
+  }
+
   ul {
     list-style: none;
     padding: 10px;
