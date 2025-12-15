@@ -48,13 +48,27 @@ export function seededRandomValue(seed: number): number {
 }
 
 /**
- * Calculates a unique integer seed based on the current year and month.
- * @returns {number} A seed that changes monthly.
+ * Calculates a unique integer seed based on the current year and month in JST.
+ * @returns {number} A seed that changes monthly, based on JST.
  */
 export function getMonthlySeed(): number {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
+
+  // 1. Get the year and month string formatted specifically for JST (Asia/Tokyo)
+  // This ensures the date components reflect the date in Tokyo at the time of execution.
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: 'numeric',
+  });
+
+  // Example output for formatter.format(now): "12/2025" (Month/Year)
+  const [monthString, yearString] = formatter.format(now).split('/');
+
+  const year = parseInt(yearString, 10);
+  // JavaScript's getMonth() is 0-indexed (Jan=0, Dec=11). 
+  // We subtract 1 from the 1-indexed month string to match.
+  const month = parseInt(monthString, 10) - 1;
 
   // Combine Year and Month Index
   return year * 100 + month;
