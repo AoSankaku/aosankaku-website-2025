@@ -16,7 +16,7 @@ const isLink = link && link.length > 0;
 <li class="icon_element">
   {
     isLink ? (
-      <a href={link} aria-label={label}>
+      <a href={link} aria-label={label} target="_blank">
         <Icon name={icon_name} width={size} height={size} />
       </a>
     ) : (

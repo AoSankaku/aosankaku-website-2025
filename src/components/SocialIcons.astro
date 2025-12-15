@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
+import { ParseStatus } from "astro:schema";
 ---
 
 <div>
@@ -10,8 +11,18 @@ import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
     label="Misskey"
     link="https://misskey.systems/@ao_sankaku"
   />
-  <Icon name="simple-icons:github" width={50} height={50} />
-  <Icon name="simple-icons:twitter" width={50} height={50} />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:github"
+    size={50}
+    label="GitHub"
+    link="https://github.com/AoSankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:twitter"
+    size={50}
+    label="Twitter"
+    link="https://twitter.com/Ao_Sankaku"
+  />
   <Icon
     name="icon-park-twotone:more-two"
     id="show_more_icons_button"
@@ -20,13 +31,48 @@ import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
   />
 </div>
 <div id="more_social_icons">
-  <Icon name="fa6-brands:square-x-twitter" width={50} height={50} />
-  <Icon name="fa6-brands:youtube" width={50} height={50} />
-  <Icon name="fa6-brands:bluesky" width={50} height={50} />
-  <Icon name="simple-icons:keybase" width={50} height={50} />
-  <Icon name="simple-icons:zenn" width={50} height={50} />
-  <Icon name="simple-icons:qiita" width={50} height={50} />
-  <Icon name="simple-icons:note" width={50} height={50} />
+  <ProfileSocialIconButton
+    icon_name="fa6-brands:square-x-twitter"
+    size={50}
+    label="X (Twitter)"
+    link="https://x.com/Ao_Sankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="fa6-brands:youtube"
+    size={50}
+    label="YouTube"
+    link="https://www.youtube.com/@Ao_Sankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="fa6-brands:bluesky"
+    size={50}
+    label="Bluesky"
+    link="https://bsky.app/profile/aosankaku.bsky.social"
+  />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:keybase"
+    size={50}
+    label="Keybase"
+    link="https://keybase.io/ao_sankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:zenn"
+    size={50}
+    label="Zenn"
+    link="https://zenn.dev/ao_sankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:qiita"
+    size={50}
+    label="Qiita"
+    link="https://qiita.com/Ao_Sankaku"
+  />
+  <ProfileSocialIconButton
+    icon_name="simple-icons:note"
+    size={50}
+    label="Note"
+    link="https://note.com/ao_sankaku"
+  />
 </div>
 
 <style>
