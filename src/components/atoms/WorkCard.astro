@@ -5,9 +5,10 @@ interface Props {
   title: string;
   imageSrc: ImageMetadata;
   link?: string;
+  linkText?: string;
 }
 
-const { title, imageSrc } = Astro.props;
+const { title, imageSrc, link, linkText } = Astro.props;
 ---
 
 <section class={`info-box-wrapper`}>
@@ -25,6 +26,15 @@ const { title, imageSrc } = Astro.props;
     <p>
       <slot />
     </p>
+    {
+      link && linkText ? (
+        <p class="cardlink">
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            {linkText}
+          </a>
+        </p>
+      ) : null
+    }
   </div>
 
   <style>
@@ -94,6 +104,25 @@ const { title, imageSrc } = Astro.props;
       @media (min-width: 768px) {
         padding: 32px 10px 16px;
         height: 780px;
+      }
+    }
+
+    .cardlink {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 8px 24px;
+      border-radius: 6px;
+      background-color: var(--color-primary);
+      border: 2px solid var(--color-text-sub);
+
+      a {
+        color: var(--color-background);
+        text-decoration: none;
+        font-weight: bold;
+
+        &:hover {
+          color: var(--color-accent);
+        }
       }
     }
   </style>
