@@ -13,14 +13,14 @@ const { title, imageSrc, link, linkText } = Astro.props;
 
 <section class={`info-box-wrapper`}>
   <div class="outer-container normal">
+    <Image
+      src={imageSrc}
+      alt={title}
+      style="color: var(--color-background);"
+      width={350}
+      height={350}
+    />
     <h2>
-      <Image
-        src={imageSrc}
-        alt={title}
-        style="color: var(--color-background);"
-        width={350}
-        height={350}
-      />
       {title}
     </h2>
     <p>
@@ -28,8 +28,13 @@ const { title, imageSrc, link, linkText } = Astro.props;
     </p>
     {
       link && linkText ? (
-        <p class="cardlink">
-          <a href={link} target="_blank" rel="noopener noreferrer">
+        <p>
+          <a
+            class="cardlink"
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {linkText}
           </a>
         </p>
@@ -57,20 +62,16 @@ const { title, imageSrc, link, linkText } = Astro.props;
       align-items: center;
       flex-direction: column;
       gap: 20px;
-      transform: translateY(0.6em);
+      height: 2.8em;
+      line-height: 1.4em;
 
       padding: 0;
-      margin-top: 0;
-
-      @media (min-width: 768px) {
-        margin: 32px auto;
-      }
+      margin: 16px auto;
     }
 
     img {
       width: 280px !important;
       height: 280px !important;
-      transform: translateY(-15px);
       border-radius: 8px 8px 0px 0px;
 
       @media (min-width: 768px) {
@@ -83,6 +84,7 @@ const { title, imageSrc, link, linkText } = Astro.props;
 
     p {
       word-break: normal;
+      padding: 0 14px;
 
       @media (min-width: 768px) {
         padding: 0 40px;
@@ -93,7 +95,7 @@ const { title, imageSrc, link, linkText } = Astro.props;
     /* --- Base Container Styles --- */
     .outer-container {
       border: none;
-      padding: 0 10px 16px;
+      padding: 0 0 16px;
       background-color: var(--color-text-sub);
       color: var(--color-background);
       border-radius: 8px;
@@ -114,16 +116,10 @@ const { title, imageSrc, link, linkText } = Astro.props;
       border-radius: 6px;
       background-color: var(--color-primary);
       border: 2px solid var(--color-text-sub);
-
-      a {
-        color: var(--color-background);
-        text-decoration: none;
-        font-weight: bold;
-
-        &:hover {
-          color: var(--color-accent);
-        }
-      }
+      color: var(--color-text);
+      color: var(--color-background);
+      text-decoration: none;
+      font-weight: bold;
     }
   </style>
 </section>
