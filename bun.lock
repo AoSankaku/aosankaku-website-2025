@@ -6,12 +6,14 @@
       "dependencies": {
         "@astrojs/react": "^4.4.2",
         "@iconify-json/carbon": "^1.2.15",
+        "@iconify-json/devicon": "^1.2.53",
         "@iconify-json/fa6-brands": "^1.2.6",
         "@iconify-json/fluent-emoji-high-contrast": "^1.2.5",
         "@iconify-json/game-icons": "^1.2.3",
         "@iconify-json/hugeicons": "^1.2.20",
         "@iconify-json/icon-park-twotone": "^1.2.4",
         "@iconify-json/logos": "^1.2.10",
+        "@iconify-json/material-icon-theme": "^1.2.44",
         "@iconify-json/mdi": "^1.2.3",
         "@iconify-json/pixelarticons": "^1.2.2",
         "@iconify-json/proicons": "^1.2.18",
@@ -190,6 +192,8 @@
 
     "@iconify-json/carbon": ["@iconify-json/carbon@1.2.15", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-9tW0nZY5QtKkMhuYzW09BM1345SyXNuA+gx2ub0j/fnfHOD5XVimMJ/D76H3tTez25NJbPYCLIQoFhvJc1HVBQ=="],
 
+    "@iconify-json/devicon": ["@iconify-json/devicon@1.2.53", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-uMBNP2Xmyre5w0XmQ3Sye64d6NokSiee+zb51AMqREjnUfM0s47bA+PO9Sy4M2GBjs6NIovi0rJQucWMpylMcQ=="],
+
     "@iconify-json/fa6-brands": ["@iconify-json/fa6-brands@1.2.6", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-twL3X4KWcxAhbc1vz/mIDsVr+CAItk1/EIfxKUVQtpv6O4eydk5KNYqTZWdvJNHGInUgd6vKg21aWfVgb5DXEg=="],
 
     "@iconify-json/fluent-emoji-high-contrast": ["@iconify-json/fluent-emoji-high-contrast@1.2.5", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-z+bl7GZDrJaX/jf9oaJ+eCvP8XaorGJc6aLNY9JibWDQHKSYRcuq+9YRst8usFExw0pEXIMCuoM1iK8TtsSsZQ=="],
@@ -201,6 +205,8 @@
     "@iconify-json/icon-park-twotone": ["@iconify-json/icon-park-twotone@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-AhnGngG6DxuIZMsz4FMrv0QWTRM/CZ3NnEeaceV6psKSgt/axW+hft7oQ6pIAFN9KB95Kp3hbJuhlhG3ao60eQ=="],
 
     "@iconify-json/logos": ["@iconify-json/logos@1.2.10", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-qxaXKJ6fu8jzTMPQdHtNxlfx6tBQ0jXRbHZIYy5Ilh8Lx9US9FsAdzZWUR8MXV8PnWTKGDFO4ZZee9VwerCyMA=="],
+
+    "@iconify-json/material-icon-theme": ["@iconify-json/material-icon-theme@1.2.44", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-fw6hluIUX2rudZucEBevvKHHnR7GQOyjHHXUXRJsv8KmdHqxsV7JPPUlNnVO/eAELuXjM+UgtuAeRE9WlCPHog=="],
 
     "@iconify-json/mdi": ["@iconify-json/mdi@1.2.3", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg=="],
 
