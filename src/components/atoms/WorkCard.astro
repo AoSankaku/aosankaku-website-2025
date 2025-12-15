@@ -1,61 +1,100 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 
 interface Props {
   title: string;
-  icon: string;
+  imageSrc: ImageMetadata;
+  link?: string;
 }
 
-const { title, icon } = Astro.props;
+const { title, imageSrc } = Astro.props;
 ---
 
 <section class={`info-box-wrapper`}>
   <div class="outer-container normal">
     <h2>
-      <Icon name={icon} color="var(--color-background)" size="7.5em" />{title}
+      <Image
+        src={imageSrc}
+        alt={title}
+        style="color: var(--color-background);"
+        width={350}
+        height={350}
+      />
+      {title}
     </h2>
-    <slot />
+    <p>
+      <slot />
+    </p>
   </div>
+
+  <style>
+    /* Local styles for the Astro wrapper */
+    .info-box-wrapper {
+      padding: 0 20px;
+      margin: 0 0 18px;
+      text-align: center;
+      box-sizing: border-box;
+      width: 320px;
+
+      @media (min-width: 768px) {
+        width: 480px;
+      }
+    }
+
+    h2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+      transform: translateY(0.6em);
+
+      padding: 0;
+      margin-top: 0;
+
+      @media (min-width: 768px) {
+        margin: 32px auto;
+      }
+    }
+
+    img {
+      width: 280px !important;
+      height: 280px !important;
+      transform: translateY(-15px);
+      border-radius: 8px 8px 0px 0px;
+
+      @media (min-width: 768px) {
+        width: 340px !important;
+        height: 340px !important;
+        transform: none;
+        border-radius: unset;
+      }
+    }
+
+    p {
+      word-break: normal;
+
+      @media (min-width: 768px) {
+        padding: 0 40px;
+        word-break: auto-phrase;
+      }
+    }
+
+    /* --- Base Container Styles --- */
+    .outer-container {
+      border: none;
+      padding: 0 10px 16px;
+      background-color: var(--color-text-sub);
+      color: var(--color-background);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      height: 620px;
+
+      @media (min-width: 768px) {
+        padding: 32px 10px 16px;
+        height: 780px;
+      }
+    }
+  </style>
 </section>
-
-<style>
-  /* Local styles for the Astro wrapper */
-  .info-box-wrapper {
-    padding: 0 20px;
-    margin: 0 0 18px;
-    text-align: center;
-    box-sizing: border-box;
-    width: 280px;
-
-    @media (min-width: 768px) {
-      width: 380px;
-    }
-  }
-
-  h2 {
-    margin: 16px auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 70px;
-    transform: translateY(0.6em);
-    padding: 0 1em;
-  }
-
-  /* --- Base Container Styles --- */
-  .outer-container {
-    border: none;
-    padding: 32px 10px 16px;
-    background-color: var(--color-text-sub);
-    color: var(--color-background);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-    height: 520px;
-
-    @media (min-width: 768px) {
-      height: 640px;
-    }
-  }
-</style>

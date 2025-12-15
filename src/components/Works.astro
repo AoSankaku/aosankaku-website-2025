@@ -1,47 +1,78 @@
 ---
 import WorkCard from "./atoms/WorkCard.astro";
+import moremobilityImage from "@/assets/homepage/works/moremobility.png";
+import serverImage1 from "@/assets/homepage/works/server_1.jpg";
+import partyparrotStreamdeckImage from "@/assets/homepage/works/partyparrot_streamdeck.png";
+import craftskyImage from "@/assets/homepage/works/craftsky.png";
+import typingImage from "@/assets/homepage/works/typing.jpg";
+import keybaseImage from "@/assets/homepage/works/keybase.png";
+import profileIcon250 from "@/assets/profileicon250.png";
+import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_generator.png";
 
 import "swiper/css";
 import "swiper/css/autoplay";
 ---
 
-<h2>作ったもの</h2>
+<h2>みてみてコーナー</h2>
 
 <div class="container swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定1" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard
+        title="Moremobility Mod"
+        imageSrc={moremobilityImage}
+        link="https://modrinth.com/mod/moremobility"
+      >
+        俺が作ったものじゃないです。sysnoteくゃんが作ってくれました。Automobilityを拡張するアドオンです。
+        でっかい収穫機やネザライトエンジンなどを追加します。
       </WorkCard>
     </div>
 
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定2" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard title="Create Citiesサーバー" imageSrc={serverImage1}>
+        マイクラサバもやってます。恐ろしい量のMODが工業を中心に入っています。友人限定ですが、知り合いの方で興味があれば広く参加を受け付けています。
       </WorkCard>
     </div>
 
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定3" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard
+        title="StreamDeck用CPUモニター"
+        imageSrc={partyparrotStreamdeckImage}
+      >
+        StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
       </WorkCard>
     </div>
 
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定4" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard
+        title="【作成中】駅名標ジェネレーター"
+        imageSrc={stationSignGeneratorImage}
+      >
+        駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
       </WorkCard>
     </div>
 
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定5" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard title="タイピングガチ勢" imageSrc={typingImage}>
+        神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
       </WorkCard>
     </div>
 
     <div class="swiper-slide">
-      <WorkCard title="作品展示予定6" icon="mdi:view-gallery-outline">
-        しばし待たれよ
+      <WorkCard title="【公開準備中】くらふとすきー" imageSrc={craftskyImage}>
+        「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを準備中です。
+      </WorkCard>
+    </div>
+
+    <div class="swiper-slide">
+      <WorkCard title="Keybaseによる本人証明" imageSrc={keybaseImage}>
+        Keybase経由で、このサイトとaosankaku.comが私のものであることを証明しています。
+      </WorkCard>
+    </div>
+
+    <div class="swiper-slide">
+      <WorkCard title="アイコンについて" imageSrc={profileIcon250}>
+        親友に描いてもらったものです。なんだかんだ8年以上愛用しています。ちなみにあおさんかくは普通に絵が下手です。
       </WorkCard>
     </div>
   </div>
@@ -57,20 +88,20 @@ import "swiper/css/autoplay";
   }
 
   .container.swiper {
-    height: 520px;
+    height: 620px;
     margin: 60px 0;
     width: 100%;
 
     @media (min-width: 768px) {
-      height: 640px;
+      height: 780px;
     }
   }
 
   .swiper-slide {
-    width: 280px !important;
+    width: 320px !important;
 
     @media (min-width: 768px) {
-      width: 380px !important;
+      width: 480px !important;
     }
   }
 </style>
@@ -92,11 +123,17 @@ import "swiper/css/autoplay";
       disableOnInteraction: false,
     },
 
-    speed: 2000,
+    speed: 1000,
 
     breakpoints: {
       768: {
         spaceBetween: 25,
+      },
+      1080: {
+        spaceBetween: 120,
+      },
+      1920: {
+        spaceBetween: 320,
       },
     },
   };
