@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.6.0",
     "@iconify-json/carbon": "^1.2.15",
     "@iconify-json/devicon": "^1.2.53",
     "@iconify-json/fa6-brands": "^1.2.6",
