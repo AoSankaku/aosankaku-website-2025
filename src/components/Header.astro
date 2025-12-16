@@ -6,6 +6,7 @@ const iconSize = 30;
 <div>
   <button id="toggle-language" aria-label="Toggle language">
     <Icon name="twemoji:flag-japan" width={iconSize} height={iconSize} />
+    <span>ブログ全記事一覧</span>
   </button>
   <a href="/blog/">
     <Icon name="carbon:blog" width={iconSize} height={iconSize} />
@@ -82,6 +83,19 @@ const iconSize = 30;
     padding: 0;
     display: flex;
     align-items: center;
+  }
+
+  /* Helper class to hide text visually but keep it for Screen Readers */
+  span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 
   a {
