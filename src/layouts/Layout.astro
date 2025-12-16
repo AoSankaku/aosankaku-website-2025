@@ -20,7 +20,7 @@ const defaultLocale = DEFAULT_LOCALE;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{t(SITE_TITLE)}</title>
+    <slot name="head" slot="head" />
     <script is:inline>
       const getThemePreference = () => {
         // 1. Check for saved preference in localStorage
