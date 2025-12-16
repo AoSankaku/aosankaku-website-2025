@@ -1,0 +1,227 @@
+---
+import Image from "astro/components/Image.astro";
+import ogDefaultImage from "../../assets/og-default.png";
+import { Debug } from "astro:components";
+import { Icon } from "astro-icon/components";
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "../../pages/blog/**/*.{jpeg,jpg,png,gif}",
+  { eager: true },
+);
+
+// Define the component props
+interface Props {
+  title: string;
+  desc: string;
+  thumbnail: string;
+  link: string;
+  date: string;
+  lastUpdate?: string;
+}
+
+const { title, desc, thumbnail, link, date, lastUpdate } = Astro.props;
+
+const articleImage =
+  images[`../../pages${link}${thumbnail}`]?.default ?? ogDefaultImage;
+
+const CalcJSTDate = (date: string) => {
+  const now = new Date(date);
+  const formatter = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(now);
+};
+
+const JSTDate = CalcJSTDate(date);
+const JSTLastUpdate = lastUpdate ? CalcJSTDate(lastUpdate) : null;
+---
+
+<a href={link}>
+  <div class="blog-card">
+    <Image src={articleImage} alt="Blog Thumbnail" class="blog-thumbnail" />
+    <h3 class="blog-title">{title}</h3>
+    <p class="desc">{desc}</p>
+    <div class="date-container">
+      <Icon name="mdi:calendar" size="1.1em" /><p class="date">{JSTDate}</p>
+      {
+        lastUpdate && (
+          <>
+            <Icon name="mdi:update" size="1.1em" />
+            <p class="date">{JSTLastUpdate}</p>
+          </>
+        )
+      }
+    </div>
+  </div>
+
+  <style>
+    a {
+      display: block;
+      text-decoration: none;
+      color: var(--color-text);
+      border-radius: 16px;
+      width: 100%;
+      height: 100%;
+      transition: box-shadow 0.3s ease;
+    }
+
+    h3 {
+      padding: 0 12px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 16px 16px 0 0;
+      margin-bottom: 12px;
+      object-fit: cover;
+      aspect-ratio: 1280 / 720;
+      background: var(--color-primary);
+    }
+
+    .blog-card {
+      border-radius: 8px;
+      text-align: center;
+      transition: box-shadow 0.3s ease;
+      background-color: var(--color-blogcard);
+      padding-bottom: 22px;
+      height: 100%;
+      position: relative;
+    }
+
+    .blog-card.large {
+      padding: 24px;
+    }
+
+    a:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .blog-icon {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .blog-title {
+      font-size: 1.2em;
+      margin: 0;
+    }
+
+    .desc {
+      font-size: 0.85rem;
+      padding: 0 12px;
+    }
+
+    .date {
+      padding-right: 0.5em;
+    }
+
+    .date-container {
+      text-align: left;
+      font-size: 0.7em;
+      color: var(--color-subtext);
+      padding: 0 12px;
+      position: absolute;
+      bottom: 0px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+
+  <!-- 
+  <Article data memo>
+
+[
+  {
+    "frontmatter": {
+      "title": "【お知らせ+近況】Twitter（旧X）のプロフィール画像自動更新を停止します",
+      "category": "Misc",
+      "date": "2024-03-14T15:30:00+09:00",
+      "desc": "IFTTTおよびTwitter（旧X）の仕様変更により、プロフィール画像の自動更新を停止します。",
+      "thumbnail": "thumbnail.png",
+      "alt": "baka blue bird",
+      "tags": [
+        "Ifttt",
+        "Twitter",
+        "お気持ち表明"
+      ]
+    },
+    "file": "C:path/to/this/project/src/pages/blog/abandoning_profile_pic_update/index.md",
+    "url": "/blog/abandoning_profile_pic_update/"
+  },
+  {
+    "frontmatter": {
+      "title": "【Gatsby】gatsbyPluginSharpってそもそも何だよという記事",
+      "category": "Tech",
+      "date": "2025-04-26T23:06:00+09:00",
+      "desc": "Gatsbyには「gatsby-plugin-sharp」という、画像をいい感じにしてくれるプラグインがありますが、この「sharp」って一体何でしょうか。ちょっと深堀りしてみました。",
+      "tags": [
+        "フロントエンド",
+        "Gatsby"
+      ]
+    },
+    "file": "C:path/to/this/project/src/pages/blog/about_gatsby_image_sharp/index.md",
+    "url": "/blog/about_gatsby_image_sharp/"
+  },
+  {
+    "frontmatter": {
+      "title": "【スマホ・PC対応】Adguardでうざいサイトへのアクセスを禁止する方法",
+      "category": "Tech",
+      "date": "2024-08-29T22:00:00+09:00",
+      "desc": "Adguardの機能を使って、特定のサイトへのアクセスをブロックする方法を説明しています。間違ってサイトにアクセスすることを防ぐ効果があるから、ネットサーフィンが快適になるぞ！",
+      "tags": [
+        "Adblock"
+      ]
+    },
+    "file": "C:path/to/this/project/src/pages/blog/android_adguard_omae_wo_kesu/index.md",
+    "url": "/blog/android_adguard_omae_wo_kesu/"
+  },
+  ...
+]
+
+
+
+  <Image data memo>
+
+  Debug "data"
+  {
+    "src": "/@fs/C:path/to/this/project/src/assets/og-default.png?origWidth=1280&origHeight=720&origFormat=png",
+    "width": 1280,
+    "height": 720,
+    "format": "png"
+  }
+
+  Debug "data"
+  {
+  "../../pages/blog/abandoning_profile_pic_update/image.png": {
+    "default": {
+      "src": "/@fs/C:path/to/this/project/src/pages/blog/abandoning_profile_pic_update/image.png?origWidth=732&origHeight=684&origFormat=png",
+      "width": 732,
+      "height": 684,
+      "format": "png"
+    }
+  },
+  "../../pages/blog/abandoning_profile_pic_update/thumbnail.png": {
+    "default": {
+      "src": "/@fs/C:path/to/this/project/src/pages/blog/abandoning_profile_pic_update/thumbnail.png?origWidth=800&origHeight=738&origFormat=png",
+      "width": 800,
+      "height": 738,
+      "format": "png"
+    }
+  },
+  "../../pages/blog/android_adguard_omae_wo_kesu/Screenshot_20240802-034520.png": {
+    "default": {
+      "src": "/@fs/C:path/to/this/project/src/pages/blog/android_adguard_omae_wo_kesu/Screenshot_20240802-034520.png?origWidth=1080&origHeight=1872&origFormat=jpg",
+      "width": 1080,
+      "height": 1872,
+      "format": "jpg"
+    }
+  },
+ -->
+</a>

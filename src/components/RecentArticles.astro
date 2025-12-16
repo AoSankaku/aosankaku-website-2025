@@ -1,0 +1,55 @@
+---
+import BlogCard from "./atoms/BlogCard.astro";
+const allPosts = Object.values(
+  import.meta.glob("../pages/blog/**/*.md", { eager: true }),
+);
+---
+
+<h2>最近のブログ記事</h2>
+
+<ul>
+  {
+    allPosts
+      .toSorted((a: any, b: any) => {
+        const dateA = new Date(a.frontmatter.lastUpdate ?? a.frontmatter.date);
+        const dateB = new Date(b.frontmatter.lastUpdate ?? b.frontmatter.date);
+        return dateB.getTime() - dateA.getTime();
+      })
+      .slice(0, 12)
+      .map((post: any) => (
+        <li>
+          <BlogCard
+            title={post.frontmatter.title || "【タイトル未設定】"}
+            desc={post.frontmatter.desc || "【説明未設定】"}
+            thumbnail={post.frontmatter.thumbnail || undefined}
+            link={post.url}
+            date={post.frontmatter.date || ""}
+            lastUpdate={post.frontmatter.lastUpdate || ""}
+          />
+        </li>
+      ))
+  }
+</ul>
+
+<style>
+  h2 {
+    margin: 220px 0 70px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0 20px;
+    margin: 0 auto 120px;
+    display: grid;
+    gap: 45px 16px;
+    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    max-width: 1920px;
+  }
+
+  li {
+    margin: 0 auto;
+    font-size: 1.1em;
+    width: 100%;
+    height: 100%;
+  }
+</style>
