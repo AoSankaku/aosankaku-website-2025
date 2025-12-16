@@ -1,10 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
-import { ParseStatus } from "astro:schema";
 ---
 
-<div>
+<ul>
   <ProfileSocialIconButton
     icon_name="simple-icons:misskey"
     size={50}
@@ -29,8 +28,8 @@ import { ParseStatus } from "astro:schema";
     width={50}
     height={50}
   />
-</div>
-<div id="more_social_icons">
+</ul>
+<ul id="more_social_icons">
   <ProfileSocialIconButton
     icon_name="fa6-brands:square-x-twitter"
     size={50}
@@ -73,16 +72,19 @@ import { ParseStatus } from "astro:schema";
     label="Note"
     link="https://note.com/ao_sankaku"
   />
-</div>
+</ul>
 
 <style>
-  div {
+  ul {
     display: flex;
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
     align-items: center;
     margin: 0 20px;
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
   }
 
   #show_more_icons_button {
