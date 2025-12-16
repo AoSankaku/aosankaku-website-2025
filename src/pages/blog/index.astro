@@ -20,8 +20,12 @@ const pageTitle = "ブログ全記事一覧";
       {
         allPosts
           .toSorted((a: any, b: any) => {
-            const dateA = new Date(a.frontmatter.date);
-            const dateB = new Date(b.frontmatter.date);
+            const dateA = new Date(
+              a.frontmatter.lastUpdate ?? a.frontmatter.date,
+            );
+            const dateB = new Date(
+              b.frontmatter.lastUpdate ?? b.frontmatter.date,
+            );
             return dateB.getTime() - dateA.getTime();
           })
           .map((post: any) => (
