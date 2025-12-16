@@ -1,0 +1,138 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+import Footer from "@/components/Footer.astro";
+import { Icon } from "astro-icon/components";
+
+import {
+  useTranslations,
+  getLocalePaths,
+  LOCALES,
+  DEFAULT_LOCALE,
+  type Lang,
+} from "@/types/i18n";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+
+const t = useTranslations(Astro.currentLocale as Lang);
+const langs = Object.keys(LOCALES);
+const defaultLocale = DEFAULT_LOCALE;
+---
+
+<Layout>
+  <div class="container">
+    <title>{`${t(SITE_TITLE)} | 404 Not Found`}</title>
+    <meta name="description" content={t(SITE_DESCRIPTION)} />
+    <Header />
+    <h1>404 Not Found</h1>
+    <p>貴様がお探しのページはなかったらしい。無念</p>
+    <div class="triangle-outer-container">
+      <div class="triangle-inner-container">
+        <Icon
+          name="icon-park-twotone:triangle"
+          color="var(--color-primary)"
+          size="180px"
+          id="spinning_triangle"
+        />
+        <div class="hidden-door" id="door">
+          <a
+            href="https://discord.com/vanityurl/dotcom/steakpants/flour/flower/index11.html"
+          >
+            <Icon name="icon-park-twotone:pull-door" size="200px" />
+          </a>
+        </div>
+      </div>
+    </div>
+    <Footer />
+  </div>
+</Layout>
+
+<script>
+  const triangle = document.getElementById("spinning_triangle");
+  let deg = 360 * -500;
+  let speed = 0.0002;
+  let scale = 1;
+  let opacity = 1;
+  let door_opacity = 0;
+
+  triangle?.addEventListener("click", () => {
+    speed *= 1.1;
+  });
+
+  const door = document.getElementById("door");
+
+  const doRotate = () => {
+    deg += speed;
+    if (triangle) {
+      triangle.style.transform = `rotate(${deg}deg)`;
+    }
+    if (triangle && deg > 0) {
+      speed *= 0.9975;
+      scale *= 1.001;
+      triangle.style.scale = `${scale}`;
+    }
+    if (triangle && scale > 30) {
+      opacity -= 0.0025;
+      triangle.style.opacity = `${opacity}`;
+    }
+    if (scale > 45) {
+      deg = 360 * -500;
+      speed = 0;
+    }
+    if (door && opacity < 0) {
+      scale = 1;
+      if (door_opacity < 1) {
+        speed = 0;
+        door_opacity += 0.005;
+        door.style.display = "block";
+        door.style.opacity = `${door_opacity}`;
+      }
+    }
+  };
+  setInterval(doRotate, 2);
+</script>
+
+<style>
+  h1 {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  p {
+    text-align: center;
+  }
+
+  .container {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .triangle-outer-container {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .triangle-inner-container {
+    cursor: pointer;
+    position: relative;
+  }
+
+  #spinning_triangle {
+    width: 180px;
+    height: 180px;
+    transform-origin: 50% 61%;
+  }
+
+  .hidden-door {
+    display: none;
+    opacity: 1;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+  }
+</style>
