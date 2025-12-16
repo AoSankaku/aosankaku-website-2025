@@ -42,8 +42,12 @@ const allPosts = Object.values(
     margin: 0 auto 120px;
     display: grid;
     gap: 45px 16px;
-    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    grid-template-columns: 1fr;
     max-width: 1920px;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    }
   }
 
   li {
