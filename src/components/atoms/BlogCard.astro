@@ -69,6 +69,11 @@ const JSTLastUpdate = lastUpdate ? CalcJSTDate(lastUpdate) : null;
 
     h3 {
       padding: 0 12px;
+      line-height: 1.4em;
+      min-height: 3lh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     img {
@@ -114,7 +119,13 @@ const JSTLastUpdate = lastUpdate ? CalcJSTDate(lastUpdate) : null;
 
     .desc {
       font-size: 0.85rem;
-      padding: 0 12px;
+      margin: 0.5lh 12px 1.2lh;
+      height: 4lh;
+      line-clamp: 4;
+      -webkit-line-clamp: 4;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .date {
