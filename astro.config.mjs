@@ -7,6 +7,8 @@ import yaml from '@rollup/plugin-yaml'
 import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/i18n/locales';
 import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
 
+import expressiveCode from 'astro-expressive-code';
+
 // https://astro.build/config
 export default defineConfig({
 
@@ -24,6 +26,9 @@ export default defineConfig({
       }
     }
     */
+  }), expressiveCode({
+    themes: ['one-dark-pro', 'one-light'],
+    useDarkModeMediaQuery: false,   // disable auto media query
   })],
 
   // i18n
@@ -41,6 +46,7 @@ export default defineConfig({
 
   markdown: {
     remarkPlugins: [remarkTocTrigger],
+    gfm: true,
   },
 
   // Vite
