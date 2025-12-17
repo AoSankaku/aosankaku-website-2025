@@ -2,11 +2,12 @@
 import Image from "astro/components/Image.astro";
 import ogDefaultImage from "@/assets/og-default.png";
 import { Icon } from "astro-icon/components";
+import formatToJSTDate from "@/utils/formatToJSTDate";
+
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "../../content/blog/**/*.{jpeg,jpg,png,gif}",
   { eager: true },
 );
-import formatToJSTDate from "@/utils/formatToJSTDate";
 
 // Define the component props
 interface Props {
