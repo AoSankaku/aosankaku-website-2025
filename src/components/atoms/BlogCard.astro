@@ -1,8 +1,6 @@
 ---
-import { getCollection } from "astro:content";
 import Image from "astro/components/Image.astro";
-import ogDefaultImage from "../../assets/og-default.png";
-import { Debug } from "astro:components";
+import ogDefaultImage from "@/assets/og-default.png";
 import { Icon } from "astro-icon/components";
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "../../content/blog/**/*.{jpeg,jpg,png,gif}",
