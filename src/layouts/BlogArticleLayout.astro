@@ -1,10 +1,14 @@
 ---
 import Layout from "./Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
 
 const { frontmatter } = Astro.props;
 ---
 
 <Layout>
+  <Header />
   <h1>{frontmatter.title}</h1>
   <slot />
+  <Footer />
 </Layout>
