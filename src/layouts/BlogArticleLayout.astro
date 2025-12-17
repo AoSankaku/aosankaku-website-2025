@@ -6,10 +6,18 @@ import { Image } from "astro:assets";
 import ogDefaultImage from "@/assets/og-default.png";
 import formatToJSTDate from "@/utils/formatToJSTDate";
 import { Icon } from "astro-icon/components";
+import type { MarkdownHeading } from "astro";
 
-const { frontmatter } = Astro.props;
+interface Props {
+  frontmatter: any;
+  headings: MarkdownHeading[];
+}
+
+const { frontmatter, headings } = Astro.props;
 const { slug } = Astro.params;
 const { thumbnail } = frontmatter;
+
+// Thumbnail generation
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   `../content/blog/**/*.{jpeg,jpg,png,gif}`,
@@ -24,6 +32,10 @@ const articleDate = formatToJSTDate(frontmatter.date);
 const lastUpdate = frontmatter.lastUpdate
   ? formatToJSTDate(frontmatter.lastUpdate)
   : null;
+
+// TOC generation
+
+const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 ---
 
 <Layout>
@@ -129,3 +141,25 @@ const lastUpdate = frontmatter.lastUpdate
     }
   }
 </style>
+
+<script is:inline define:vars={{ toc }}>
+  const container = document.getElementById("article-toc-trigger");
+  if (container && toc.length > 0) {
+    const title = document.createElement("h2");
+    title.innerText = "Table of Contents";
+
+    const list = document.createElement("ul");
+    toc.forEach((h) => {
+      const li = document.createElement("li");
+      li.style.marginLeft = `${(h.depth - 2) * 20}px`;
+      const a = document.createElement("a");
+      a.href = `#${h.slug}`;
+      a.innerText = h.text;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    container.appendChild(title);
+    container.appendChild(list);
+  }
+</script>

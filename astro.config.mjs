@@ -5,12 +5,28 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
 import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/i18n/locales';
+import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
 
 // https://astro.build/config
 export default defineConfig({
+
+  // Sitemap
   site: 'https://aosankaku.net',
-  integrations: [react(), icon(), sitemap()],
-  trailingSlash: 'always',
+
+  // Integrations
+  integrations: [react(), icon(), sitemap({
+    /*
+    i18n: {
+      defaultLocale: 'ja',
+      locales: {
+        ja: 'ja-JP',
+        en: 'en-US',
+      }
+    }
+    */
+  })],
+
+  // i18n
   i18n: {
     defaultLocale: DEFAULT_LOCALE_SETTING,
     locales: Object.keys(LOCALES_SETTING),
@@ -19,6 +35,15 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
+
+  // Path
+  trailingSlash: 'always',
+
+  markdown: {
+    remarkPlugins: [remarkTocTrigger],
+  },
+
+  // Vite
   vite: {
     plugins: [yaml()],
     ssr: {
