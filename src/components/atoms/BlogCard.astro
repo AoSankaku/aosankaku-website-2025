@@ -6,6 +6,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   "../../content/blog/**/*.{jpeg,jpg,png,gif}",
   { eager: true },
 );
+import formatToJSTDate from "@/utils/formatToJSTDate";
 
 // Define the component props
 interface Props {
@@ -24,19 +25,8 @@ const articleImage =
     `../../content${link}${thumbnail ? thumbnail.replace(/^\.\//, "") : null}`
   ]?.default ?? ogDefaultImage;
 
-const CalcJSTDate = (date: string) => {
-  const now = new Date(date);
-  const formatter = new Intl.DateTimeFormat("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  return formatter.format(now);
-};
-
-const JSTDate = CalcJSTDate(date);
-const JSTLastUpdate = lastUpdate ? CalcJSTDate(lastUpdate) : null;
+const JSTDate = formatToJSTDate(date);
+const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;
 ---
 
 <a href={link}>
