@@ -1,8 +1,7 @@
 ---
 import BlogCard from "./atoms/BlogCard.astro";
-const allPosts = Object.values(
-  import.meta.glob("../pages/blog/**/*.md", { eager: true }),
-);
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("blog");
 ---
 
 <h2>最近のブログ記事</h2>
@@ -11,20 +10,20 @@ const allPosts = Object.values(
   {
     allPosts
       .toSorted((a: any, b: any) => {
-        const dateA = new Date(a.frontmatter.lastUpdate ?? a.frontmatter.date);
-        const dateB = new Date(b.frontmatter.lastUpdate ?? b.frontmatter.date);
+        const dateA = new Date(a.data.lastUpdate ?? a.data.date);
+        const dateB = new Date(b.data.lastUpdate ?? b.data.date);
         return dateB.getTime() - dateA.getTime();
       })
       .slice(0, 12)
       .map((post: any) => (
         <li>
           <BlogCard
-            title={post.frontmatter.title || "【タイトル未設定】"}
-            desc={post.frontmatter.desc || "【説明未設定】"}
-            thumbnail={post.frontmatter.thumbnail || undefined}
-            link={post.url}
-            date={post.frontmatter.date || ""}
-            lastUpdate={post.frontmatter.lastUpdate || ""}
+            title={post.data.title}
+            desc={post.data.desc || "【説明未設定】"}
+            thumbnail={post.data.thumbnail || undefined}
+            link={`/blog/${post.id.replace(/\/index$/, "")}/`}
+            date={post.data.date || ""}
+            lastUpdate={post.data.lastUpdate || ""}
           />
         </li>
       ))

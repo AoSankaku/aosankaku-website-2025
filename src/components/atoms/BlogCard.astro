@@ -1,10 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import Image from "astro/components/Image.astro";
 import ogDefaultImage from "../../assets/og-default.png";
 import { Debug } from "astro:components";
 import { Icon } from "astro-icon/components";
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  "../../pages/blog/**/*.{jpeg,jpg,png,gif}",
+  "../../content/blog/**/*.{jpeg,jpg,png,gif}",
   { eager: true },
 );
 
@@ -21,7 +22,9 @@ interface Props {
 const { title, desc, thumbnail, link, date, lastUpdate } = Astro.props;
 
 const articleImage =
-  images[`../../pages${link}${thumbnail}`]?.default ?? ogDefaultImage;
+  images[
+    `../../content${link}${thumbnail ? thumbnail.replace(/^\.\//, "") : null}`
+  ]?.default ?? ogDefaultImage;
 
 const CalcJSTDate = (date: string) => {
   const now = new Date(date);

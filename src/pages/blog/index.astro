@@ -2,7 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-const allPosts = Object.values(import.meta.glob("./**/*.md", { eager: true }));
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("blog");
 const pageTitle = "ブログ全記事一覧";
 ---
 
@@ -20,18 +21,14 @@ const pageTitle = "ブログ全記事一覧";
       {
         allPosts
           .toSorted((a: any, b: any) => {
-            const dateA = new Date(
-              a.frontmatter.lastUpdate ?? a.frontmatter.date,
-            );
-            const dateB = new Date(
-              b.frontmatter.lastUpdate ?? b.frontmatter.date,
-            );
+            const dateA = new Date(a.data.lastUpdate ?? a.data.date);
+            const dateB = new Date(b.data.lastUpdate ?? b.data.date);
             return dateB.getTime() - dateA.getTime();
           })
-          .map((post: any) => (
+          .map((post) => (
             <li>
-              <a href={post.url}>
-                {post.frontmatter.title || "【タイトル未設定】"}
+              <a href={`/blog/${post.id.replace(/\/index$/, "")}/`}>
+                {post.data.title}
               </a>
             </li>
           ))
