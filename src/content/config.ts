@@ -10,6 +10,8 @@ const blog = defineCollection({
     lastUpdate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     thumbnail: z.string().optional(),
+    alt: z.string().default("Blog Article Image"),
+    category: z.string().default("Uncategorized")
   })
 });
 
