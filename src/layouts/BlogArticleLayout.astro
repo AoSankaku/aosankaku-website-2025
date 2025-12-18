@@ -39,6 +39,8 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 ---
 
 <Layout>
+  <title slot="head">{frontmatter.title}</title>
+  <meta name="description" slot="head" content={frontmatter.desc} />
   <Header />
   <div class="blog-hero">
     <Image src={articleImage} alt={frontmatter.alt} />
