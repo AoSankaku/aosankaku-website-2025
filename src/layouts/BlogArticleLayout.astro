@@ -43,7 +43,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <meta name="description" slot="head" content={frontmatter.desc} />
   <Header />
   <div class="blog-hero">
-    <Image src={articleImage} alt={frontmatter.alt} />
+    <Image src={articleImage} alt={frontmatter.alt} loading="eager" />
     <p class="category">{frontmatter.category}</p>
     <h1>{frontmatter.title}</h1>
     <div class="date-container">
