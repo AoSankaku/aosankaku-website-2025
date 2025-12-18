@@ -11,6 +11,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 const t = useTranslations(Astro.currentLocale as Lang);
 const langs = Object.keys(LOCALES);
 const defaultLocale = DEFAULT_LOCALE;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -20,6 +22,7 @@ const defaultLocale = DEFAULT_LOCALE;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <slot name="head" slot="head" />
     <script is:inline>
