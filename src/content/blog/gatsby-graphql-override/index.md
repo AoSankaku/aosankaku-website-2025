@@ -23,7 +23,7 @@ tags:
 
 gatsby-nodeです。
 
-```js:title=gatsby-node.js
+```js title=gatsby-node.js
 const path = require(`path`)
 const _ = require("lodash")
 const normalizeTagName = require("./src/functions/normalizeTagName")
@@ -183,7 +183,7 @@ exports.createResolvers = ({ createResolvers }) => {
 
 タグ名をノーマライズ（gatsbyが処理できる正しいパスの形式）にします。
 
-```js:title=normalizeTagName.js
+```js title=normalizeTagName.js
 //import tagAliases from "./tagAliases"
 const tagAliases = require("./tagAliases")
 const _ = require("lodash")
@@ -214,7 +214,7 @@ module.exports = normalizeTagName
 
 そのままケバブケースを適用すると奇妙な見た目になるものや、日本語（そもそもケバブケースを適用できない）場合に使用します。すべて手動で定義する必要があります。
 
-```js:title=tagAliases.js
+```js title=tagAliases.js
 
 const tagAliases = {
   names: [
@@ -257,7 +257,7 @@ module.exports = tagAliases
 
 記事のIDと「関連記事候補」を渡すと関連記事を順位付けし、その順番で返します。
 
-```tsx:title=RelatedArticlesList.tsx
+```tsx title=RelatedArticlesList.tsx
 import React from "react"
 import xorShiftArray from "Functions/xorShiftArray"
 import { Link } from "gatsby"
@@ -329,7 +329,7 @@ export default RelatedArticlesList
 
 「シード値を指定して乱数を生成する」アルゴリズムを実現するための関数です。
 
-```ts:title=xorShiftArray.ts
+```ts title=xorShiftArray.ts
 //Thanks to https://sbfl.net/blog/2017/06/01/javascript-reproducible-random/
 //and people on みすてむず
 /*

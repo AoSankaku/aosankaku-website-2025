@@ -228,7 +228,7 @@ arkmanager stop @main
 
 `/etc/arkmanager/instances/main.cfg`（main以外を弄りたい場合はmainを書き換えてください）に、以下を追加します。多分どこでもいいです。
 
-```cfg:title=main.cfg
+```cfg title=main.cfg
 arkflag_NoBattlEye="true"
 ```
 
@@ -245,7 +245,7 @@ arkflag_NoBattlEye="true"
 
 ホワイトリストが欲しい人は、また`/etc/arkmanager/instances/main.cfg`（main以外を弄りたい場合はmainを書き換えてください）に1行加えます。
 
-```cfg:title=main.cfg
+```cfg title=main.cfg
 arkflag_exclusivejoin="true"
 ```
 

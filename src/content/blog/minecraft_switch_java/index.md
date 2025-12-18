@@ -94,7 +94,7 @@ https://nj-clucker.com/edit-system-environment-variables/
 
 ## 起動ファイルから環境変数が読めているかテストする
 
-```batch:title=test.bat
+```batch title=test.bat
 echo %java17%
 pause
 ```

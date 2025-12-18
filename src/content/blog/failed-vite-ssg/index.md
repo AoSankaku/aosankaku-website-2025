@@ -84,7 +84,7 @@ useEffect(() => {
 
 それでは、その言語を渡すための`+data.tsx`とやらがどうなっているかをお見せします。
 
-```tsx:title=+data.tsx
+```tsx title=+data.tsx
 import { useConfig } from "vike-react/useConfig";
 import i18n from "../../i18n/configs";
 import ogp from "../../assets/images/ogp.png"
@@ -135,7 +135,7 @@ export const data = (pageContext: { locale: string }) => {
 
 パスの取得が関係してくるということで、`+onBeforeRoute.ts`というファイルを作成した形跡がありました。
 
-```tsx:title=+onBeforeRoute.ts
+```tsx title=+onBeforeRoute.ts
 export { onBeforeRoute }
 
 import { modifyUrl } from 'vike/modifyUrl'

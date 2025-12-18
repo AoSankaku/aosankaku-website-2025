@@ -32,7 +32,7 @@ tags:
 
 ただ説明文だけ載せて終わるのもぷよぐらまーらしくないので、例も載せておこうと思います。
 
-```js:title=gatsby-config.js
+```js title=gatsby-config.js
   const markdownPlugins = [
   {
     resolve: "gatsby-transformer-remark",

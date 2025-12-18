@@ -183,7 +183,7 @@ sudo apt install screen
 
 私は、`run.sh`として以下のファイルを作成してあります。**意味を理解してから実行できるようにしてください**。相対パスのため、どこから実行しても動くわけではありません。必要であれば絶対パスに書き換えるなど、各自工夫して使ってください。
 
-```sh:title=run.sh
+```sh title=run.sh
 #!/bin/sh
 
 screen -S terra -X quit

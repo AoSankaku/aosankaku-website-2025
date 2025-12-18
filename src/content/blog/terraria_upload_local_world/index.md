@@ -54,7 +54,7 @@ configファイルがないなら、作ってしまいましょう。Terrariaの
 
 ファイル名にも指定はありません。なんでもOKです。ここでは、`serverconfig.txt`と打つのはあまりに面倒なので`cf.txt`と命名したことにして進めていきます。
 
-```text:title=cf.txt
+```text title=cf.txt
 worldpath=./worlds
 world=./worlds/main.wld
 ```
@@ -67,7 +67,7 @@ world=./worlds/main.wld
 
 起動コマンドで、作成したコンフィグを読み込むのを忘れないようにしましょう。これを忘れると、今までやってきたことの意味がありません。気をつけてくださいね。
 
-```sh:title=run.sh
+```sh title=run.sh
 ./TerrariaServer.bin.x86_64 -config ./cf.txt
 ```
 
