@@ -14,11 +14,11 @@ import TechStacks from "@/components/TechStacks.astro";
 import RecentArticles from "@/components/RecentArticles.astro";
 
 import {
-	useTranslations,
-	getLocalePaths,
-	LOCALES,
-	DEFAULT_LOCALE,
-	type Lang,
+  useTranslations,
+  getLocalePaths,
+  LOCALES,
+  DEFAULT_LOCALE,
+  type Lang,
 } from "@/types/i18n";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 
@@ -28,27 +28,31 @@ const defaultLocale = DEFAULT_LOCALE;
 ---
 
 <Layout>
-	<title slot="head">{t(SITE_TITLE)}</title>
-	<meta name="description" slot="head" content={t(SITE_DESCRIPTION)} />
-	<Header />
-	<HiddenH1 />
-	<SpinningTetrahedron />
-	<RandomVideo />
-	<ProfileIcon />
-	<SocialIcons />
-	<Profile />
-	<TechStacks />
-	<ProfileDetails />
-	<Works />
-	<RecentArticles />
-	<Footer />
+  <title slot="head">{t(SITE_TITLE)}</title>
+  <meta name="description" slot="head" content={t(SITE_DESCRIPTION)} />
+  <meta property="og:title" content={t(SITE_TITLE)} />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content={t(SITE_DESCRIPTION)} />
+  <meta property="og:url" content={Astro.request.url} />
+  <Header />
+  <HiddenH1 />
+  <SpinningTetrahedron />
+  <RandomVideo />
+  <ProfileIcon />
+  <SocialIcons />
+  <Profile />
+  <TechStacks />
+  <ProfileDetails />
+  <Works />
+  <RecentArticles />
+  <Footer />
 </Layout>
 
 <style>
-	:global(h2) {
-		text-align: center;
-		margin: 80px 20px 20px 20px;
-	}
+  :global(h2) {
+    text-align: center;
+    margin: 80px 20px 20px 20px;
+  }
 
 	:global(h1, h2, h3, h4, h5, h6, p, li) {
 		word-break: auto-phrase;
