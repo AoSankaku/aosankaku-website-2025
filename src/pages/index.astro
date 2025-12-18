@@ -22,6 +22,10 @@ import {
 } from "@/types/i18n";
 import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 
+import ogImage from "@/assets/og-default.png";
+
+const defaultOgImageUrl = new URL(ogImage.src, Astro.site);
+
 const t = useTranslations(Astro.currentLocale as Lang);
 const langs = Object.keys(LOCALES);
 const defaultLocale = DEFAULT_LOCALE;
@@ -30,10 +34,19 @@ const defaultLocale = DEFAULT_LOCALE;
 <Layout>
   <title slot="head">{t(SITE_TITLE)}</title>
   <meta name="description" slot="head" content={t(SITE_DESCRIPTION)} />
-  <meta property="og:title" content={t(SITE_TITLE)} />
+  <meta property="og:title" content={t(SITE_TITLE)} /><meta
+    property="og:site_name"
+    content={t(SITE_TITLE)}
+  />
   <meta property="og:type" content="website" />
   <meta property="og:description" content={t(SITE_DESCRIPTION)} />
-  <meta property="og:url" content={Astro.request.url} />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:image" content={defaultOgImageUrl} />
+  <meta property="og:locale" content={Astro.currentLocale} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={t(SITE_TITLE)} />
+  <meta name="twitter:description" content={t(SITE_DESCRIPTION)} />
+  <meta name="twitter:image" content={defaultOgImageUrl} />
   <Header />
   <HiddenH1 />
   <SpinningTetrahedron />
