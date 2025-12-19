@@ -10,5 +10,9 @@ homepage:
     name: あおさんかく
     subname: Blue Triangle
 
+blog: 
+  all-articles: ブログ全記事一覧
+  search-articles: 記事の検索もこちらから可能です。
+
 error: 
   untranslated: <未翻訳>

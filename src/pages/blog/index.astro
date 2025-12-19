@@ -3,14 +3,23 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { getCollection } from "astro:content";
+
+import { useTranslator } from "@/i18n/utils";
+import { LOCALES, type Lang } from "@/types/i18n";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+
 const allPosts = await getCollection("blog");
-const pageTitle = "ブログ全記事一覧";
+
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
-<Layout pageTitle={pageTitle}>
+<Layout pageTitle={t("blog.all-articles")}>
+  <title slot="head">{`${t("blog.all-articles")} | ${t("site-name")}`}</title>
+
   <Header />
   <div>
-    <p>全記事の一覧です。</p>
+    <h1>{t("blog.all-articles")}</h1>
+    <p>記事の検索もこちらから可能です。</p>
     <input
       type="text"
       id="searchInput"

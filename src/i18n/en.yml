@@ -2,7 +2,12 @@ site-name: Blue Triangle's Website
 site-description: "Blue Trinagle's personal hobby website. Mainly explores frontend, server, and minecraft."
 
 homepage:
+  hidden-h1: Blue Triangle's Website - Frontend Dev, Servers and Minecraft.
   profile: Profile
+
+blog: 
+  all-articles: All Posts
+  search-articles: You can also search and filter articles here.
 
 error: 
   untranslated: <Untranslated>
