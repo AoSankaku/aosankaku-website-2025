@@ -3,6 +3,8 @@ title: "【Proxmox】「pve login」から先に進めないときの対処法"
 category: "Tech"
 date: "2025-06-23T14:30:00+09:00"
 desc: "Proxmoxを使い始めたとき、初期設定は終わったものの「pve login」「Proxmox VE Login」「Proxmox Login」から先に進めず詰まってしまいました。日本語の情報がなかったので、こちらに書いておきます。"
+thumbnail: Gemini_Generated_Image_qpqtz2qpqtz2qpqt.png
+alt: 爆発するドア
 tags:
   - Proxmox
   - サーバー

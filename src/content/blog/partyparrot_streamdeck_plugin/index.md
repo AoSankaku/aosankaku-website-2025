@@ -3,6 +3,8 @@ title: "StreamDeckの余ったボタンでPartyParrotを踊らせるプラグイ
 category: "Tech"
 date: "2025-08-04T12:00:00+09:00"
 desc: "あのPartyParrotがStreamDeckのボタンでうごめく！自作プラグインでStreamDeckをさらに楽しくする方法を解説します。CPU使用率に応じて回転速度が変わったり、ボタンを押すたびにキャラが変わったりする機能も実装済み！"
+thumbnail: thumbnail.png
+alt: 集中線とPartyParrotちゃんたち
 tags:
   - 自動化
   - パソコン

@@ -3,6 +3,8 @@ title: "【Proxmox】IP割当が面倒だったので、Jumper SSHを組んで�
 category: "Tech"
 date: "2025-06-23T06:00:00+09:00"
 desc: "これまでは手動でMACアドレスを参照してIPアドレスを割り当てていたのですが、もう面倒になってきたのでSNATとJumperSSHを組みました。やり方を解説します。"
+thumbnail: thumbnail.jpg
+alt: スキージャンプするSSH
 tags:
   - Proxmox
   - Ubuntu

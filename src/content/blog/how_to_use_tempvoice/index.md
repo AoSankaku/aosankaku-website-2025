@@ -3,6 +3,8 @@ title: "【Discord Bot】一時的な通話部屋を作ってくれる「TempVoi
 category: "Misc"
 date: "2025-06-23T15:00:00+09:00"
 desc: "TempVoiceは、一時的な通話を作成できるDiscordのBotです。管理者権限がなくても通話部屋が作れるようになったりして便利なので、やり方を説明します。"
+thumbnail: thumbnail.jpg
+alt: うたってるひとたち
 tags:
   - Discord
   - 自動化
