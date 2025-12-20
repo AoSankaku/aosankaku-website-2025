@@ -13,40 +13,13 @@ import Works from "@/components/Works.astro";
 import TechStacks from "@/components/TechStacks.astro";
 import RecentArticles from "@/components/RecentArticles.astro";
 
-import {
-  useTranslations,
-  getLocalePaths,
-  LOCALES,
-  DEFAULT_LOCALE,
-  type Lang,
-} from "@/types/i18n";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import { type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
 
-import ogImage from "@/assets/og-default.png";
-
-const defaultOgImageUrl = new URL(ogImage.src, Astro.site);
-
-const t = useTranslations(Astro.currentLocale as Lang);
-const langs = Object.keys(LOCALES);
-const defaultLocale = DEFAULT_LOCALE;
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
 <Layout>
-  <title slot="head">{t(SITE_TITLE)}</title>
-  <meta name="description" slot="head" content={t(SITE_DESCRIPTION)} />
-  <meta property="og:title" content={t(SITE_TITLE)} /><meta
-    property="og:site_name"
-    content={t(SITE_TITLE)}
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:description" content={t(SITE_DESCRIPTION)} />
-  <meta property="og:url" content={Astro.url} />
-  <meta property="og:image" content={defaultOgImageUrl} />
-  <meta property="og:locale" content={Astro.currentLocale} />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={t(SITE_TITLE)} />
-  <meta name="twitter:description" content={t(SITE_DESCRIPTION)} />
-  <meta name="twitter:image" content={defaultOgImageUrl} />
   <Header />
   <HiddenH1 />
   <SpinningTetrahedron />

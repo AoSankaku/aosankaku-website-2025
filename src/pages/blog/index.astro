@@ -14,9 +14,7 @@ const allPosts = await getCollection("blog");
 const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
-<Layout pageTitle={t("blog.all-articles")}>
-  <title slot="head">{`${t("blog.all-articles")} | ${t("site-name")}`}</title>
-
+<Layout title={t("blog.all-articles")}>
   <Header />
   <div>
     <h1>{t("blog.all-articles")}</h1>

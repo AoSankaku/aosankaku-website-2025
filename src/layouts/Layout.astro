@@ -1,22 +1,42 @@
 ---
-import {
-  useTranslations,
-  getLocalePaths,
-  LOCALES,
-  DEFAULT_LOCALE,
-  type Lang,
-} from "@/types/i18n";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import { LOCALES, DEFAULT_LOCALE, type Lang } from "@/types/i18n";
 
-const t = useTranslations(Astro.currentLocale as Lang);
-const langs = Object.keys(LOCALES);
-const defaultLocale = DEFAULT_LOCALE;
+import { LOCALES_SETTING } from "@/i18n/locales";
+import { useTranslator } from "@/i18n/utils";
+
+import defaultOgpImage from "@/assets/og-default.png";
+
+const lang = (Astro.currentLocale ||
+  DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
+const t = useTranslator(lang);
+const langFull = LOCALES_SETTING[lang]?.lang;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: "website" | "article";
+  ogpImage?: URL;
+  disableTrailingWebsiteName?: Boolean;
+}
+
+const defaultOgpImageUrl = new URL(defaultOgpImage.src, Astro.site);
+const {
+  title = t("site-name"),
+  description = t("site-description"),
+  type = "website",
+  ogpImage = defaultOgpImageUrl,
+  disableTrailingWebsiteName = false,
+} = Astro.props;
+
+const displayedTitle = !disableTrailingWebsiteName
+  ? `${title} | ${t("site-name")}`
+  : title;
 ---
 
 <!doctype html>
-<html lang={DEFAULT_LOCALE}>
+<html lang={langFull}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -24,6 +44,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
+    <title>{displayedTitle}</title>
+    <meta name="description" slot="head" content={description} />
+    <meta property="og:title" content={displayedTitle} /><meta
+      property="og:site_name"
+      content={displayedTitle}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogpImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={displayedTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogpImage} />
+    <meta property="og:locale" content={langFull?.replace("-", "_")} />
+    <meta property="og:url" content={Astro.url} />
     <slot name="head" slot="head" />
     <script is:inline>
       const getThemePreference = () => {

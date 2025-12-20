@@ -49,9 +49,7 @@ const lastUpdate = frontmatter.lastUpdate
 const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 ---
 
-<Layout>
-  <title slot="head">{`${frontmatter.title} | ${t(SITE_TITLE)}`}</title>
-  <meta name="description" slot="head" content={frontmatter.desc} />
+<Layout title={frontmatter.title} description={frontmatter.desc}>
   <Header />
   <div class="blog-hero">
     <Image src={articleImage} alt={frontmatter.alt} loading="eager" />
