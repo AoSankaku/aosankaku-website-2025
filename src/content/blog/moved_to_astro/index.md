@@ -3,6 +3,8 @@ title: "【Gatsby→Astro】サイトの引っ越しをした"
 category: "Tech"
 date: "2025-12-21T00:00:00+09:00"
 desc: "Gatsbyに見切りをつけてAstroに引っ越しました。色々と発見があったので、簡潔に今の感想を語ります。"
+thumbnail: "thumbnail.png"
+alt: "Astro logo truck"
 tags:
   - Gatsby
   - Astro
