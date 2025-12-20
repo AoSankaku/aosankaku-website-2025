@@ -27,8 +27,14 @@ export default defineConfig({
     }
     */
   }), expressiveCode({
-    themes: ['one-dark-pro', 'one-light'],
-    useDarkModeMediaQuery: false,   // disable auto media query
+    themes: ['one-light', 'one-dark-pro'],
+    useDarkModeMediaQuery: false,
+    themeCssSelector: (theme, { styleVariants }) => {
+      // If the theme is 'one-dark-pro', trigger it when .dark class is on <html>
+      if (theme.name === 'one-dark-pro') return '.dark';
+      // Otherwise, it's the default theme (one-light)
+      return false;
+    },
   })],
 
   // i18n
