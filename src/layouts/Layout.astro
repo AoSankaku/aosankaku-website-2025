@@ -16,7 +16,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 interface Props {
   title?: string;
   description?: string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "profile" | "book" | "music" | "video";
   ogpImage?: URL;
   disableTrailingWebsiteName?: Boolean;
 }
@@ -50,7 +50,7 @@ const displayedTitle = !disableTrailingWebsiteName
       property="og:site_name"
       content={displayedTitle}
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogpImage} />
     <meta name="twitter:card" content="summary_large_image" />

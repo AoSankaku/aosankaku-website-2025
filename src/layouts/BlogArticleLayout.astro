@@ -38,7 +38,7 @@ const lastUpdate = frontmatter.lastUpdate
 const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 ---
 
-<Layout title={frontmatter.title} description={frontmatter.desc}>
+<Layout title={frontmatter.title} description={frontmatter.desc} type="article">
   <Header />
   <div class="blog-hero">
     <Image src={articleImage} alt={frontmatter.alt} loading="eager" />
