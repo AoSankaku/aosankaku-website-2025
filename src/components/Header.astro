@@ -4,7 +4,7 @@ const currentPath = Astro.url.pathname;
 const iconSize = 30;
 ---
 
-<header class="header-container">
+<div class="header-container">
   <div class="left">
     {
       currentPath !== "/" && (
@@ -62,21 +62,6 @@ const iconSize = 30;
       htmlElement.classList.add("dark");
     } else {
       htmlElement.classList.remove("dark");
-    }
-
-    // Code block theme toggle (temporary)
-    const root = document.documentElement;
-
-    if (isDark) {
-      // Switching to Light
-      root.classList.remove("dark");
-      root.setAttribute("data-theme", "one-light");
-      localStorage.setItem("theme", "light");
-    } else {
-      // Switching to Dark
-      root.classList.add("dark");
-      root.setAttribute("data-theme", "one-dark-pro");
-      localStorage.setItem("theme", "dark");
     }
 
     // Save the new preference to localStorage

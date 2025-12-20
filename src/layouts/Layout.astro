@@ -27,28 +27,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <slot name="head" slot="head" />
     <script is:inline>
       const getThemePreference = () => {
+        // 1. Check for saved preference in localStorage
         if (
           typeof localStorage !== "undefined" &&
           localStorage.getItem("theme")
         ) {
           return localStorage.getItem("theme");
         }
-        return window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
+        // 2. Fallback to system preference
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        // 3. Default to 'light'
+        return "light";
       };
 
       const theme = getThemePreference();
-      const root = document.documentElement;
 
+      // Apply the class before the browser renders the content
       if (theme === "dark") {
-        root.classList.add("dark");
-        // This tells Expressive Code to use the dark theme
-        root.setAttribute("data-theme", "one-dark-pro");
+        document.documentElement.classList.add("dark");
       } else {
-        root.classList.remove("dark");
-        // This tells Expressive Code to use the light theme
-        root.setAttribute("data-theme", "one-light");
+        document.documentElement.classList.remove("dark");
       }
     </script>
   </head>

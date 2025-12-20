@@ -28,6 +28,7 @@ export default defineConfig({
     */
   }), expressiveCode({
     themes: ['one-dark-pro', 'one-light'],
+    useDarkModeMediaQuery: false,   // disable auto media query
   })],
 
   // i18n
