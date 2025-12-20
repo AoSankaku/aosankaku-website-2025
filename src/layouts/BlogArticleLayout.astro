@@ -22,10 +22,10 @@ const t = useTranslations(Astro.currentLocale as Lang);
 interface Props {
   frontmatter: any;
   headings: MarkdownHeading[];
+  slug: string;
 }
 
-const { frontmatter, headings } = Astro.props;
-const { slug } = Astro.params;
+const { frontmatter, headings, slug } = Astro.props;
 const { thumbnail } = frontmatter;
 
 // Thumbnail generation

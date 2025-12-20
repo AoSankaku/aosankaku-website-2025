@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
-import MarkdownPostLayout from "@/layouts/BlogArticleLayout.astro";
+import BlogArticleLayout from "@/layouts/BlogArticleLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -20,6 +20,6 @@ const { slug } = Astro.params;
 const { Content, headings } = await render(post);
 ---
 
-<MarkdownPostLayout frontmatter={post.data} headings={headings} slug={slug}>
+<BlogArticleLayout frontmatter={post.data} headings={headings} slug={slug}>
   <Content />
-</MarkdownPostLayout>
+</BlogArticleLayout>
