@@ -5,6 +5,7 @@ import { LOCALES_SETTING } from "@/i18n/locales";
 import { useTranslator } from "@/i18n/utils";
 
 import defaultOgpImage from "@/assets/og-default.png";
+import type { ImageMetadata } from "astro";
 
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
@@ -17,7 +18,7 @@ interface Props {
   title?: string;
   description?: string;
   type?: "website" | "article" | "profile" | "book" | "music" | "video";
-  ogpImage?: URL;
+  ogpImage?: URL | ImageMetadata;
   disableTrailingWebsiteName?: Boolean;
 }
 
@@ -33,6 +34,9 @@ const {
 const displayedTitle = !disableTrailingWebsiteName
   ? `${title} | ${t("site-name")}`
   : title;
+
+const displayedOgpImage =
+  "src" in ogpImage ? new URL(ogpImage.src, Astro.site) : ogpImage;
 ---
 
 <!doctype html>
@@ -52,11 +56,11 @@ const displayedTitle = !disableTrailingWebsiteName
     />
     <meta property="og:type" content={type} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogpImage} />
+    <meta property="og:image" content={displayedOgpImage} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={displayedTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogpImage} />
+    <meta name="twitter:image" content={displayedOgpImage} />
     <meta property="og:locale" content={langFull?.replace("-", "_")} />
     <meta property="og:url" content={Astro.url} />
     <slot name="head" slot="head" />
