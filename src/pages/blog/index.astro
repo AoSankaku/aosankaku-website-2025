@@ -53,25 +53,44 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
 <script>
   import "../../utils/prototypes";
+
   const searchInput = document.getElementById(
     "searchInput",
   ) as HTMLInputElement;
-
   const postList = document.querySelectorAll("ul li");
 
-  searchInput.addEventListener("input", () => {
-    const filter = searchInput.value.toLowerCase().toKatakana();
+  const filterArticles = () => {
+    const value = searchInput.value;
+    // Save to session storage so it survives navigation
+    sessionStorage.setItem("blog-search-query", value);
+
+    const filter = value.toLowerCase().toKatakana();
 
     postList.forEach((post) => {
       const postElement = post as HTMLElement;
-
       const title = postElement.textContent?.toLowerCase().toKatakana() || "";
 
-      if (title.includes(filter)) {
-        postElement.style.display = "";
-      } else {
-        postElement.style.display = "none";
-      }
+      postElement.style.display = title.includes(filter) ? "" : "none";
     });
+  };
+
+  // 1. Restore value from sessionStorage on load
+  const savedSearch = sessionStorage.getItem("blog-search-query");
+  if (savedSearch !== null) {
+    searchInput.value = savedSearch;
+  }
+
+  // 2. Initial run to sync list with the restored value
+  filterArticles();
+
+  // 3. Listen for changes
+  searchInput.addEventListener("input", filterArticles);
+
+  // 4. Handle "pageshow" (Required for Safari and some browsers when using 'Back')
+  window.addEventListener("pageshow", (event) => {
+    // If the page was loaded from the 'bfcache' (back-forward cache)
+    if (event.persisted) {
+      filterArticles();
+    }
   });
 </script>
