@@ -3,25 +3,30 @@
    * This script removes Gatsby's service worker and clears local caches.
    * It prevents returning visitors from seeing a cached version of the old site.
    */
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-        console.log("Old Service Worker unregistered");
-      }
-      // Optional: Force a one-time reload to ensure the new site is clean
-      if (registrations.length > 0) {
-        window.location.reload();
-      }
-    });
-  }
 
-  // Clear old Gatsby Caches
-  if ("caches" in window) {
-    caches.keys().then(function (names) {
-      for (let name of names) {
-        caches.delete(name);
+  async function surgicalGatsbyClean() {
+    // 1. Unregister Service Workers (Gatsby usually only has one)
+    if ("serviceWorker" in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (let registration of registrations) {
+        // Gatsby's default worker is usually named sw.js
+        if (registration.active?.scriptURL.includes("sw.js")) {
+          await registration.unregister();
+          window.location.reload();
+        }
       }
-    });
+    }
+
+    // 2. Only delete caches that look like Gatsby caches
+    if ("caches" in window) {
+      const keys = await caches.keys();
+      for (let key of keys) {
+        if (key.includes("gatsby")) {
+          await caches.delete(key);
+          console.log(`Deleted Gatsby cache: ${key}`);
+        }
+      }
+    }
   }
+  surgicalGatsbyClean();
 </script>
