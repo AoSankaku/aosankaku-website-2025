@@ -8,17 +8,6 @@ import formatToJSTDate from "@/utils/formatToJSTDate";
 import { Icon } from "astro-icon/components";
 import type { MarkdownHeading } from "astro";
 
-import {
-  useTranslations,
-  getLocalePaths,
-  LOCALES,
-  DEFAULT_LOCALE,
-  type Lang,
-} from "@/types/i18n";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
-
-const t = useTranslations(Astro.currentLocale as Lang);
-
 interface Props {
   frontmatter: any;
   headings: MarkdownHeading[];
