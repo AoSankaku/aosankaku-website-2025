@@ -423,7 +423,7 @@ export default xorShiftArray
 
 しかし、GitHub様が過去のファイルを残してくれているため、Diffの併記は可能です。一応おいておきます。
 
-```diff-js
+```diff lang="js"
  const path = require(`path`)
  const _ = require("lodash")
 +const normalizeTagName = require("./src/functions/normalizeTagName")
