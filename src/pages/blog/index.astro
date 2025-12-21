@@ -4,11 +4,25 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
 
 import { useTranslator } from "@/i18n/utils";
 import { type Lang } from "@/types/i18n";
 
 const allPosts = await getCollection("blog");
+// 1. Calculate tag occurrences
+const tagCountMap: Record<string, number> = {};
+allPosts.forEach((post) => {
+  post.data.tags?.forEach((tag: string) => {
+    tagCountMap[tag] = (tagCountMap[tag] || 0) + 1;
+  });
+});
+
+// 2. Sort tags by occurrence (descending), then alphabetically
+const sortedTags = Object.keys(tagCountMap).sort((a, b) => {
+  const countDiff = tagCountMap[b] - tagCountMap[a];
+  return countDiff !== 0 ? countDiff : a.localeCompare(b);
+});
 
 const t = useTranslator(Astro.currentLocale as Lang);
 ---
@@ -17,13 +31,32 @@ const t = useTranslator(Astro.currentLocale as Lang);
   <Header />
   <div>
     <h1>{t("blog.all-articles")}</h1>
+
     <p>{t("blog.search-articles")}</p>
     <input
       type="text"
       id="searchInput"
       placeholder="タイトルから記事を検索..."
-      style="width: 100%; padding: 8px; margin-bottom: 16px; box-sizing: border-box;"
+      style="width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box;"
     />
+
+    <div id="tagFilters">
+      {
+        sortedTags.map((tag) => (
+          <button class="tag-button" data-tag={tag}>
+            #{tag} <span class="tag-count">({tagCountMap[tag]})</span>
+          </button>
+        ))
+      }
+      {
+        sortedTags.length > 0 && (
+          <button id="clearTags">
+            <Icon name="mdi:trash" size="1.4em" /> Clear all
+          </button>
+        )
+      }
+    </div>
+
     <ul>
       {
         allPosts
@@ -33,7 +66,8 @@ const t = useTranslator(Astro.currentLocale as Lang);
             return dateB.getTime() - dateA.getTime();
           })
           .map((post) => (
-            <li>
+            // Add tags to data-attribute as a string
+            <li data-tags={(post.data.tags || []).join(",")}>
               <a href={`/blog/${post.id.replace(/\/index$/, "")}/`}>
                 {post.data.title}
               </a>
@@ -41,6 +75,14 @@ const t = useTranslator(Astro.currentLocale as Lang);
           ))
       }
     </ul>
+
+    <div id="nothingFound">
+      <Icon name="twemoji:person-shrugging" size="64px" />
+      <p>
+        何も見つからなかったらしい。<br
+        />タグを消したりキーワードを変えたりしてみてね。
+      </p>
+    </div>
   </div>
   <Footer />
 </Layout>
@@ -48,6 +90,53 @@ const t = useTranslator(Astro.currentLocale as Lang);
 <style>
   div {
     margin: 80px max(20px, 5%);
+  }
+
+  #tagFilters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 24px 0 64px 0;
+  }
+
+  #clearTags {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+    color: var(--color-text-sub);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tag-button {
+    padding: 4px 12px;
+    border-radius: 16px;
+    border: 2px solid var(--color-text-sub);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.85em;
+    color: var(--color-text);
+    height: 32px;
+  }
+
+  .tag-count {
+    color: var(--color-text-sub);
+    font-size: 0.9em;
+  }
+
+  .tag-button.active {
+    background: var(--color-primary);
+    color: var(--color-background);
+    border-color: var(--color-text-sub);
+  }
+
+  #nothingFound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
 
@@ -57,40 +146,72 @@ const t = useTranslator(Astro.currentLocale as Lang);
   const searchInput = document.getElementById(
     "searchInput",
   ) as HTMLInputElement;
+  const tagButtons = document.querySelectorAll(".tag-button");
+  const clearBtn = document.getElementById("clearTags");
   const postList = document.querySelectorAll("ul li");
+  let hasVisible = false;
+
+  let activeTags: string[] = JSON.parse(
+    sessionStorage.getItem("blog-active-tags") || "[]",
+  );
 
   const filterArticles = () => {
-    const value = searchInput.value;
-    // Save to session storage so it survives navigation
-    sessionStorage.setItem("blog-search-query", value);
+    hasVisible = false;
+    const searchText = searchInput.value.toLowerCase().toKatakana();
+    sessionStorage.setItem("blog-search-query", searchInput.value);
+    sessionStorage.setItem("blog-active-tags", JSON.stringify(activeTags));
+    const nothingFound = document.getElementById("nothingFound");
 
-    const filter = value.toLowerCase().toKatakana();
+    tagButtons.forEach((btn) => {
+      const tag = (btn as HTMLElement).dataset.tag || "";
+      btn.classList.toggle("active", activeTags.includes(tag));
+    });
 
     postList.forEach((post) => {
       const postElement = post as HTMLElement;
       const title = postElement.textContent?.toLowerCase().toKatakana() || "";
+      const postTags = postElement.dataset.tags?.split(",") || [];
 
-      postElement.style.display = title.includes(filter) ? "" : "none";
+      const matchesSearch = title.includes(searchText);
+      const matchesTags =
+        activeTags.length === 0 ||
+        activeTags.every((tag) => postTags.includes(tag));
+
+      postElement.style.display = matchesSearch && matchesTags ? "" : "none";
+      if (matchesSearch && matchesTags) {
+        hasVisible = true;
+      }
     });
+    nothingFound?.style.setProperty("display", hasVisible ? "none" : "flex");
   };
 
-  // 1. Restore value from sessionStorage on load
-  const savedSearch = sessionStorage.getItem("blog-search-query");
-  if (savedSearch !== null) {
-    searchInput.value = savedSearch;
-  }
-
-  // 2. Initial run to sync list with the restored value
-  filterArticles();
-
-  // 3. Listen for changes
   searchInput.addEventListener("input", filterArticles);
 
-  // 4. Handle "pageshow" (Required for Safari and some browsers when using 'Back')
-  window.addEventListener("pageshow", (event) => {
-    // If the page was loaded from the 'bfcache' (back-forward cache)
-    if (event.persisted) {
+  tagButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tag = (btn as HTMLElement).dataset.tag || "";
+      if (activeTags.includes(tag)) {
+        activeTags = activeTags.filter((t) => t !== tag);
+      } else {
+        activeTags.push(tag);
+      }
       filterArticles();
-    }
+    });
+  });
+
+  clearBtn?.addEventListener("click", () => {
+    activeTags = [];
+    searchInput.value = ""; // Optional: Clear search too
+    filterArticles();
+  });
+
+  // Init
+  const savedSearch = sessionStorage.getItem("blog-search-query");
+  if (savedSearch !== null) searchInput.value = savedSearch;
+
+  filterArticles();
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) filterArticles();
   });
 </script>
