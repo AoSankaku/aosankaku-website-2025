@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# remark-link-card-plus cache for dev
+public/remark-link-card-plus/

@@ -8,6 +8,7 @@ import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/i18n/locales';
 import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
 
 import expressiveCode from 'astro-expressive-code';
+import remarkLinkCard from 'remark-link-card-plus';
 
 // https://astro.build/config
 export default defineConfig({
@@ -51,7 +52,23 @@ export default defineConfig({
   trailingSlash: 'always',
 
   markdown: {
-    remarkPlugins: [remarkTocTrigger],
+    remarkPlugins: [remarkTocTrigger, [remarkLinkCard, {
+      cache: true,
+      shortenUrl: true,
+      thumbnailPosition: "right",
+      noThumbnail: false,
+      noFavicon: false,
+      ignoreExtensions: ['.mp4', '.pdf'],
+      ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
+        if (url.hostname === 'github.com') {
+          return { ...og, title: `GitHub: ${og.title}` };
+        }
+        if (og.title === og.description) {
+          return { ...og, description: 'custom description' };
+        }
+        return og;
+      }
+    }]],
     gfm: true,
   },
 
