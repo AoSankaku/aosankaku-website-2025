@@ -38,6 +38,12 @@ export default defineConfig({
       // Otherwise, it's the default theme (one-light)
       return false;
     },
+    shiki: {
+      langAlias: {
+        'cfg': 'ini',
+        'zs': 'java',
+      }
+    }
   })],
 
   // i18n
