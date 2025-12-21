@@ -68,9 +68,9 @@ date: "2025-12-20T22:00:00+09:00"
 
 ## 著作権に関する表記
 
-### ソフトウェア（ソースコード）
+### コンテンツ及びソフトウェア（ソースコード）
 
-ウェブサイト上にある私が作成したコンテンツ及びソースコードは、個別に断りがない限り、すべての著作権がBlue Triangleに属します。法的に認められている引用の範囲を超えた、ソースコード及び記事・画像などのコンテンツの無断転載を禁止します。このウェブサイトのソースコードは、Blue Triangleが全て自力で頑張って書いたものです。テンプレートではありません。
+GitHubリポジトリや当サイト上にある私が作成したコンテンツ（ブログ記事など）及びソースコードは、個別に断りがない限り、すべての著作権がBlue Triangleに属します。法的に認められている引用の範囲を超えた、ソースコード及び記事・画像などのコンテンツの無断転載を禁止します。このウェブサイトのソースコードは、Blue Triangleが全て自力で頑張って書いたものです。テンプレートではありません。
 
 ただし、私のリポジトリのコードを読んで「学習」することは全くもって構いません。また、同じことを実装するために同じような方法でコードを実装したとしても、著作権違反に当たることはありません（例えば、「5を入れたら20が返ってくるJavaScriptの関数」を書いても、それがよほど創作的なソースコードでなければ著作権は発生しません）。なお、AIによる学習についても自由とします。
 
@@ -169,4 +169,14 @@ I'm carefully paying attention to what I publish, however, I do NOT guarantee th
 I do NOT necessarily mean to express being for, against, or neutral to what I just liked or retweeted regardless of the amount that I did or contents of the posts.  
 The above statement will apply on any reactions like "Likes" and "Retweets" on any other platforms.
 
+---
 
+## 連絡先
+
+著作権（侵害の通知、利用許可申請）などの理由により直接連絡をご希望の場合は、本人性の確認を強固にするためにKeybaseからご連絡ください。
+
+https://keybase.io/ao_sankaku
+
+特に権利侵害に関する事項のご連絡の場合は、本人確認のためご利用のKeybaseアカウントと侵害を受けたドメインの連携などをしていただくか、または以降メールによるご連絡をお願いする場合がございます。
+
+※Keybaseに記事の質問や指摘などをお送りした場合は対応できません。Twitterなどで適当にリプを送ってください。
