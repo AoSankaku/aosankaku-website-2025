@@ -5,11 +5,30 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
+import categoryIcons, { getIcon } from "@/consts/categoryIcons";
 
 import { useTranslator } from "@/i18n/utils";
 import { type Lang } from "@/types/i18n";
 
 const allPosts = await getCollection("blog");
+
+// Category Logic
+const categoryOrder = Object.keys(categoryIcons);
+
+const isDev = import.meta.env.DEV;
+const rawCategories = [
+  ...new Set(allPosts.map((post) => post.data.category || "Uncategorized")),
+];
+
+const categories = rawCategories
+  .filter((cat) => isDev || cat.toLowerCase() !== "uncategorized")
+  .sort((a, b) => {
+    // Sort based on the index in categoryOrder, or push to end if not found
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    return (indexA > -1 ? indexA : 99) - (indexB > -1 ? indexB : 99);
+  });
+
 // 1. Calculate tag occurrences
 const tagCountMap: Record<string, number> = {};
 allPosts.forEach((post) => {
@@ -29,7 +48,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
 <Layout title={t("blog.all-articles")}>
   <Header />
-  <div>
+  <div class="container">
     <h1>{t("blog.all-articles")}</h1>
 
     <p>{t("blog.search-articles")}</p>
@@ -40,39 +59,57 @@ const t = useTranslator(Astro.currentLocale as Lang);
       style="width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box;"
     />
 
-    <div id="tagFilters">
-      {
-        sortedTags.map((tag) => (
-          <button class="tag-button" data-tag={tag}>
-            #{tag} <span class="tag-count">({tagCountMap[tag]})</span>
-          </button>
-        ))
-      }
-      {
-        sortedTags.length > 0 && (
-          <button id="clearTags">
-            <Icon name="mdi:trash" size="1.4em" /> Clear all
-          </button>
-        )
-      }
-    </div>
+    <details id="filterDetails">
+      <summary>
+        <Icon name="mdi:filter-variant" size="1.4em" />
+        <span>フィルター</span>
+        <span id="activeFilterCount" class="filter-badge" style="display: none;"
+          >0</span
+        >
+      </summary>
+      <button id="clearTags"
+        ><Icon name="mdi:trash" size="2em" /> フィルターをリセット</button
+      >
+
+      <div class="filter-section">
+        <p class="filter-label">カテゴリー</p>
+        <div id="categoryFilters">
+          {
+            categories.map((cat) => (
+              <button class="category-button" data-category={cat}>
+                {/* Make sure this line looks exactly like this */}
+                <Icon name={categoryIcons[cat]} />
+                <span>{cat}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <p class="filter-label">タグ</p>
+        <div id="tagFilters">
+          {
+            sortedTags.map((tag) => (
+              <button class="tag-button" data-tag={tag}>
+                #{tag} <span class="tag-count">({tagCountMap[tag]})</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </details>
 
     <ul>
       {
-        allPosts
-          .toSorted((a: any, b: any) => {
-            const dateA = new Date(a.data.lastUpdate ?? a.data.date);
-            const dateB = new Date(b.data.lastUpdate ?? b.data.date);
-            return dateB.getTime() - dateA.getTime();
-          })
-          .map((post) => (
-            // Add tags to data-attribute as a string
-            <li data-tags={(post.data.tags || []).join(",")}>
-              <a href={`/blog/${post.id.replace(/\/index$/, "")}/`}>
-                {post.data.title}
-              </a>
-            </li>
-          ))
+        allPosts.map((post) => (
+          <li
+            data-tags={(post.data.tags || []).join(",")}
+            data-category={post.data.category || "uncategorized"}
+          >
+            <a href={`/blog/${post.id.replace(/\/index$/, "")}/`}>
+              {post.data.title}
+            </a>
+          </li>
+        ))
       }
     </ul>
 
@@ -88,8 +125,17 @@ const t = useTranslator(Astro.currentLocale as Lang);
 </Layout>
 
 <style>
-  div {
-    margin: 80px max(20px, 5%);
+  div.container {
+    margin: 80px max(20px, 5%) 200px;
+  }
+
+  #filterDetails {
+    background: var(--color-card);
+    border-radius: 16px;
+    user-select: none;
+    border: 2px solid var(--color-text-sub);
+    padding: 10px;
+    margin: 16px 0 30px 0;
   }
 
   #tagFilters {
@@ -101,17 +147,23 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
   #clearTags {
     background: none;
-    border: none;
+    border: 2px solid var(--color-text-sub);
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.8em;
+    font-size: 1em;
     color: var(--color-text-sub);
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 4px;
+    line-height: 1.8em;
+    margin: 16px auto;
   }
 
   .tag-button {
+    transition:
+      opacity 0.2s ease,
+      transform 0.1s ease;
     padding: 4px 12px;
     border-radius: 16px;
     border: 2px solid var(--color-text-sub);
@@ -131,12 +183,103 @@ const t = useTranslator(Astro.currentLocale as Lang);
     background: var(--color-primary);
     color: var(--color-background);
     border-color: var(--color-text-sub);
+
+    .tag-count {
+      color: var(--color-background);
+    }
   }
 
   #nothingFound {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  summary {
+    list-style-type: none;
+    cursor: pointer;
+    border-radius: 16px;
+    padding: 0.3em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .filter-badge {
+    background: var(--color-primary);
+    color: var(--color-background);
+    font-weight: bold;
+    font-size: 0.7em;
+    padding: 0px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+    aspect-ratio: 1 / 1;
+  }
+
+  .filter-label {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 16px 0 8px 0;
+    color: var(--color-text-sub);
+  }
+
+  #categoryFilters {
+    display: flex;
+    gap: 0px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    border: 1px solid var(--color-text-sub);
+    justify-content: space-evenly;
+  }
+
+  .category-button {
+    flex: 1 1 0px;
+    padding: 8px 16px; /* Increased padding slightly for icons */
+    min-width: 200px;
+    border: 1px solid var(--color-text);
+    background: var(--color-background-sub);
+    cursor: pointer;
+    font-size: 1.1em; /* Adjusted font size for better icon/text balance */
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  /* Target the icon specifically within the button */
+  .category-button [data-icon] {
+    font-size: 1.2em;
+    color: var(--color-primary); /* Or your preferred accent color */
+  }
+
+  .category-button.active {
+    background: var(--color-text);
+    color: var(--color-background);
+  }
+
+  .category-button.active [data-icon] {
+    color: var(--color-background); /* Icon matches text color when active */
+  }
+
+  @media (max-width: 600px) {
+    .category-button {
+      font-size: 0.9em;
+      padding: 6px 10px;
+    }
+  }
+
+  /* Responsive Shrinking */
+  @media (max-width: 600px) {
+    .tag-button {
+      font-size: 0.75em;
+      padding: 2px 8px;
+      height: 28px;
+    }
   }
 </style>
 
@@ -147,71 +290,134 @@ const t = useTranslator(Astro.currentLocale as Lang);
     "searchInput",
   ) as HTMLInputElement;
   const tagButtons = document.querySelectorAll(".tag-button");
-  const clearBtn = document.getElementById("clearTags");
+  const catButtons = document.querySelectorAll(".category-button");
+  const filterBadge = document.getElementById("activeFilterCount");
   const postList = document.querySelectorAll("ul li");
-  let hasVisible = false;
+  const nothingFound = document.getElementById("nothingFound");
 
   let activeTags: string[] = JSON.parse(
     sessionStorage.getItem("blog-active-tags") || "[]",
   );
+  let activeCategory = sessionStorage.getItem("blog-active-cat") || "";
 
   const filterArticles = () => {
-    hasVisible = false;
+    let hasVisible = false;
     const searchText = searchInput.value.toLowerCase().toKatakana();
+
+    // 1. Save state
     sessionStorage.setItem("blog-search-query", searchInput.value);
     sessionStorage.setItem("blog-active-tags", JSON.stringify(activeTags));
-    const nothingFound = document.getElementById("nothingFound");
+    sessionStorage.setItem("blog-active-cat", activeCategory);
 
-    tagButtons.forEach((btn) => {
-      const tag = (btn as HTMLElement).dataset.tag || "";
-      btn.classList.toggle("active", activeTags.includes(tag));
-    });
+    // 2. Dynamic Tag Count Logic
+    // We create a temporary map to count tags available within the current category + search
+    const currentTagCounts: Record<string, number> = {};
 
     postList.forEach((post) => {
-      const postElement = post as HTMLElement;
-      const title = postElement.textContent?.toLowerCase().toKatakana() || "";
-      const postTags = postElement.dataset.tags?.split(",") || [];
+      const el = post as HTMLElement;
+      const title = el.textContent?.toLowerCase().toKatakana() || "";
+      const cat = el.dataset.category || "uncategorized";
+      const tags = el.dataset.tags?.split(",") || [];
 
+      // Check if article matches Category AND Search (ignoring current tags for count purposes)
       const matchesSearch = title.includes(searchText);
-      const matchesTags =
-        activeTags.length === 0 ||
-        activeTags.every((tag) => postTags.includes(tag));
+      const matchesCat = activeCategory === "" || cat === activeCategory;
 
-      postElement.style.display = matchesSearch && matchesTags ? "" : "none";
-      if (matchesSearch && matchesTags) {
-        hasVisible = true;
+      if (matchesSearch && matchesCat) {
+        tags.forEach((t) => {
+          if (t) currentTagCounts[t] = (currentTagCounts[t] || 0) + 1;
+        });
+      }
+
+      // 3. Final Visibility Logic (Must match all 3 criteria)
+      const matchesTags =
+        activeTags.length === 0 || activeTags.every((t) => tags.includes(t));
+      const isVisible = matchesSearch && matchesTags && matchesCat;
+
+      el.style.display = isVisible ? "" : "none";
+      if (isVisible) hasVisible = true;
+    });
+
+    // 4. Update Tag Button UI (Hide/Disable tags with 0 matches)
+    tagButtons.forEach((btn) => {
+      const tag = (btn as HTMLElement).dataset.tag || "";
+      const count = currentTagCounts[tag] || 0;
+      const countSpan = btn.querySelector(".tag-count");
+
+      if (countSpan) countSpan.textContent = `(${count})`;
+
+      // Hide or Disable tags that have no articles in this category/search
+      // Note: We keep active tags visible even if count is 0 so the user can deselect them
+      if (count === 0 && !activeTags.includes(tag)) {
+        (btn as HTMLElement).style.display = "none";
+      } else {
+        (btn as HTMLElement).style.display = "";
+        btn.classList.toggle("active", activeTags.includes(tag));
       }
     });
+
+    // 5. Update Badge & Category UI
+    const totalFilters = activeTags.length + (activeCategory ? 1 : 0);
+    if (filterBadge) {
+      filterBadge.textContent = totalFilters.toString();
+      filterBadge.style.display = totalFilters > 0 ? "inline" : "none";
+    }
+
+    catButtons.forEach((btn) =>
+      btn.classList.toggle(
+        "active",
+        (btn as HTMLElement).dataset.category === activeCategory,
+      ),
+    );
+
     nothingFound?.style.setProperty("display", hasVisible ? "none" : "flex");
   };
 
-  searchInput.addEventListener("input", filterArticles);
-
-  tagButtons.forEach((btn) => {
+  // Category Clicks (Single Select)
+  catButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const tag = (btn as HTMLElement).dataset.tag || "";
-      if (activeTags.includes(tag)) {
-        activeTags = activeTags.filter((t) => t !== tag);
-      } else {
-        activeTags.push(tag);
-      }
+      const cat = (btn as HTMLElement).dataset.category || "";
+      activeCategory = activeCategory === cat ? "" : cat;
       filterArticles();
     });
   });
 
-  clearBtn?.addEventListener("click", () => {
-    activeTags = [];
-    searchInput.value = ""; // Optional: Clear search too
-    filterArticles();
+  // Tag Clicks (Multi Select) - logic remains the same
+  tagButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tag = (btn as HTMLElement).dataset.tag || "";
+      activeTags = activeTags.includes(tag)
+        ? activeTags.filter((t) => t !== tag)
+        : [...activeTags, tag];
+      filterArticles();
+    });
   });
 
-  // Init
-  const savedSearch = sessionStorage.getItem("blog-search-query");
-  if (savedSearch !== null) searchInput.value = savedSearch;
+  document.getElementById("clearTags")?.addEventListener("click", () => {
+    activeTags = [];
+    activeCategory = "";
+    searchInput.value = "";
+    filterArticles();
+  });
+  // 2. Variables activeTags and activeCategory were already restored
+  // at the top of the script during declaration.
 
+  // 3. Trigger the filter immediately to sync the UI with restored values
+  // This now has access to the searchInput.value we just restored.
   filterArticles();
 
+  // 4. Handle Safari/Mobile Back-Forward Cache (BFCache)
   window.addEventListener("pageshow", (event) => {
-    if (event.persisted) filterArticles();
+    if (event.persisted) {
+      const persistedSearch = sessionStorage.getItem("blog-search-query");
+      if (persistedSearch !== null) searchInput.value = persistedSearch;
+
+      activeTags = JSON.parse(
+        sessionStorage.getItem("blog-active-tags") || "[]",
+      );
+      activeCategory = sessionStorage.getItem("blog-active-cat") || "";
+
+      filterArticles();
+    }
   });
 </script>
