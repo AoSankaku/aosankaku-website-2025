@@ -159,3 +159,17 @@ const displayedOgpImage =
     --color-blogcard: #3d3d3d;
   }
 </style>
+
+<style is:global>
+  /* This will apply to EVERY .twemoji img on your site, 
+     regardless of where it was generated */
+  img[data-twemoji] {
+    height: 1.2em !important;
+    width: 1.2em !important;
+    margin: 0 0.05em 0 0.1em !important;
+    vertical-align: -0.2em !important;
+    display: inline-block !important;
+    border: none !important; /* Remove any default image borders */
+    box-shadow: none !important;
+  }
+</style>
