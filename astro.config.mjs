@@ -9,6 +9,7 @@ import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
 import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
+import partytown from '@astrojs/partytown'
 
 import expressiveCode from 'astro-expressive-code';
 import remarkLinkCard from 'remark-link-card-plus';
@@ -49,7 +50,13 @@ export default defineConfig({
         'zs': 'java',
       }
     }
-  })],
+  }),
+  partytown({
+    config: {
+      forward: ['dataLayer.push', 'gtag']
+    }
+  })
+  ],
 
   // i18n
   i18n: {
