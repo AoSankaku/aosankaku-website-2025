@@ -9,6 +9,8 @@ import type { ImageMetadata } from "astro";
 
 import OldGatsbyCacheKillSwitch from "@/components/OldGatsbyCacheKillSwitch.astro";
 
+import "@fontsource-variable/noto-sans-jp";
+
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
 const t = useTranslator(lang);
@@ -104,6 +106,7 @@ const displayedOgpImage =
 <style>
   html,
   body {
+    font-family: "Noto Sans JP Variable", sans-serif;
     margin: 0;
     width: 100%;
     height: 100%;
