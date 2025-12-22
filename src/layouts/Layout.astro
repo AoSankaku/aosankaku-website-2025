@@ -11,6 +11,7 @@ import OldGatsbyCacheKillSwitch from "@/components/OldGatsbyCacheKillSwitch.astr
 
 import "@fontsource-variable/noto-sans-jp";
 import "remark-github-alerts/styles/github-base.css";
+import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
@@ -95,22 +96,7 @@ const displayedOgpImage =
         document.documentElement.classList.remove("dark");
       }
     </script>
-
-    <!-- Google tag (gtag.js) -->
-    <script
-      is:inline
-      type="text/partytown"
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-Z49MSPZWTY"></script>
-    <script is:inline type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-Z49MSPZWTY");
-    </script>
+    <GoogleAnalytics />
     <OldGatsbyCacheKillSwitch />
   </head>
   <body>
