@@ -18,6 +18,10 @@ export default defineConfig({
   // Sitemap
   site: 'https://aosankaku.net',
 
+  redirects: {
+    '/rss': '/rss.xml',
+  },
+
   // Integrations
   integrations: [react(), icon(), sitemap({
     /*
