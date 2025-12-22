@@ -1,6 +1,5 @@
 ---
-// src/components/GoogleAnalytics.astro
-const { id } = Astro.props;
+// THE FUCKING ASTRO JAVASCRIPT PARSER CANT DIGEST ASTRO PROPS IN INLINE SCRIPT
 const isProd = import.meta.env.PROD;
 ---
 
@@ -10,14 +9,14 @@ const isProd = import.meta.env.PROD;
       is:inline
       type="text/partytown" 
       async 
-      src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
+      src={`https://www.googletagmanager.com/gtag/js?id=G-039TWQH72W`}
     ></script>
     
     <script is:inline type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-      gtag('config', {id});
+      gtag('config', 'G-039TWQH72W');
     </script>
   </>
 )}
