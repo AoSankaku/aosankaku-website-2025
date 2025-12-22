@@ -82,7 +82,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 
     @media (max-width: 768px) {
       font-size: 24px;
-      margin: 8px 40px 16px 40px;
+      margin: 8px 20px 16px 20px;
     }
   }
 
@@ -100,6 +100,10 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     color: var(--color-text-sub);
     margin: 1lh auto 0.6lh auto;
     max-width: 70%;
+
+    @media (max-width: 600px) {
+      max-width: 90%;
+    }
   }
 
   .container {
@@ -333,6 +337,10 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     max-width: 1080px;
     margin: 0 auto 80px auto;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     img {
       max-width: 100%;
