@@ -7,7 +7,7 @@ import ogDefaultImage from "@/assets/og-default.png";
 import formatToJSTDate from "@/utils/formatToJSTDate";
 import { Icon } from "astro-icon/components";
 import type { MarkdownHeading } from "astro";
-import categoryIcons from "@/consts/categoryIcons";
+import { getIcon } from "@/consts/categoryIcons";
 
 interface Props {
   frontmatter: any;
@@ -49,7 +49,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <div class="blog-hero">
     <Image src={articleImage} alt={frontmatter.alt || ""} loading="eager" />
     <p class="category">
-      <Icon name={categoryIcons[frontmatter.category]} size="1.2em" />{
+      <Icon name={getIcon(frontmatter.category)} size="1.2em" />{
         frontmatter.category
       }
     </p>

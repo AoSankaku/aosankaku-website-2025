@@ -78,7 +78,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
             categories.map((cat) => (
               <button class="category-button" data-category={cat}>
                 {/* Make sure this line looks exactly like this */}
-                <Icon name={categoryIcons[cat]} />
+                <Icon name={getIcon(cat)} />
                 <span>{cat}</span>
               </button>
             ))
