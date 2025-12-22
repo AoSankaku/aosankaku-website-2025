@@ -351,7 +351,21 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
       li.style.marginLeft = `${(h.depth - 2) * 20}px`;
       const a = document.createElement("a");
       a.href = `#${h.slug}`;
-      a.innerText = h.text;
+
+      // --- Emoji Integration ---
+      // Find the actual heading in the article using the slug
+      const actualHeading = document.getElementById(h.slug);
+      if (actualHeading) {
+        // Clone content to remove any nested anchor links (#)
+        const clone = actualHeading.cloneNode(true);
+        clone.querySelectorAll("a, .anchor-link").forEach((el) => el.remove());
+        // Set HTML to preserve the <img> tags from twemoji
+        a.innerHTML = clone.innerHTML;
+      } else {
+        a.innerText = h.text; // Fallback to plain text
+      }
+      // -------------------------
+
       li.appendChild(a);
       list.appendChild(li);
     });
