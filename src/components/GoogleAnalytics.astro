@@ -13,11 +13,11 @@ const isProd = import.meta.env.PROD;
       src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
     ></script>
     
-    <script is:inline type="text/partytown" define:vars={{ id }}>
+    <script is:inline type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-      gtag('config', id);
+      gtag('config', {id});
     </script>
   </>
 )}
