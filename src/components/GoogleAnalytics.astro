@@ -1,0 +1,23 @@
+---
+// src/components/GoogleAnalytics.astro
+const id = Astro.props;
+const isProd = import.meta.env.PROD;
+---
+
+{isProd && (
+  <>
+    <script 
+      is:inline
+      type="text/partytown" 
+      async 
+      src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
+    ></script>
+    
+    <script is:inline type="text/partytown" define:vars={{ id }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', id);
+    </script>
+  </>
+)}
