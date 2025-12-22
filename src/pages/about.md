@@ -2,6 +2,7 @@
 title: このサイトについて（フォローバック基準、著作権表記など）
 layout: ../layouts/BlogArticleLayout.astro
 date: "2025-12-20T22:00:00+09:00"
+category: Pages
 ---
 
 ```toc
