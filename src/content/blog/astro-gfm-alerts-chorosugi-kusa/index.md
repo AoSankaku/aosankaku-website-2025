@@ -3,6 +3,8 @@ title: 【Astro】記事にGitHubみたいなアラートブロックつける�
 category: Tech
 date: "2025-12-23 01:00"
 desc: GFM（GitHub Flavored Markdown）みたいなヒントとか警告とかだすブロック、読みやすさを考えるならほしいですよね。Astroでこれを実装するのはあまりにチョロいです。
+thumbnail: "./image.png"
+alt: "ヒントブロック的なやつ"
 tags:
   - Astro
   - フロントエンド
