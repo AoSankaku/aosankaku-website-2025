@@ -11,6 +11,7 @@ import OldGatsbyCacheKillSwitch from "@/components/OldGatsbyCacheKillSwitch.astr
 
 import "@fontsource-variable/noto-sans-jp";
 import "remark-github-alerts/styles/github-base.css";
+import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
@@ -96,6 +97,7 @@ const displayedOgpImage =
       }
     </script>
     <OldGatsbyCacheKillSwitch />
+    <GoogleAnalytics id="G-Z49MSPZWTY" />
   </head>
   <body>
     <main id="main-content">
