@@ -60,16 +60,20 @@ const t = useTranslator(Astro.currentLocale as Lang);
     />
 
     <details id="filterDetails">
-      <summary>
-        <Icon name="mdi:filter-variant" size="1.4em" />
-        <span>フィルター</span>
-        <span id="activeFilterCount" class="filter-badge" style="display: none;"
-          >0</span
+      <summary id="summary">
+        <p class="filter-desc">
+          <Icon name="mdi:filter-variant" size="1.4em" />
+          <span>フィルター</span>
+          <span
+            id="activeFilterCount"
+            class="filter-badge"
+            style="display: none;">0</span
+          >
+        </p>
+        <button id="clearTags"
+          ><Icon name="mdi:trash" size="2em" /> すべてリセット</button
         >
       </summary>
-      <button id="clearTags"
-        ><Icon name="mdi:trash" size="2em" /> フィルターをリセット</button
-      >
 
       <div class="filter-section">
         <p class="filter-label">カテゴリー</p>
@@ -95,6 +99,9 @@ const t = useTranslator(Astro.currentLocale as Lang);
             ))
           }
         </div>
+        <button id="closeSummary"
+          ><Icon name="mdi:chevron-up" size="1.5em" />折りたたむ</button
+        >
       </div>
     </details>
 
@@ -142,7 +149,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin: 24px 0 64px 0;
+    margin: 24px 0 44px 0;
   }
 
   #clearTags {
@@ -157,7 +164,6 @@ const t = useTranslator(Astro.currentLocale as Lang);
     align-items: center;
     gap: 4px;
     line-height: 1.8em;
-    margin: 16px auto;
   }
 
   .tag-button {
@@ -203,6 +209,16 @@ const t = useTranslator(Astro.currentLocale as Lang);
     display: flex;
     justify-content: center;
     align-items: center;
+    column-gap: 40px;
+    row-gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-desc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
   }
 
   .filter-badge {
@@ -266,6 +282,18 @@ const t = useTranslator(Astro.currentLocale as Lang);
     color: var(--color-background); /* Icon matches text color when active */
   }
 
+  #closeSummary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    padding: 6px 12px;
+    border: none;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
   @media (max-width: 600px) {
     .category-button {
       font-size: 0.9em;
@@ -292,6 +320,8 @@ const t = useTranslator(Astro.currentLocale as Lang);
   const tagButtons = document.querySelectorAll(".tag-button");
   const catButtons = document.querySelectorAll(".category-button");
   const filterBadge = document.getElementById("activeFilterCount");
+  const closeSummary = document.getElementById("closeSummary");
+  const summary = document.getElementById("summary");
   const postList = document.querySelectorAll("ul li");
   const nothingFound = document.getElementById("nothingFound");
 
@@ -419,5 +449,13 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
       filterArticles();
     }
+  });
+
+  searchInput?.addEventListener("input", () => {
+    filterArticles();
+  });
+
+  closeSummary?.addEventListener("click", () => {
+    summary?.click();
   });
 </script>
