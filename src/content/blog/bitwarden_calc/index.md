@@ -1,7 +1,7 @@
 ---
 title: "BitWardenの自動入力が電卓で働く件"
 category: "Misc"
-date: "aaaaaaaa"
+date: "2025/12/22"
 desc: "BitWardenのパスワード自動入力補助機能の無効化をアプリ単位でやる方法についてご紹介します。"
 tags:
   - 生活
