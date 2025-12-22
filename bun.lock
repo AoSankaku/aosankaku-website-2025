@@ -39,6 +39,7 @@
         "react-dom": "^19.2.1",
         "rehype-twemoji": "^0.0.6",
         "remark-gemoji": "^8.0.0",
+        "remark-github-alerts": "^0.1.1",
         "remark-link-card-plus": "^0.7.2",
         "styled-components": "^6.1.19",
         "swiper": "^12.0.3",
@@ -1032,6 +1033,8 @@
     "remark-gemoji": ["remark-gemoji@8.0.0", "", { "dependencies": { "@types/mdast": "^4.0.0", "gemoji": "^8.0.0", "mdast-util-find-and-replace": "^3.0.0" } }, "sha512-/fL9rc72FYwFGtOKcT+QeQdx9Q9t5v4N6KLXSDOTEgaedzK85I9judBqB2eqz+g4b0ERMejlwSOuPK+wket6aA=="],
 
     "remark-gfm": ["remark-gfm@4.0.1", "", { "dependencies": { "@types/mdast": "^4.0.0", "mdast-util-gfm": "^3.0.0", "micromark-extension-gfm": "^3.0.0", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "unified": "^11.0.0" } }, "sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg=="],
+
+    "remark-github-alerts": ["remark-github-alerts@0.1.1", "", { "dependencies": { "unist-util-visit": "^5.0.0" }, "peerDependencies": { "@types/mdast": "^4.0.0", "unified": "^11.0.0" } }, "sha512-A0NLfeAuu76ymiGIoEoBcHmqlPcdLFq+FoCGiWlzu8vkyhscyDv+pAkMA9paGr+OHpzpFflZKnsqOCvMESG/Uw=="],
 
     "remark-link-card-plus": ["remark-link-card-plus@0.7.2", "", { "dependencies": { "file-type": "^21.1.1", "open-graph-scraper": "^6.11.0", "sanitize-html": "^2.17.0", "unified": "^11.0.5", "unist-util-visit": "^5.0.0" } }, "sha512-LCNBkaRAMkQNbZXcezCg18Lka9ypqfMpU7bqSSOGbF+WHnOYtLhXTPTzhHapqhIkcrkRTvkef1CjcZwvMdUMWA=="],
 
