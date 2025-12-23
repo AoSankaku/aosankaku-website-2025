@@ -22,6 +22,7 @@ export default defineConfig({
 
   redirects: {
     '/rss': '/rss.xml',
+    '/sitemap.xml': '/sitemap-index.xml'
   },
 
   // Integrations
@@ -53,7 +54,7 @@ export default defineConfig({
   }),
   partytown({
     config: {
-      forward: ['dataLayer.push', 'gtag']
+      forward: ['dataLayer.push', 'gtag'],
     }
   })
   ],
