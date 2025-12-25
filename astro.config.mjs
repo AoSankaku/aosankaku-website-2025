@@ -111,5 +111,8 @@ export default defineConfig({
         ignored: ['**/node_modules/**', '**/.git/**'],
       }
     },
+    build: {
+      assetsInlineLimit: 10240,
+    }
   },
 });
