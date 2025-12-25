@@ -18,8 +18,10 @@
 
   const canvas = document.getElementById("tetrahedron-canvas");
   if (!canvas) throw new Error("Canvas element not found");
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
+
+  const rect = canvas.getBoundingClientRect();
+  let width = rect.width;
+  let height = rect.height;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 1000);
@@ -28,8 +30,10 @@
     canvas: canvas,
     antialias: true,
     alpha: true,
+    powerPreference: "high-performance", // Optimization
   });
 
+  renderer.setPixelRatio(window.devicePixelRatio); // Better sharpness
   renderer.setSize(width, height, false);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -79,24 +83,25 @@
   camera.position.z = 5.2;
   camera.position.y = 0.5;
 
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      // Use the entry data directly instead of querying the DOM
+      const { inlineSize: newWidth, blockSize: newHeight } =
+        entry.contentBoxSize[0];
+
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight, false);
+    }
+  });
+
+  resizeObserver.observe(canvas);
+
   const animate = () => {
     requestAnimationFrame(animate);
-    tetrahedron.rotation.x = Math.PI / 36;
     tetrahedron.rotation.y += 0.002;
     renderer.render(scene, camera);
   };
-
-  window.addEventListener("resize", () => {
-    const newWidth = canvas.clientWidth;
-    const newHeight = canvas.clientHeight;
-    camera.aspect = newWidth / newHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(newWidth, newHeight, false);
-  });
-
-  document.addEventListener("click", () => {
-    updateLightIntensity();
-  });
 
   animate();
 </script>
