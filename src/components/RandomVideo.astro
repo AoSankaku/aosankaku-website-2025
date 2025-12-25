@@ -68,7 +68,12 @@ const randomVideoId = videoIds[randomIndex];
 
 <h2>{t("homepage.random-video")}</h2>
 <div>
-  <YouTube class="video" id={randomVideoId} posterQuality="high" />
+  <YouTube
+    class="video"
+    id={randomVideoId}
+    posterQuality="high"
+    fetchpriority="high"
+  />
 </div>
 <p>{t("homepage.random-video-desc")}</p>
 

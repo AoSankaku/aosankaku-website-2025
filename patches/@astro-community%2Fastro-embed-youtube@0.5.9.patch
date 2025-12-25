@@ -1,0 +1,28 @@
+diff --git a/YouTube.astro b/YouTube.astro
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..9b7fc1e4c4c16ffe4994f7891c9f74fa27ea3607 100644
+--- a/YouTube.astro
++++ b/YouTube.astro
+@@ -8,6 +8,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
+ 	posterQuality?: 'max' | 'high' | 'default' | 'low';
+ 	params?: string;
+ 	playlabel?: string;
++	fetchpriority?: 'high' | 'low' | 'auto';
+ }
+ 
+ const {
+@@ -16,6 +17,7 @@ const {
+ 	posterQuality = 'default',
+ 	title,
+ 	style,
++	fetchpriority = 'auto',
+ 	...attrs
+ } = Astro.props as Props;
+ 
+@@ -47,6 +49,7 @@ if (posterURL) styles.push(`background-image: url('${posterURL}')`);
+ 	{videoid}
+ 	{title}
+ 	data-title={title}
++	fetchpriority={fetchpriority}
+ 	{...attrs}
+ 	style={styles.join(';')}
+ >
