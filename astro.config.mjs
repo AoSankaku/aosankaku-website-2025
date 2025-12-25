@@ -22,7 +22,10 @@ export default defineConfig({
 
   redirects: {
     '/rss': '/rss.xml',
-    '/sitemap.xml': '/sitemap-index.xml'
+    '/sitemap.xml': '/sitemap-index.xml',
+    '/links': '/',
+    '/profile': '/',
+    '/tags': '/blog/',
   },
 
   // Integrations
