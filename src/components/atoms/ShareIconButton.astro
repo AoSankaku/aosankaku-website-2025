@@ -1,0 +1,31 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  iconName: string;
+  url: string;
+  color?: string;
+  copyLink?: boolean;
+}
+const { iconName, url, color } = Astro.props;
+
+const iconColor = color ? color : "var(--color-background)";
+---
+
+<a href={url} target="_blank">
+  <Icon name={iconName} />
+</a>
+
+<style define:vars={{ iconColor }}>
+  a {
+    display: inline-block;
+    background: var(--color-text);
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    font-size: 250%;
+    padding: 10px;
+    border-radius: 50%;
+    color: var(--iconColor);
+  }
+</style>

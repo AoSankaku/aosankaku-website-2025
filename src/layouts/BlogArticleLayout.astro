@@ -8,6 +8,7 @@ import formatToJSTDate from "@/utils/formatToJSTDate";
 import { Icon } from "astro-icon/components";
 import type { MarkdownHeading } from "astro";
 import { getIcon } from "@/consts/categoryIcons";
+import ShareButtons from "@/components/ShareButtons.astro";
 
 interface Props {
   frontmatter: any;
@@ -70,6 +71,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <div class="container">
     <slot />
   </div>
+  <ShareButtons title={frontmatter.title} />
   <Footer />
 </Layout>
 
