@@ -23,6 +23,29 @@ const encodedShareText = encodeURIComponent(title);
       iconName="logos:mastodon-icon"
       url=`https://mastodonshare.com/share?text=${encodedShareText}&url=${encodedUrl}`
     />
+    <ShareIconButton
+      iconName="hugeicons:twitter"
+      url=`https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedUrl}`
+    />
+    <ShareIconButton
+      iconName="hugeicons:new-twitter"
+      url=`https://x.com/intent/post?text=${encodedShareText}&url=${encodedUrl}`
+    />
+    <ShareIconButton
+      iconName="simple-icons:line"
+      url=`https://social-plugins.line.me/lineit/share?text=${encodedShareText}&url=${encodedUrl}`
+      color="#06c655"
+    />
+    <ShareIconButton
+      iconName="mdi:ios-share"
+      url=`${title}\n${Astro.url.href}`
+      shareLink
+    />
+    <ShareIconButton
+      iconName="mdi:content-copy"
+      url=`${title}\n${Astro.url.href}`
+      copyLink
+    />
   </div>
 </div>
 
@@ -32,17 +55,20 @@ const encodedShareText = encodeURIComponent(title);
     padding: 0.8em 0 0 0;
     margin: 0;
     font-size: 1.4rem;
+    word-break: auto-phrase;
   }
   div.container {
     background: var(--color-card);
     display: block;
     margin-bottom: 100px;
+    padding: 0 20px 20px 20px;
   }
   div.icon-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
-    padding: 20px;
+    padding-top: 20px;
   }
 </style>

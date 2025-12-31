@@ -5,27 +5,72 @@ interface Props {
   iconName: string;
   url: string;
   color?: string;
+  shareLink?: boolean;
   copyLink?: boolean;
 }
-const { iconName, url, color } = Astro.props;
+const { iconName, url, color, shareLink, copyLink } = Astro.props;
 
 const iconColor = color ? color : "var(--color-background)";
 ---
 
-<a href={url} target="_blank">
-  <Icon name={iconName} />
-</a>
+{
+  shareLink ? (
+    <button class="share-button-component">
+      <Icon name={iconName} />
+    </button>
+  ) : copyLink ? (
+    <button class="copy-button-component">
+      <Icon name={iconName} />
+    </button>
+  ) : (
+    <a href={url} target="_blank">
+      <Icon name={iconName} />
+    </a>
+  )
+}
 
 <style define:vars={{ iconColor }}>
-  a {
-    display: inline-block;
+  a,
+  button {
+    box-sizing: content-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: var(--color-text);
     width: 1em;
     height: 1em;
     line-height: 1;
-    font-size: 250%;
+    font-size: 36px;
     padding: 10px;
     border-radius: 50%;
     color: var(--iconColor);
+    cursor: pointer;
+    border: none;
   }
 </style>
+
+<script is:inline define:vars={{ url }}>
+  const shareButtons = document.querySelectorAll(".share-button-component");
+
+  shareButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      if (!window.navigator.share) {
+        alert("Not available on your browser");
+        return;
+      }
+      try {
+        await window.navigator.share({ text: url });
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  });
+
+  const copyButtons = document.querySelectorAll(".copy-button-component");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      navigator.clipboard.writeText(url);
+    });
+  });
+</script>
