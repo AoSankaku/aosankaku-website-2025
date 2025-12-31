@@ -10,8 +10,9 @@
       const registrations = await navigator.serviceWorker.getRegistrations();
       for (let registration of registrations) {
         // Gatsby's default worker is usually named sw.js
-        if (registration.active?.scriptURL.includes("sw.js")) {
+        if (!sessionStorage.getItem("gatsby-cleaned")) {
           await registration.unregister();
+          sessionStorage.setItem("gatsby-cleaned", "true");
           window.location.reload();
         }
       }
