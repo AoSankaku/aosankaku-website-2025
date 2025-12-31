@@ -12,6 +12,7 @@ import OldGatsbyCacheKillSwitch from "@/components/OldGatsbyCacheKillSwitch.astr
 import "@fontsource-variable/noto-sans-jp";
 import "remark-github-alerts/styles/github-base.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
+import { SITE_TITLE } from "@/consts";
 
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
@@ -29,8 +30,9 @@ interface Props {
 }
 
 const defaultOgpImageUrl = new URL(defaultOgpImage.src, Astro.site);
+const siteName = t("site-name");
 const {
-  title = t("site-name"),
+  title = siteName,
   description = t("site-description"),
   type = "website",
   ogpImage = defaultOgpImageUrl,
@@ -38,7 +40,7 @@ const {
 } = Astro.props;
 
 const displayedTitle = !disableTrailingWebsiteName
-  ? `${title} | ${t("site-name")}`
+  ? `${title} | ${siteName}`
   : title;
 
 const displayedOgpImage =
@@ -58,7 +60,7 @@ const displayedOgpImage =
     <title>{displayedTitle}</title>
     <meta name="description" slot="head" content={description} />
     <meta property="og:title" content={displayedTitle} />
-    <meta property="og:site_name" content={title} />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:type" content={type} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={displayedOgpImage} />
