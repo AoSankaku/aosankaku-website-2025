@@ -31,11 +31,13 @@ const encodedShareText = encodeURIComponent(title);
       iconName="hugeicons:new-twitter"
       url=`https://x.com/intent/post?text=${encodedShareText}&url=${encodedUrl}`
     />
+    <!--
     <ShareIconButton
       iconName="simple-icons:line"
       url=`https://social-plugins.line.me/lineit/share?text=${encodedShareText}&url=${encodedUrl}`
       color="#06c655"
     />
+    -->
     <ShareIconButton
       iconName="mdi:ios-share"
       url=`${title}\n${Astro.url.href}`
