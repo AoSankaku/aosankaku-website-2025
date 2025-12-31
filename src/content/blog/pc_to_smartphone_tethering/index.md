@@ -3,8 +3,8 @@ title: "【Windowsからスマホ】ネット共有（無線LAN）を飛ばす�
 category: "Tech"
 date: "2025-12-31T18:30:00+09:00"
 desc: "パソコンからスマホにインターネット接続を共有する方法について解説します。Windows 11のPC向けです。"
-thumbnail: "no_image_card.png"
-alt: ""
+thumbnail: "749.jpg"
+alt: "パソコンからなんか出てる"
 tags:
   - Windows
 ---
