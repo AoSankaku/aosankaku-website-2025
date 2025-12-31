@@ -4,6 +4,8 @@ category: "Misc"
 date: "2025/12/22"
 lastUpdate: "2025-12-31T18:45:00+09:00"
 desc: "BitWardenのパスワード自動入力補助機能の無効化をアプリ単位でやる方法についてご紹介します。"
+thumbnail: "thumbnail.png"
+alt: "電卓を押す指"
 tags:
   - 生活
   - BitWarden
