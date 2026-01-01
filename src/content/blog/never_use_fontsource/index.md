@@ -1,7 +1,7 @@
 ---
 title: "【絶対やめろ】AstroでFontSourceをつかってWebFontを入れるな"
 category: "Tech"
-date: "2026-01-01T21: 00: 00+09: 00"
+date: "2026-01-01T21:00:00+09:00"
 desc: "Astroでフォント（Noto Sans JP Variable）を追加したところ、Pagespeed Insightsのパフォーマンススコアが急低下していることが判明しました。どうやらFontSourceのせいみたいです。除去する方法について説明します。"
 tags:
   - フロントエンド
