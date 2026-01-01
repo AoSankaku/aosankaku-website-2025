@@ -14,11 +14,11 @@
 </style>
 
 <script>
-  import * as THREE from "three";
-
-  const init = () => {
+  const init = async () => {
     const canvas = document.getElementById("tetrahedron-canvas");
     if (!canvas) throw new Error("Canvas element not found");
+
+    const THREE = await import("three");
 
     const rect = canvas.getBoundingClientRect();
     let width = rect.width;
@@ -107,9 +107,11 @@
     animate();
   };
 
-  if (window.requestIdleCallback) {
-    window.requestIdleCallback(() => init());
-  } else {
-    window.setTimeout(init, 200);
-  }
+  window.addEventListener("load", () => {
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(() => init());
+    } else {
+      window.setTimeout(init, 200);
+    }
+  });
 </script>
