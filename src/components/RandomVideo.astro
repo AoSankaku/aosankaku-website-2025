@@ -66,6 +66,13 @@ const randomIndex = Math.floor(random * videoIds.length);
 const randomVideoId = videoIds[randomIndex];
 ---
 
+<link
+  rel="preload"
+  as="image"
+  href={`https://i.ytimg.com/vi/${randomVideoId}/sddefault.jpg`}
+  fetchpriority="high"
+/>
+
 <h2>{t("homepage.random-video")}</h2>
 <div>
   <YouTube
