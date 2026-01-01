@@ -45,7 +45,8 @@
       powerPreference: "high-performance", // Optimization
     });
 
-    renderer.setPixelRatio(window.devicePixelRatio); // Better sharpness
+    const maxPixelRatio = window.innerWidth < 768 ? 1.5 : 2;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
     renderer.setSize(width, height, false);
 
     const ambientLight = new AmbientLight(0xffffff, 0.3);
