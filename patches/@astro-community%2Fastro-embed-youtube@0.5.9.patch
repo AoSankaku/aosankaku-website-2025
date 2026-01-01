@@ -1,5 +1,8 @@
+diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-78de75ad5a05ba8 b/.bun-tag-78de75ad5a05ba8
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/YouTube.astro b/YouTube.astro
-index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..9b7fc1e4c4c16ffe4994f7891c9f74fa27ea3607 100644
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..06408407e41db487939fd0d4c65a01228efa6087 100644
 --- a/YouTube.astro
 +++ b/YouTube.astro
 @@ -8,6 +8,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
@@ -18,7 +21,18 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..9b7fc1e4c4c16ffe4994f7891c9f74fa
  	...attrs
  } = Astro.props as Props;
  
-@@ -47,6 +49,7 @@ if (posterURL) styles.push(`background-image: url('${posterURL}')`);
+@@ -43,10 +45,18 @@ if (style) styles.push(style);
+ if (posterURL) styles.push(`background-image: url('${posterURL}')`);
+ ---
+ 
++<link
++  rel="preload"
++  as="image"
++  href={posterURL}
++  fetchpriority={fetchpriority}
++/>
++
+ <lite-youtube
  	{videoid}
  	{title}
  	data-title={title}
