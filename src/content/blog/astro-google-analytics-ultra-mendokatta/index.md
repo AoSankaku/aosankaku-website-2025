@@ -1,7 +1,7 @@
 ---
 title: 【注意】Tag Assistantは@astro/partytown経由のGA4タグを認識できない
 category: Tech
-date: "2026-01-23 00:40"
+date: "2026-01-02 00:40"
 desc: AstroにGoogle Analytics（GA4）とPartyTownを入れようとしたらデバッグがうまく行かなかったものの、導入はできているようでした。顛末を紹介します。
 thumbnail: "./image.png"
 alt: "タグが見つかりませんでした（大嘘）"
