@@ -17,8 +17,8 @@ const { title, imageSrc, link, linkText } = Astro.props;
       src={imageSrc}
       alt={title}
       style="color: var(--color-background);"
-      width={350}
-      height={350}
+      widths={[280, 350, imageSrc.width]}
+      sizes="(max-width: 768px) 280px, 350px"
     />
     <h2>
       {title}
@@ -75,8 +75,8 @@ const { title, imageSrc, link, linkText } = Astro.props;
       border-radius: 8px 8px 0px 0px;
 
       @media (min-width: 768px) {
-        width: 340px !important;
-        height: 340px !important;
+        width: 350px !important;
+        height: 350px !important;
         transform: none;
         border-radius: unset;
       }
