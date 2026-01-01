@@ -121,35 +121,35 @@ import "swiper/css/autoplay";
 
 <script>
   import Swiper from "swiper";
-  import type { SwiperOptions } from "swiper/types";
   import { Autoplay } from "swiper/modules";
 
-  export const swiperConfig = {
-    modules: [Autoplay],
-    loop: true,
-    slidesPerView: "auto",
-    spaceBetween: 0,
-    centeredSlides: true,
+  const initSwiper = () => {
+    const swiperElement = document.querySelector(".swiper");
+    if (!swiperElement) return;
 
-    autoplay: {
-      delay: 8000,
-      disableOnInteraction: false,
-    },
-
-    speed: 1000,
-
-    breakpoints: {
-      768: {
-        spaceBetween: 25,
+    new Swiper(".swiper", {
+      modules: [Autoplay],
+      loop: true,
+      slidesPerView: "auto",
+      spaceBetween: 0,
+      centeredSlides: true,
+      autoplay: {
+        delay: 8000,
+        disableOnInteraction: false,
       },
-      1080: {
-        spaceBetween: 120,
+      speed: 1000,
+      breakpoints: {
+        768: { spaceBetween: 25 },
+        1080: { spaceBetween: 120 },
+        1920: { spaceBetween: 320 },
       },
-      1920: {
-        spaceBetween: 320,
-      },
-    },
+    });
   };
 
-  const swiper = new Swiper(".swiper", swiperConfig as SwiperOptions);
+  // Wait until the main thread is idle to prevent "Forced Reflow"
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(() => initSwiper());
+  } else {
+    setTimeout(initSwiper, 200);
+  }
 </script>
