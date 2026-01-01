@@ -16,92 +16,100 @@
 <script>
   import * as THREE from "three";
 
-  const canvas = document.getElementById("tetrahedron-canvas");
-  if (!canvas) throw new Error("Canvas element not found");
+  const init = () => {
+    const canvas = document.getElementById("tetrahedron-canvas");
+    if (!canvas) throw new Error("Canvas element not found");
 
-  const rect = canvas.getBoundingClientRect();
-  let width = rect.width;
-  let height = rect.height;
+    const rect = canvas.getBoundingClientRect();
+    let width = rect.width;
+    let height = rect.height;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 1000);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 1000);
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    antialias: true,
-    alpha: true,
-    powerPreference: "high-performance", // Optimization
-  });
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance", // Optimization
+    });
 
-  renderer.setPixelRatio(window.devicePixelRatio); // Better sharpness
-  renderer.setSize(width, height, false);
+    renderer.setPixelRatio(window.devicePixelRatio); // Better sharpness
+    renderer.setSize(width, height, false);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-  scene.add(ambientLight);
-  const pointLight = new THREE.PointLight(0xffffff, 30);
-  pointLight.position.set(0, 6, 7);
-  scene.add(pointLight);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 30);
+    pointLight.position.set(0, 6, 7);
+    scene.add(pointLight);
 
-  const updateLightIntensity = () => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
+    const updateLightIntensity = () => {
+      const isDarkMode = document.documentElement.classList.contains("dark");
 
-    let newIntensity;
-    if (isDarkMode) {
-      newIntensity = 0.3;
-    } else {
-      newIntensity = 8;
-    }
+      let newIntensity;
+      if (isDarkMode) {
+        newIntensity = 0.3;
+      } else {
+        newIntensity = 8;
+      }
 
-    ambientLight.intensity = newIntensity;
+      ambientLight.intensity = newIntensity;
+    };
+
+    updateLightIntensity();
+
+    const radius = 1;
+    const detail = 0;
+    const geometry = new THREE.TetrahedronGeometry(radius, detail);
+
+    const upAxis = new THREE.Vector3(1, 0, -1).normalize();
+    const angle = Math.atan(Math.sqrt(2));
+    const rotationMatrix = new THREE.Matrix4().makeRotationAxis(upAxis, angle);
+    geometry.applyMatrix4(rotationMatrix);
+
+    const distanceToBase = radius / 3;
+    geometry.translate(0, distanceToBase, 0);
+
+    // Material and Mesh
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x0077ff,
+      metalness: 0.8,
+      roughness: 0.35,
+      wireframe: false,
+    });
+
+    const tetrahedron = new THREE.Mesh(geometry, material);
+    scene.add(tetrahedron);
+
+    camera.position.z = 5.2;
+    camera.position.y = 0.5;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        // Use the entry data directly instead of querying the DOM
+        const { inlineSize: newWidth, blockSize: newHeight } =
+          entry.contentBoxSize[0];
+
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight, false);
+      }
+    });
+
+    resizeObserver.observe(canvas);
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      tetrahedron.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    };
+
+    animate();
   };
 
-  updateLightIntensity();
-
-  const radius = 1;
-  const detail = 0;
-  const geometry = new THREE.TetrahedronGeometry(radius, detail);
-
-  const upAxis = new THREE.Vector3(1, 0, -1).normalize();
-  const angle = Math.atan(Math.sqrt(2));
-  const rotationMatrix = new THREE.Matrix4().makeRotationAxis(upAxis, angle);
-  geometry.applyMatrix4(rotationMatrix);
-
-  const distanceToBase = radius / 3;
-  geometry.translate(0, distanceToBase, 0);
-
-  // Material and Mesh
-  const material = new THREE.MeshStandardMaterial({
-    color: 0x0077ff,
-    metalness: 0.8,
-    roughness: 0.35,
-    wireframe: false,
-  });
-
-  const tetrahedron = new THREE.Mesh(geometry, material);
-  scene.add(tetrahedron);
-
-  camera.position.z = 5.2;
-  camera.position.y = 0.5;
-
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      // Use the entry data directly instead of querying the DOM
-      const { inlineSize: newWidth, blockSize: newHeight } =
-        entry.contentBoxSize[0];
-
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight, false);
-    }
-  });
-
-  resizeObserver.observe(canvas);
-
-  const animate = () => {
-    requestAnimationFrame(animate);
-    tetrahedron.rotation.y += 0.002;
-    renderer.render(scene, camera);
-  };
-
-  animate();
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(() => init());
+  } else {
+    window.setTimeout(init, 200);
+  }
 </script>
