@@ -97,7 +97,10 @@ import "swiper/css/autoplay";
   }
 
   .swiper-wrapper {
+    display: flex;
     align-items: stretch;
+    transition-property: transform;
+    box-sizing: content-box;
   }
 
   .container.swiper {
@@ -111,10 +114,13 @@ import "swiper/css/autoplay";
   }
 
   .swiper-slide {
-    width: 320px !important;
+    flex-shrink: 0;
+    width: 320px;
+    height: 100%;
+    position: relative;
 
     @media (min-width: 768px) {
-      width: 480px !important;
+      width: 480px;
     }
   }
 </style>
