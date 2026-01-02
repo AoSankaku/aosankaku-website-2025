@@ -94,11 +94,23 @@ import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
   }
 
   #more_social_icons {
+    display: none;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 20px 20px 0;
+    list-style: none;
+    padding: 0;
+
     animation: slideDown 0.3s ease-out;
-    margin-top: 20px;
   }
 
-  #more_social_icons.hidden {
+  #more_social_icons.show {
+    display: flex;
+  }
+
+  #more_social_icons.hiding {
     animation: slideUp 0.3s ease-out forwards;
   }
 
@@ -126,25 +138,24 @@ import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
 </style>
 
 <script>
-  const showMoreIconsButton = document.getElementById(
-    "show_more_icons_button",
-  ) as HTMLElement;
-  const moreSocialIcons = document.getElementById(
-    "more_social_icons",
-  ) as HTMLElement;
+  const showMoreIconsButton = document.getElementById("show_more_icons_button");
+  const moreSocialIcons = document.getElementById("more_social_icons");
 
-  moreSocialIcons.style.display = "none";
-  moreSocialIcons.classList.add("hidden");
+  if (showMoreIconsButton && moreSocialIcons) {
+    showMoreIconsButton.addEventListener("click", () => {
+      const isHidden = !moreSocialIcons.classList.contains("show");
 
-  showMoreIconsButton.addEventListener("click", () => {
-    if (moreSocialIcons.style.display === "none") {
-      moreSocialIcons.style.display = "flex";
-      moreSocialIcons.classList.remove("hidden");
-    } else {
-      moreSocialIcons.classList.add("hidden");
-      setTimeout(() => {
-        moreSocialIcons.style.display = "none";
-      }, 300);
-    }
-  });
+      if (isHidden) {
+        // Show logic
+        moreSocialIcons.classList.remove("hiding");
+        moreSocialIcons.classList.add("show");
+      } else {
+        // Hide logic with animation delay
+        moreSocialIcons.classList.add("hiding");
+        setTimeout(() => {
+          moreSocialIcons.classList.remove("show");
+        }, 300); // Matches animation duration
+      }
+    });
+  }
 </script>
