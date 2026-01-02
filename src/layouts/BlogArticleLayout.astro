@@ -9,6 +9,7 @@ import { Icon } from "astro-icon/components";
 import type { MarkdownHeading } from "astro";
 import { getIcon } from "@/consts/categoryIcons";
 import ShareButtons from "@/components/ShareButtons.astro";
+import "remark-github-alerts/styles/github-base.css";
 import "@/styles/blogArticleStyle.css";
 
 interface Props {
@@ -72,6 +73,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <div class="container">
     <slot />
   </div>
+  <RelatedArticles />
   <ShareButtons title={frontmatter.title} />
   <Footer />
 </Layout>
