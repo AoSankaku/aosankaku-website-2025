@@ -68,7 +68,7 @@ const displayedOgpImage =
     <meta name="twitter:image" content={displayedOgpImage} />
     <meta property="og:locale" content={langFull?.replace("-", "_")} />
     <meta property="og:url" content={Astro.url} />
-    <slot name="head" slot="head" />
+    <slot name="head" />
     <script is:inline>
       const getThemePreference = () => {
         // 1. Check for saved preference in localStorage
