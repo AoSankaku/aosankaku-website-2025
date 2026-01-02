@@ -49,7 +49,6 @@ const displayedOgpImage =
 <html lang={langFull}>
   <head>
     <meta charset="UTF-8" />
-    <GoogleAnalytics />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -91,12 +90,13 @@ const displayedOgpImage =
         document.documentElement.classList.remove("dark");
       }
     </script>
-    <OldGatsbyCacheKillSwitch />
   </head>
   <body>
     <main id="main-content">
       <slot />
     </main>
+    <OldGatsbyCacheKillSwitch client:idle />
+    <GoogleAnalytics />
   </body>
 </html>
 
