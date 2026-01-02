@@ -77,11 +77,13 @@ const { title, imageSrc, link, linkText } = Astro.props;
     img {
       width: 280px;
       height: 280px;
+      aspect-ratio: 1 / 1;
       border-radius: 8px 8px 0px 0px;
 
       @media (min-width: 768px) {
         width: 350px;
         height: 350px;
+        aspect-ratio: 1 / 1;
         transform: none;
         border-radius: unset;
       }
