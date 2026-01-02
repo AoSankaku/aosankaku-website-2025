@@ -71,24 +71,20 @@ const displayedOgpImage =
     <slot name="head" />
     <script is:inline>
       const getThemePreference = () => {
-        // 1. Check for saved preference in localStorage
         if (
           typeof localStorage !== "undefined" &&
           localStorage.getItem("theme")
         ) {
           return localStorage.getItem("theme");
         }
-        // 2. Fallback to system preference
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
           return "dark";
         }
-        // 3. Default to 'light'
         return "light";
       };
 
       const theme = getThemePreference();
 
-      // Apply the class before the browser renders the content
       if (theme === "dark") {
         document.documentElement.classList.add("dark");
       } else {
