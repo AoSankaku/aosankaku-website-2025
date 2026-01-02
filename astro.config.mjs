@@ -28,6 +28,10 @@ export default defineConfig({
     '/tags': '/blog/',
   },
 
+  image: {
+    domains: ["i.ytimg.com"]
+  },
+
   // Integrations
   integrations: [react(), icon(), sitemap({
     /*
