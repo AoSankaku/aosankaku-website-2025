@@ -130,13 +130,17 @@ import "swiper/css/autoplay";
   import { Autoplay } from "swiper/modules";
 
   const initSwiper = () => {
-    const swiperElement = document.querySelector(".swiper");
-    if (!swiperElement) return;
+    // Check if already initialized to prevent double-init
+    const swiperEl = document.querySelector(".swiper");
+    if (!swiperEl || swiperEl.classList.contains("swiper-initialized")) return;
 
     new Swiper(".swiper", {
       modules: [Autoplay],
       loop: true,
       slidesPerView: "auto",
+      // Add 'observeParents' to help Swiper detect changes without forcing reflows
+      observer: true,
+      observeParents: true,
       spaceBetween: 0,
       centeredSlides: true,
       autoplay: {
@@ -152,10 +156,19 @@ import "swiper/css/autoplay";
     });
   };
 
-  // Wait until the main thread is idle to prevent "Forced Reflow"
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(() => initSwiper());
-  } else {
-    setTimeout(initSwiper, 200);
-  }
+  // --- Optimization: Lazy Initialize on Scroll ---
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          initSwiper();
+          observer.disconnect(); // Run once and stop observing
+        }
+      });
+    },
+    { rootMargin: "600px" },
+  ); // Start initializing 200px before it comes into view
+
+  const target = document.querySelector(".swiper");
+  if (target) observer.observe(target);
 </script>
