@@ -7,14 +7,17 @@ index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-956fa6869deace0 b/.bun-tag-956fa6869deace0
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-aa8faaf4308a684a b/.bun-tag-aa8faaf4308a684a
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-c296f4c3cab15ae8 b/.bun-tag-c296f4c3cab15ae8
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/YouTube.astro b/YouTube.astro
-index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..8d71c1621979085af4099253183d9b9ae5ae198f 100644
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..59ae78133b4656ebd99878b7a7441d321b22ffbd 100644
 --- a/YouTube.astro
 +++ b/YouTube.astro
-@@ -1,69 +1,124 @@
+@@ -1,69 +1,146 @@
  ---
  import 'lite-youtube-embed/src/lite-yt-embed.css';
 +import { getImage } from "astro:assets";
@@ -130,6 +133,17 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..8d71c1621979085af4099253183d9b9a
 +if (optimizedPoster.src) styles.push(`background-image: url('${optimizedPoster.src}')`);
  ---
  
+-<lite-youtube
+-	{videoid}
+-	{title}
+-	data-title={title}
+-	{...attrs}
+-	style={styles.join(';')}
+->
+-	<a {href} class="lyt-playbtn">
+-		<span class="lyt-visually-hidden">{attrs.playlabel || 'Play'}</span>
+-	</a>
+-</lite-youtube>
 +<link
 +  rel="preload"
 +  as="image"
@@ -137,26 +151,20 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..8d71c1621979085af4099253183d9b9a
 +  fetchpriority={fetchpriority}
 +/>
 +
- <lite-youtube
--	{videoid}
--	{title}
--	data-title={title}
--	{...attrs}
--	style={styles.join(';')}
-+  {videoid}
-+  {title}
-+  data-title={title}
-+  fetchpriority={fetchpriority}
-+  {...attrs}
-+  style={styles.join(';')}
- >
--	<a {href} class="lyt-playbtn">
--		<span class="lyt-visually-hidden">{attrs.playlabel || 'Play'}</span>
--	</a>
-+  <a {href} class="lyt-playbtn">
-+    <span class="lyt-visually-hidden">{attrs.playlabel || 'Play'}</span>
-+  </a>
- </lite-youtube>
++<div class="yt-embed-wrapper">
++  <lite-youtube
++    {videoid}
++    {title}
++    data-title={title}
++    fetchpriority={fetchpriority}
++    {...attrs}
++    style={styles.join(';')}
++  >
++    <a {href} class="lyt-playbtn">
++      <span class="lyt-visually-hidden">{attrs.playlabel || 'Play'}</span>
++    </a>
++  </lite-youtube>
++</div>
  
  <script src="lite-youtube-embed"></script>
  
@@ -169,6 +177,26 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..8d71c1621979085af4099253183d9b9a
 -		inset: 0 !important;
 -		border: 0 !important;
 -	}
++  .yt-embed-wrapper {
++    width: 100%;
++    aspect-ratio: 16 / 9; 
++    background-color: #000;
++    position: relative;
++    contain: layout paint; 
++    border-radius: 12px;
++    overflow: hidden;
++  }
++
++  lite-youtube {
++    display: block !important;
++    width: 100% !important;
++    height: 100% !important;
++    position: absolute !important;
++    inset: 0 !important;
++    background-size: cover !important;
++    background-position: center !important;
++  }
++
 +  lite-youtube > iframe {
 +    all: unset !important;
 +    width: 100% !important;
