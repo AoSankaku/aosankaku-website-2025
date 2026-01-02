@@ -8,168 +8,178 @@ import typingImage from "@/assets/homepage/works/typing_340.jpg";
 import keybaseImage from "@/assets/homepage/works/keybase_340.png";
 import profileIcon250 from "@/assets/profileicon250.png";
 import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_generator.png";
-
-import "swiper/css";
-import "swiper/css/autoplay";
 ---
 
 <h2>みてみてコーナー</h2>
 
-<div class="container swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <WorkCard
-        title="Moremobility Mod"
-        imageSrc={moremobilityImage}
-        link="https://modrinth.com/mod/moremobility"
-        linkText="Modrinthで見る"
-      >
-        俺が作ったものではなく、sysnoteくゃんが作ってくれました。Automobilityを拡張するアドオンです。
-        でっかい収穫機やネザライトエンジンなどを追加します。
-      </WorkCard>
-    </div>
+<section class="embla" id="works-embla">
+  <div class="embla__viewport">
+    <div class="embla__container">
+      <div class="embla__slide">
+        <WorkCard
+          title="Moremobility Mod"
+          imageSrc={moremobilityImage}
+          link="https://modrinth.com/mod/moremobility"
+          linkText="Modrinthで見る"
+        >
+          俺が作ったものではなく、sysnoteくゃんが作ってくれました。Automobilityを拡張するアドオンです。でっかい収穫機やネザライトエンジンなどを追加します。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard title="Create Citiesサーバー" imageSrc={serverImage1}>
-        マイクラサバもやってます。恐ろしい量のMODが工業を中心に入っています。友人限定ですが、知り合いの方で興味があれば広く参加を受け付けています。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard title="Create Citiesサーバー" imageSrc={serverImage1}>
+          マイクラサバもやってます。恐ろしい量のMODが工業を中心に入っています。友人限定ですが、知り合いの方で興味があれば広く参加を受け付けています。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard
-        title="StreamDeck用CPUモニター"
-        imageSrc={partyparrotStreamdeckImage}
-        link="https://github.com/AoSankaku/cpu-partyparrot/releases"
-        linkText="ダウンロード（GitHub）"
-      >
-        StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard
+          title="StreamDeck用CPUモニター"
+          imageSrc={partyparrotStreamdeckImage}
+          link="https://github.com/AoSankaku/cpu-partyparrot/releases"
+          linkText="ダウンロード（GitHub）"
+        >
+          StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard
-        title="【作成中】駅名標ジェネレーター"
-        imageSrc={stationSignGeneratorImage}
-      >
-        駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard
+          title="【作成中】駅名標ジェネレーター"
+          imageSrc={stationSignGeneratorImage}
+        >
+          駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard title="タイピングガチ勢" imageSrc={typingImage}>
-        神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard title="タイピングガチ勢" imageSrc={typingImage}>
+          神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard
-        title="【公開準備中】くらふとすきー"
-        imageSrc={craftskyImage}
-        link="https://crafters.aosankaku.net"
-        linkText="見に行く"
-      >
-        「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを準備中です。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard
+          title="【公開準備中】くらふとすきー"
+          imageSrc={craftskyImage}
+          link="https://crafters.aosankaku.net"
+          linkText="見に行く"
+        >
+          「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを準備中です。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard
-        title="Keybaseによる本人証明"
-        imageSrc={keybaseImage}
-        link="https://keybase.io/ao_sankaku"
-        linkText="見に行く"
-      >
-        Keybase経由で、このサイトとaosankaku.comが私のものであることを証明しています。
-      </WorkCard>
-    </div>
+      <div class="embla__slide">
+        <WorkCard
+          title="Keybaseによる本人証明"
+          imageSrc={keybaseImage}
+          link="https://keybase.io/ao_sankaku"
+          linkText="見に行く"
+        >
+          Keybase経由で、このサイトとaosankaku.comが私のものであることを証明しています。
+        </WorkCard>
+      </div>
 
-    <div class="swiper-slide">
-      <WorkCard title="アイコンについて" imageSrc={profileIcon250}>
-        親友に描いてもらったものです。なんだかんだ8年以上愛用しています。ちなみにあおさんかくは普通に絵が下手です。
-      </WorkCard>
+      <div class="embla__slide">
+        <WorkCard title="アイコンについて" imageSrc={profileIcon250}>
+          親友に描いてもらったものです。なんだかんだ8年以上愛用しています。ちなみにあおさんかくは普通に絵が下手です。
+        </WorkCard>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <style>
-  .container {
-    margin: 30px;
-  }
+  .embla {
+    --slide-spacing: 0px;
+    --slide-size: 320px;
+    --slide-height: 660px;
 
-  .swiper-wrapper {
-    display: flex;
-    align-items: stretch;
-    transition-property: transform;
-    box-sizing: content-box;
-  }
-
-  .container.swiper {
-    contain: layout paint;
-    height: 620px;
     margin: 60px 0;
-    width: 100%;
+    overflow: hidden;
+    contain: layout paint;
+    height: var(--slide-height);
+  }
 
-    @media (min-width: 768px) {
-      height: 780px;
+  @media (min-width: 768px) {
+    .embla {
+      --slide-spacing: 25px;
+      --slide-size: 480px;
+      --slide-height: 780px;
     }
   }
 
-  .swiper-slide {
-    flex-shrink: 0;
-    width: 320px;
+  .embla__viewport {
+    overflow: hidden;
     height: 100%;
-    position: relative;
+  }
 
-    @media (min-width: 768px) {
-      width: 480px;
-    }
+  .embla__container {
+    display: flex;
+    height: 100%;
+    backface-visibility: hidden;
+    touch-action: pan-y;
+    margin-left: calc(var(--slide-spacing) * -1);
+  }
+
+  .embla__slide {
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 
 <script>
-  import Swiper from "swiper";
-  import { Autoplay } from "swiper/modules";
+  import EmblaCarousel from "embla-carousel";
+  import Autoplay from "embla-carousel-autoplay";
+  // If you add other plugins (like navigation dots), import them here
 
-  const initSwiper = () => {
-    // Check if already initialized to prevent double-init
-    const swiperEl = document.querySelector(".swiper");
-    if (!swiperEl || swiperEl.classList.contains("swiper-initialized")) return;
+  const initEmbla = () => {
+    const rootNode = document.querySelector("#works-embla") as HTMLElement;
+    const viewportNode = rootNode?.querySelector(
+      ".embla__viewport",
+    ) as HTMLElement;
 
-    new Swiper(".swiper", {
-      modules: [Autoplay],
-      loop: true,
-      slidesPerView: "auto",
-      // Add 'observeParents' to help Swiper detect changes without forcing reflows
-      observer: true,
-      observeParents: true,
-      spaceBetween: 0,
-      centeredSlides: true,
-      autoplay: {
-        delay: 8000,
-        disableOnInteraction: false,
+    if (!viewportNode) return;
+
+    const emblaApi = EmblaCarousel(
+      viewportNode,
+      {
+        loop: true,
+        align: "center",
+        skipSnaps: false,
+        duration: 30,
       },
-      speed: 1000,
-      breakpoints: {
-        768: { spaceBetween: 25 },
-        1080: { spaceBetween: 120 },
-        1920: { spaceBetween: 320 },
-      },
-    });
+      [
+        // Add plugins here
+        Autoplay({
+          delay: 8000,
+          stopOnInteraction: false,
+        }),
+      ],
+    );
+
+    // Optional: Add event listeners for custom navigation (e.g., dots, arrows)
+    // emblaApi.on('select', () => { /* Update active dot */ });
   };
 
-  // --- Optimization: Lazy Initialize on Scroll ---
+  // Lazy load Embla using IntersectionObserver
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          initSwiper();
-          observer.disconnect(); // Run once and stop observing
+          initEmbla();
+          observer.disconnect();
         }
       });
     },
-    { rootMargin: "600px" },
-  ); // Start initializing 200px before it comes into view
+    { rootMargin: "400px" },
+  );
 
-  const target = document.querySelector(".swiper");
+  const target = document.querySelector("#works-embla");
   if (target) observer.observe(target);
 </script>
