@@ -22,6 +22,8 @@ const { title, imageSrc, link, linkText } = Astro.props;
       width={350}
       height={350}
       format="avif"
+      loading="lazy"
+      decoding="async"
     />
     <h2>
       {title}
