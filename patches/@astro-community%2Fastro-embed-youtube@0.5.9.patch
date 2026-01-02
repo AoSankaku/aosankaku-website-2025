@@ -4,14 +4,17 @@ index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-953d63c8762b33b6 b/.bun-tag-953d63c8762b33b6
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-956fa6869deace0 b/.bun-tag-956fa6869deace0
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-c296f4c3cab15ae8 b/.bun-tag-c296f4c3cab15ae8
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/YouTube.astro b/YouTube.astro
-index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..87cc43d920f23cfdd2cc526964c488b38dc07188 100644
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..8d71c1621979085af4099253183d9b9ae5ae198f 100644
 --- a/YouTube.astro
 +++ b/YouTube.astro
-@@ -1,69 +1,97 @@
+@@ -1,69 +1,124 @@
  ---
  import 'lite-youtube-embed/src/lite-yt-embed.css';
 +import { getImage } from "astro:assets";
@@ -61,7 +64,7 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..87cc43d920f23cfdd2cc526964c488b3
  }
  
  const videoid = extractID(id);
- const posterFile =
+-const posterFile =
 -	{
 -		max: 'maxresdefault',
 -		high: 'sddefault',
@@ -70,26 +73,54 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..87cc43d920f23cfdd2cc526964c488b3
 -	}[posterQuality] || 'hqdefault';
 -const posterURL =
 -	poster || `https://i.ytimg.com/vi/${videoid}/${posterFile}.jpg`;
++const qualityFiles = ['maxresdefault', 'sddefault', 'hqdefault', 'mqdefault', 'default'];
++const startIndex = qualityFiles.indexOf(
 +  {
 +    max: 'maxresdefault',
 +    high: 'sddefault',
 +    default: 'hqdefault',
 +    low: 'default',
-+  }[posterQuality] || 'hqdefault';
++  }[posterQuality] || 'hqdefault'
++);
 +
-+const posterURLRaw =
-+  poster || `https://i.ytimg.com/vi/${videoid}/${posterFile}.jpg`;
++async function getFinalPoster() {
++  if (poster) {
++    try {
++      return await getImage({ 
++        src: poster, 
++        format: 'webp', 
++        inferSize: true, 
++        quality: compressionQuality, 
++        width: 1280 
++      });
++    } catch (e) {
++      console.warn(`[YouTube] Custom poster failed for ${videoid}. Falling back to black.`);
++      return { src: BLACK_SQUARE };
++    }
++  }
 +
-+const optimizedPoster = await getImage({
-+  src: posterURLRaw,
-+  format: 'webp',
-+  inferSize: true,
-+  quality: compressionQuality,
-+  width: posterQuality === 'max' ? 1280 : 640 
-+}).catch(() => ({
-+  src: BLACK_SQUARE,
-+  width: posterQuality === 'max' ? 1280 : 640 
-+}));
++  for (let i = startIndex; i < qualityFiles.length; i++) {
++    const file = qualityFiles[i];
++    const url = `https://i.ytimg.com/vi/${videoid}/${file}.jpg`;
++    
++    try {
++      return await getImage({
++        src: url,
++        format: 'webp',
++        inferSize: true,
++        quality: compressionQuality,
++        width: file === 'maxresdefault' ? 1280 : 640
++      });
++    } catch (e) {
++      console.warn(`[astro-embed-youtube] Failed to fetch thumbnail image from ${url} (Trying lower resolution image as fallback if possible)`)
++      continue;
++    }
++  }
++  console.warn(`[astro-embed-youtube] All thumbnail variants failed for ID: ${videoid}. Using black square.`)
++  return { src: BLACK_SQUARE };
++}
++
++const optimizedPoster = await getFinalPoster();
 +
  const href = `https://youtube.com/watch?v=${videoid}`;
  
