@@ -2,6 +2,7 @@
 title: "【絶対やめろ】AstroでFontSourceをつかってWebFontを入れるな"
 category: "Tech"
 date: "2026-01-01T21:00:00+09:00"
+lastUpdate: "2026-01-02T22:00:00+09:00"
 desc: "Astroでフォント（Noto Sans JP Variable）を追加したところ、Pagespeed Insightsのパフォーマンススコアが急低下していることが判明しました。どうやらFontSourceのせいみたいです。除去する方法について説明します。"
 tags:
   - フロントエンド
@@ -145,3 +146,21 @@ FontSourceは、
 - 二次配布禁止なフォント
 
 という状況以外では、**何が何でも絶対に避ける**ぐらいの気持ちで行くのが無難だと思います。気をつけよう！
+
+## 2026/01/02追記：できていなかった
+
+よく見ると、文法ミスでフォント読んでいませんでした。VivaldiのデフォルトフォントがNoto Sans JPになったのを忘れておりましたわ。
+
+この記事を参考にしながらもう一度挑戦。
+
+https://www.tak-dcxi.com/article/optimization-of-google-font-loading/
+
+![Performance 73点](image-2.png)
+
+手厳しいですが、マシではあります。他の部分を軽量化してみることとします。
+
+記事の主題である「Fontsourceはやめとけ」は特に変わらないです。Fontsourceを使うとローカルからフォントをサーブできるためたしかに実際はちょっと軽いのかもしれません。検証してません。
+
+https://tm23forest.com/contents/google-fonts-and-page-speed-insights-opinion
+
+これを読む感じ、レイアウトとPerformance Scoreはトレードオフっぽい感じもします。当サイトは基本的に日本人を対象としているのもあり、遅い4Gや超スペックの低い端末を想定した開発をしなくてもいいという見解も妥当です。
