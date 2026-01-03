@@ -3,11 +3,7 @@ import Image from "astro/components/Image.astro";
 import ogDefaultImage from "@/assets/og-default.png";
 import { Icon } from "astro-icon/components";
 import formatToJSTDate from "@/utils/formatToJSTDate";
-
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  "../../content/blog/**/*.{jpeg,jpg,png,gif}",
-  { eager: true },
-);
+import getArticleImage from "@/utils/getArticleImage";
 
 // Define the component props
 interface Props {
@@ -21,10 +17,7 @@ interface Props {
 
 const { title, desc, thumbnail, link, date, lastUpdate } = Astro.props;
 
-const articleImage =
-  images[
-    `../../content${link}${thumbnail ? thumbnail.replace(/^\.\//, "") : null}`
-  ]?.default ?? ogDefaultImage;
+const articleImage = getArticleImage(link, thumbnail);
 
 const JSTDate = formatToJSTDate(date);
 const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;
