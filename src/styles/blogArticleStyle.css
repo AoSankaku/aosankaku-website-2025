@@ -20,6 +20,39 @@ h6 {
   word-break: auto-phrase;
 }
 
+.blog-hero {
+  max-width: 1080px;
+  margin: 0 auto 80px auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-width: 100%;
+    object-fit: cover;
+    aspect-ratio: 1280 / 720;
+    height: auto;
+  }
+
+  .category {
+    background-color: var(--color-text-sub);
+    color: var(--color-background);
+    display: inline-block;
+    text-align: center;
+    padding: 0 14px;
+    margin: 32px 0 0 0;
+    border-radius: 8px;
+    font-size: 0.9em;
+  }
+
+  .category>* {
+    vertical-align: text-bottom;
+    padding-right: 5px;
+  }
+}
+
 p.desc {
   color: var(--color-text-sub);
   margin: 1lh auto 0.6lh auto;
@@ -28,6 +61,22 @@ p.desc {
   @media (max-width: 600px) {
     max-width: 90%;
   }
+}
+
+.date {
+  padding-right: 0.5em;
+}
+
+.date-container {
+  font-size: 0.8em;
+  color: var(--color-text-sub);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 1.2em;
+  color: var(--color-text-sub);
 }
 
 .container {
@@ -280,51 +329,18 @@ p.desc {
   }
 }
 
-.blog-hero {
-  max-width: 1080px;
-  margin: 0 auto 80px auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+div.tags {
+  margin: 6px auto 18px auto;
+  text-align: left;
 
-  img {
-    max-width: 100%;
-    object-fit: cover;
-    aspect-ratio: 1280 / 720;
-    height: auto;
-  }
-
-  .date {
-    padding-right: 0.5em;
-  }
-
-  .date-container {
-    font-size: 0.8em;
-    color: var(--color-text-sub);
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    height: 1.2em;
-    color: var(--color-text-sub);
-  }
-
-  .category {
-    background-color: var(--color-text-sub);
-    color: var(--color-background);
+  span.tag {
     display: inline-block;
-    text-align: center;
-    padding: 0 14px;
-    margin: 32px 0 0 0;
-    border-radius: 8px;
-    font-size: 0.9em;
-  }
-
-  .category>* {
-    vertical-align: text-bottom;
-    padding-right: 5px;
+    background-color: var(--color-card);
+    padding: 0px 12px;
+    line-height: 1.4em;
+    margin: 1px 4px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    vertical-align: middle;
   }
 }
