@@ -1,3 +1,6 @@
+diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-1a5e673e7857d3e2 b/.bun-tag-1a5e673e7857d3e2
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-78de75ad5a05ba8 b/.bun-tag-78de75ad5a05ba8
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
@@ -14,10 +17,10 @@ diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-c296f4c3
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/YouTube.astro b/YouTube.astro
-index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..59ae78133b4656ebd99878b7a7441d321b22ffbd 100644
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..f6cfcd8ebb316421d4ff75cf798e54cee743c985 100644
 --- a/YouTube.astro
 +++ b/YouTube.astro
-@@ -1,69 +1,146 @@
+@@ -1,69 +1,115 @@
  ---
  import 'lite-youtube-embed/src/lite-yt-embed.css';
 +import { getImage } from "astro:assets";
@@ -150,7 +153,8 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..59ae78133b4656ebd99878b7a7441d32
 +  href={optimizedPoster.src}
 +  fetchpriority={fetchpriority}
 +/>
-+
+ 
+-<script src="lite-youtube-embed"></script>
 +<div class="yt-embed-wrapper">
 +  <lite-youtube
 +    {videoid}
@@ -166,9 +170,7 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..59ae78133b4656ebd99878b7a7441d32
 +  </lite-youtube>
 +</div>
  
- <script src="lite-youtube-embed"></script>
- 
- <style is:global>
+-<style is:global>
 -	lite-youtube > iframe {
 -		all: unset !important;
 -		width: 100% !important;
@@ -177,32 +179,5 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..59ae78133b4656ebd99878b7a7441d32
 -		inset: 0 !important;
 -		border: 0 !important;
 -	}
-+  .yt-embed-wrapper {
-+    width: 100%;
-+    aspect-ratio: 16 / 9; 
-+    background-color: #000;
-+    position: relative;
-+    contain: layout paint; 
-+    border-radius: 12px;
-+    overflow: hidden;
-+  }
-+
-+  lite-youtube {
-+    display: block !important;
-+    width: 100% !important;
-+    height: 100% !important;
-+    position: absolute !important;
-+    inset: 0 !important;
-+    background-size: cover !important;
-+    background-position: center !important;
-+  }
-+
-+  lite-youtube > iframe {
-+    all: unset !important;
-+    width: 100% !important;
-+    height: 100% !important;
-+    position: absolute !important;
-+    inset: 0 !important;
-+    border: 0 !important;
-+  }
- </style>
+-</style>
++<script src="lite-youtube-embed"></script>
