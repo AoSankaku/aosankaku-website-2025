@@ -30,7 +30,7 @@ const JSTDate = formatToJSTDate(date);
 const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;
 ---
 
-<a href={link}>
+<a href={link} data-astro-prefetch>
   <div class="blog-card">
     <Image src={articleImage} alt="Blog Thumbnail" class="blog-thumbnail" />
     <h3 class="blog-title">{title}</h3>
