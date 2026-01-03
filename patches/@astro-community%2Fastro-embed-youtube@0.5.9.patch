@@ -10,6 +10,9 @@ index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-956fa6869deace0 b/.bun-tag-956fa6869deace0
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-a79e06ba816e87ff b/.bun-tag-a79e06ba816e87ff
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-aa8faaf4308a684a b/.bun-tag-aa8faaf4308a684a
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
@@ -17,10 +20,10 @@ diff --git a/node_modules/@astro-community/astro-embed-youtube/.bun-tag-c296f4c3
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/YouTube.astro b/YouTube.astro
-index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..f6cfcd8ebb316421d4ff75cf798e54cee743c985 100644
+index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..1e5618dc951520c07db0cfb69cf9b56b7b8fecbf 100644
 --- a/YouTube.astro
 +++ b/YouTube.astro
-@@ -1,69 +1,115 @@
+@@ -1,59 +1,116 @@
  ---
  import 'lite-youtube-embed/src/lite-yt-embed.css';
 +import { getImage } from "astro:assets";
@@ -153,8 +156,7 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..f6cfcd8ebb316421d4ff75cf798e54ce
 +  href={optimizedPoster.src}
 +  fetchpriority={fetchpriority}
 +/>
- 
--<script src="lite-youtube-embed"></script>
++
 +<div class="yt-embed-wrapper">
 +  <lite-youtube
 +    {videoid}
@@ -170,14 +172,5 @@ index 6f1375bc8ea1afadfdd0c01710cdc0a005602c45..f6cfcd8ebb316421d4ff75cf798e54ce
 +  </lite-youtube>
 +</div>
  
--<style is:global>
--	lite-youtube > iframe {
--		all: unset !important;
--		width: 100% !important;
--		height: 100% !important;
--		position: absolute !important;
--		inset: 0 !important;
--		border: 0 !important;
--	}
--</style>
-+<script src="lite-youtube-embed"></script>
+ <script src="lite-youtube-embed"></script>
+ 
