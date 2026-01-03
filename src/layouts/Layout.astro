@@ -58,16 +58,21 @@ const displayedOgpImage =
     <link
       rel="preload"
       as="style"
-      fetchpriority="high"
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
-      crossorigin
+      crossorigin="anonymous"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
       media="print"
-      onload='this.media="all"'
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
+      />
+    </noscript>
     <meta name="generator" content={Astro.generator} />
     <title>{displayedTitle}</title>
     <meta name="description" slot="head" content={description} />
