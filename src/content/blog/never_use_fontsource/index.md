@@ -1,5 +1,5 @@
 ---
-title: "【絶対やめろ】AstroでFontSourceをつかってWebFontを入れるな"
+title: "【絶対やめろ】Astroで適当にFontSourceをつかってWebFontを入れるな"
 category: "Tech"
 date: "2026-01-01T21:00:00+09:00"
 lastUpdate: "2026-01-02T22:00:00+09:00"
