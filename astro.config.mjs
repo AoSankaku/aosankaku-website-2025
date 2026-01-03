@@ -20,7 +20,9 @@ export default defineConfig({
   // Sitemap
   site: 'https://aosankaku.net',
 
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+  },
 
   redirects: {
     '/rss': '/rss.xml',
