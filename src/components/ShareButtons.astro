@@ -11,7 +11,7 @@ const { title } = Astro.props;
 const encodedShareText = encodeURIComponent(title);
 ---
 
-<div class="container">
+<div class="outer-icon-container">
   <h2>役に立ったら記事をバラ撒こう</h2>
   <div class="icon-container">
     <ShareIconButton
@@ -59,12 +59,15 @@ const encodedShareText = encodeURIComponent(title);
     font-size: 1.4rem;
     word-break: auto-phrase;
   }
-  div.container {
+
+  div.outer-icon-container {
     background: var(--color-card);
     display: block;
-    margin-bottom: 100px;
+    margin: 0 0 100px 0;
+    width: 100%;
     padding: 0 20px 20px 20px;
   }
+
   div.icon-container {
     display: flex;
     justify-content: center;
