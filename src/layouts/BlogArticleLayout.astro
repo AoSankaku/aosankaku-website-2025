@@ -65,7 +65,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     <slot />
   </div>
   <RelatedArticles slug={slug} />
-  <ShareButtons title={frontmatter.title} />
+
   {
     frontmatter.tags && (
       <div class="tags">
@@ -79,6 +79,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
       </div>
     )
   }
+  <ShareButtons title={frontmatter.title} />
   <Footer />
 </Layout>
 

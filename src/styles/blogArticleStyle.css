@@ -81,7 +81,7 @@ p.desc {
 
 .container {
   max-width: 768px;
-  padding: 0 30px 80px;
+  padding: 0 30px 40px;
   margin: 0 auto;
 
   p {
@@ -330,9 +330,9 @@ p.desc {
 }
 
 div.tags {
-  margin: 6px auto 18px auto;
+  margin: 40px auto 54px auto;
   text-align: left;
-  max-width: 800px;
+  max-width: 768px;
 
   h3 {
     margin-bottom: 8px;
