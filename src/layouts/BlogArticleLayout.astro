@@ -11,7 +11,9 @@ import ShareButtons from "@/components/ShareButtons.astro";
 import RelatedArticles from "@/components/atoms/RelatedArticles.astro";
 import "remark-github-alerts/styles/github-base.css";
 import "@/styles/blogArticleStyle.css";
-import getArticleImage from "@/utils/getArticleImage";
+import getArticleImage, {
+  getDefaultArticleImage,
+} from "@/utils/getArticleImage";
 
 interface Props {
   frontmatter: any;
@@ -21,8 +23,12 @@ interface Props {
 
 const { frontmatter, headings, slug } = Astro.props;
 
-// IMPORTANT TO-DO: this can't handle non-blog article thumbnail at all
-const articleImage = getArticleImage(slug, frontmatter.thumbnail);
+// When the slug is undefined, this article doesn't belong to /blog/
+const articleImage = slug
+  ? getArticleImage(slug, frontmatter.thumbnail)
+  : frontmatter.thumbnail
+    ? frontmatter.thumbnail // Use the specified fetchable thumbnail if exists
+    : getDefaultArticleImage(); // Use the default thumbnail if blank
 
 const articleDate = formatToJSTDate(frontmatter.date);
 const lastUpdate = frontmatter.lastUpdate

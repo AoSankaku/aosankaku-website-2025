@@ -12,6 +12,9 @@ export default function getArticleImage(slug: string, thumbnail: string | undefi
     .replace(/^\/blog\//, '')
     .replace(/\/$/, '')
     }/${thumbnail ? thumbnail.replace(/^\.\//, "") : "null"}`;
-  console.log(path)
   return images[path]?.default ?? ogDefaultImage;
+}
+
+export const getDefaultArticleImage = () => {
+  return ogDefaultImage
 }
