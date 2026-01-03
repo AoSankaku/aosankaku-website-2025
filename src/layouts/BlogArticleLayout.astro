@@ -76,6 +76,19 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   </div>
   <RelatedArticles />
   <ShareButtons title={frontmatter.title} />
+  {
+    frontmatter.tags && (
+      <div class="tags">
+        <h3>記事のタグ</h3>
+        {frontmatter.tags.map((tag: string) => (
+          <span class="tag">
+            <Icon name="mdi:tag" size="0.8em" />
+            {tag}
+          </span>
+        ))}
+      </div>
+    )
+  }
   <Footer />
 </Layout>
 
