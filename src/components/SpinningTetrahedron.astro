@@ -58,17 +58,28 @@
     const updateLightIntensity = () => {
       const isDarkMode = document.documentElement.classList.contains("dark");
 
-      let newIntensity;
-      if (isDarkMode) {
-        newIntensity = 0.3;
-      } else {
-        newIntensity = 8;
-      }
-
-      ambientLight.intensity = newIntensity;
+      ambientLight.intensity = isDarkMode ? 0.3 : 8;
     };
 
     updateLightIntensity();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          updateLightIntensity();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+    });
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => observer.disconnect(),
+      { once: true },
+    );
 
     const radius = 1;
     const detail = 0;
