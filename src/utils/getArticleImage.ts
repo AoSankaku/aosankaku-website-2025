@@ -7,6 +7,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 export default function getArticleImage(slug: string, thumbnail: string | undefined) {
+  if (!slug) { return ogDefaultImage }
   const path = `/src/content/blog/${slug
     .replace(/^\/blog\//, '')
     .replace(/\/$/, '')
