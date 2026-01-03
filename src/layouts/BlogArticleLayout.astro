@@ -21,6 +21,7 @@ interface Props {
 
 const { frontmatter, headings, slug } = Astro.props;
 
+// IMPORTANT TO-DO: this can't handle non-blog article thumbnail at all
 const articleImage = getArticleImage(slug, frontmatter.thumbnail);
 
 const articleDate = formatToJSTDate(frontmatter.date);
