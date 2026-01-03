@@ -51,7 +51,8 @@
     "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "nclean": "bun pm cache rm && bun i -f"
   },
   "type": "module"
 }
