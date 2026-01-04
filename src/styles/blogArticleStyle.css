@@ -82,6 +82,11 @@ p.desc {
 .container {
   max-width: 768px;
   padding: 0 30px 40px;
+
+  @media (max-width: 400px) {
+    padding: 0 16px 40px;
+  }
+
   margin: 0 auto;
 
   p {
@@ -175,7 +180,6 @@ p.desc {
     justify-content: space-between;
     padding: 16px;
     overflow: hidden;
-    /* Prevents text from pushing the card wider */
   }
 
   .remark-link-card-plus__content {
@@ -211,6 +215,11 @@ p.desc {
     align-items: center;
     gap: 8px;
     margin-top: 12px;
+
+
+    @media(max-width: 400px) {
+      gap: 4px;
+    }
   }
 
   .remark-link-card-plus__favicon {
@@ -222,6 +231,15 @@ p.desc {
     color: var(--color-text-sub);
     font-size: 0.75em;
     letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    direction: rtl;
+
+
+    @media(max-width: 400px) {
+      font-size: 0.68em;
+    }
   }
 
   .remark-link-card-plus__thumbnail {
@@ -253,6 +271,10 @@ p.desc {
 
     .remark-link-card-plus__main {
       padding: 10px 16px;
+
+      @media(max-width: 400px) {
+        padding: 10px 6px 10px 10px;
+      }
     }
 
     .remark-link-card-plus__title {
