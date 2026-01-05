@@ -27,7 +27,6 @@ export default defineConfig({
 
   redirects: {
     '/rss': '/rss.xml',
-    '/rss.xml/': '/rss.xml',
     '/sitemap.xml': '/sitemap-index.xml',
     '/links': '/',
     '/profile': '/',
