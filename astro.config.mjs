@@ -6,6 +6,7 @@ import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
 import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/i18n/locales';
 import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
+import { remarkYoutube } from './src/plugins/remark-youtube.mjs';
 import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
@@ -85,23 +86,29 @@ export default defineConfig({
   trailingSlash: 'always',
 
   markdown: {
-    remarkPlugins: [remarkTocTrigger, gemoji, remarkGithubAlerts, [remarkLinkCard, {
-      cache: true,
-      shortenUrl: true,
-      thumbnailPosition: "right",
-      noThumbnail: false,
-      noFavicon: false,
-      ignoreExtensions: ['.mp4', '.pdf'],
-      ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
-        if (url.hostname === 'github.com') {
-          return { ...og, title: `GitHub: ${og.title}` };
+    remarkPlugins: [
+      remarkTocTrigger,
+      gemoji,
+      remarkGithubAlerts,
+      remarkYoutube,
+      [remarkLinkCard, {
+        cache: true,
+        shortenUrl: true,
+        thumbnailPosition: "right",
+        noThumbnail: false,
+        noFavicon: false,
+        ignoreExtensions: ['.mp4', '.pdf'],
+        ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
+          if (url.hostname === 'github.com') {
+            return { ...og, title: `GitHub: ${og.title}` };
+          }
+          if (og.title === og.description) {
+            return { ...og, description: 'custom description' };
+          }
+          return og;
         }
-        if (og.title === og.description) {
-          return { ...og, description: 'custom description' };
-        }
-        return og;
-      }
-    }]],
+      }],
+    ],
     rehypePlugins: [
       [rehypeTwemoji, {
         format: 'svg',
