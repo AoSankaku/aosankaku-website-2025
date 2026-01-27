@@ -3,6 +3,7 @@ title: "【Astro】画面サイズに応じて画像サイズを最適化する�
 category: "Tech"
 date: "2026-01-28T00:30:00+09:00"
 desc: "Astroで画面の幅に応じたサイズの画像を複数用意する超簡単な方法について説明します。最適化できる上に数文字書くだけで効果抜群です。"
+thumbnail: thumbnail.jpg
 tags:
   - Astro
   - フロントエンド
