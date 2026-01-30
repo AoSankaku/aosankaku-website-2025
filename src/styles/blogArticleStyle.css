@@ -144,6 +144,48 @@ p.desc {
     word-break: auto-phrase;
   }
 
+  table {
+    overflow-x: auto;
+    border-collapse: collapse;
+    display: block;
+    table-layout: fixed;
+  }
+
+  th {
+    background-color: var(--color-card);
+    padding: 8px 12px;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  td {
+    padding: 8px 12px;
+  }
+
+  th,
+  td {
+    border: 1px solid var(--color-text-sub);
+    white-space: nowrap;
+  }
+
+  th img[data-twemoji],
+  td img[data-twemoji] {
+    max-width: none !important;
+    flex-shrink: 0 !important;
+  }
+
+  tr:nth-of-type(even) {
+    background-color: var(--color-surface);
+  }
+
+  hr {
+    margin: 4lh 0 2lh 0;
+
+    @media (max-width: 600px) {
+      margin: 2lh 0 1.5lh 0;
+    }
+  }
+
   /* Container spacing in the blog flow */
   .remark-link-card-plus__container {
     margin: 1.5rem 0;
