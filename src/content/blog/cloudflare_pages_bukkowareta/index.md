@@ -3,7 +3,7 @@ title: "【Cloudflare Pages】急にブログ記事のCSSがぶっ壊れた"
 category: "Tech"
 date: "2026-03-08T01:15:00+09:00"
 desc: "ある日自分のブログをチェックしたら、CSSがぶっ壊れてました。一人だと絶対わからないようなことが理由だったので、備忘録として残しておきます。"
-thumbnail: tbumbnail.jpg
+thumbnail: thumbnail.jpg
 tags:
   - Cloudflare
 ---
