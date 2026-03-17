@@ -65,6 +65,20 @@ const displayedOgpImage =
     <meta name="twitter:image" content={displayedOgpImage} />
     <meta property="og:locale" content={langFull?.replace("-", "_")} />
     <meta property="og:url" content={Astro.url} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
+      />
+    </noscript>
     <slot name="head" />
     <script is:inline>
       const getThemePreference = () => {
