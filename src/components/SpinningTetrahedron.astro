@@ -29,6 +29,12 @@
       { type: "module" }
     );
 
+    worker.addEventListener("message", (e) => {
+      if (e.data.type === "webgl-unsupported") {
+        worker.terminate();
+      }
+    });
+
     worker.postMessage(
       { type: "init", canvas: offscreen, width, height, isDark },
       [offscreen]
@@ -65,6 +71,13 @@
   };
 
   const startOnMainThread = async () => {
+    // Test WebGL availability before loading Three.js to avoid console errors
+    const testCanvas = document.createElement("canvas");
+    const testGl = testCanvas.getContext("webgl2") || testCanvas.getContext("webgl");
+    if (!testGl) {
+      return;
+    }
+
     const [
       { Scene },
       { PerspectiveCamera },

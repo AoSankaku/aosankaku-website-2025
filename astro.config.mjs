@@ -9,7 +9,6 @@ import { remarkYoutube } from './src/plugins/remark-youtube.mjs';
 import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
-import partytown from '@astrojs/partytown'
 
 import expressiveCode from 'astro-expressive-code';
 import remarkLinkCard from 'remark-link-card-plus';
@@ -63,11 +62,6 @@ export default defineConfig({
       }
     }
   }),
-  partytown({
-    config: {
-      forward: ['dataLayer.push', 'gtag'],
-    }
-  })
   ],
 
   // i18n

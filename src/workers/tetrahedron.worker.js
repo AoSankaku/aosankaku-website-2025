@@ -13,15 +13,36 @@ let renderer, camera, tetrahedron, ambientLight;
 let animating = false;
 
 function init(canvas, width, height, isDark) {
+  // Suppress Three.js console.error for WebGL failures (e.g. headless/no-GPU environments).
+  // Three.js calls console.error internally before throwing, so we intercept it here.
+  const origConsoleError = console.error;
+  let webglFailed = false;
+  console.error = (...args) => {
+    if (String(args[0]).includes("WebGL")) {
+      webglFailed = true;
+      return;
+    }
+    origConsoleError.apply(console, args);
+  };
+  try {
+    renderer = new WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+  } catch (_) {
+    webglFailed = true;
+  }
+  console.error = origConsoleError;
+
+  if (webglFailed || !renderer) {
+    self.postMessage({ type: "webgl-unsupported" });
+    return;
+  }
+
   const scene = new Scene();
   camera = new PerspectiveCamera(35, width / height, 0.1, 1000);
-
-  renderer = new WebGLRenderer({
-    canvas,
-    antialias: true,
-    alpha: true,
-    powerPreference: "high-performance",
-  });
 
   const maxPixelRatio = width < 768 ? 1.5 : 2;
   renderer.setPixelRatio(Math.min(self.devicePixelRatio ?? 1, maxPixelRatio));
