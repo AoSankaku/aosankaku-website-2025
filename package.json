@@ -47,6 +47,9 @@
   "patchedDependencies": {
     "@astro-community/astro-embed-youtube@0.5.9": "patches/@astro-community%2Fastro-embed-youtube@0.5.9.patch"
   },
+  "overrides": {
+    "pkg-types": "2.3.0"
+  },
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",
