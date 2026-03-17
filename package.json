@@ -54,8 +54,5 @@
     "astro": "astro",
     "nclean": "bun pm cache rm && bun i -f"
   },
-  "type": "module",
-  "devDependencies": {
-    "lighthouse": "^13.0.3"
-  }
+  "type": "module"
 }
