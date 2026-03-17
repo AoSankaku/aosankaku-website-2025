@@ -22,14 +22,25 @@ import RecentArticles from "@/components/RecentArticles.astro";
   <ProfileIcon />
   <SocialIcons />
   <Profile />
-  <TechStacks />
-  <ProfileDetails />
-  <Works />
-  <RecentArticles />
+  <div class="deferred-section">
+    <TechStacks />
+    <ProfileDetails />
+  </div>
+  <div class="deferred-section">
+    <Works />
+  </div>
+  <div class="deferred-section">
+    <RecentArticles />
+  </div>
   <Footer />
 </Layout>
 
 <style>
+  .deferred-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
+  }
+
   :global(h2) {
     text-align: center;
     margin: 80px 20px 20px 20px;

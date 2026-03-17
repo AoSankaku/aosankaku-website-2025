@@ -14,127 +14,158 @@
 </style>
 
 <script>
-  const init = async () => {
-    const canvas = document.getElementById("tetrahedron-canvas");
-    if (!canvas) throw new Error("Canvas element not found");
+  const canvas = document.getElementById("tetrahedron-canvas") as HTMLCanvasElement | null;
+  if (!canvas) throw new Error("Canvas element not found");
 
-    const {
-      Scene,
-      PerspectiveCamera,
-      WebGLRenderer,
-      TetrahedronGeometry,
-      MeshStandardMaterial,
-      Mesh,
-      AmbientLight,
-      PointLight,
-      Vector3,
-      Matrix4,
-    } = await import("three");
+  const rect = canvas.getBoundingClientRect();
+  const width = rect.width || canvas.offsetWidth;
+  const height = rect.height || canvas.offsetHeight;
+  const isDark = document.documentElement.classList.contains("dark");
 
-    const rect = canvas.getBoundingClientRect();
-    let width = rect.width;
-    let height = rect.height;
+  const startWithWorker = () => {
+    const offscreen = canvas.transferControlToOffscreen();
+    const worker = new Worker(
+      new URL("../workers/tetrahedron.worker.js", import.meta.url),
+      { type: "module" }
+    );
+
+    worker.postMessage(
+      { type: "init", canvas: offscreen, width, height, isDark },
+      [offscreen]
+    );
+
+    const resizeObs = new ResizeObserver((entries) => {
+      const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
+      worker.postMessage({ type: "resize", width: w, height: h });
+    });
+    resizeObs.observe(canvas);
+
+    const mutObs = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        if (m.attributeName === "class") {
+          worker.postMessage({
+            type: "theme",
+            isDark: document.documentElement.classList.contains("dark"),
+          });
+        }
+      });
+    });
+    mutObs.observe(document.documentElement, { attributes: true });
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        resizeObs.disconnect();
+        mutObs.disconnect();
+        worker.postMessage({ type: "stop" });
+        worker.terminate();
+      },
+      { once: true }
+    );
+  };
+
+  const startOnMainThread = async () => {
+    const [
+      { Scene },
+      { PerspectiveCamera },
+      { WebGLRenderer },
+      { TetrahedronGeometry },
+      { MeshStandardMaterial },
+      { Mesh },
+      { AmbientLight },
+      { PointLight },
+      { Vector3 },
+      { Matrix4 },
+    ] = await Promise.all([
+      import("three/src/scenes/Scene.js"),
+      import("three/src/cameras/PerspectiveCamera.js"),
+      import("three/src/renderers/WebGLRenderer.js"),
+      import("three/src/geometries/TetrahedronGeometry.js"),
+      import("three/src/materials/MeshStandardMaterial.js"),
+      import("three/src/objects/Mesh.js"),
+      import("three/src/lights/AmbientLight.js"),
+      import("three/src/lights/PointLight.js"),
+      import("three/src/math/Vector3.js"),
+      import("three/src/math/Matrix4.js"),
+    ]);
 
     const scene = new Scene();
     const camera = new PerspectiveCamera(35, width / height, 0.1, 1000);
 
     const renderer = new WebGLRenderer({
-      canvas: canvas,
+      canvas,
       antialias: true,
       alpha: true,
-      powerPreference: "high-performance", // Optimization
+      powerPreference: "high-performance",
     });
 
     const maxPixelRatio = window.innerWidth < 768 ? 1.5 : 2;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
     renderer.setSize(width, height, false);
 
-    const ambientLight = new AmbientLight(0xffffff, 0.3);
+    const ambientLight = new AmbientLight(0xffffff, isDark ? 0.3 : 8);
     scene.add(ambientLight);
     const pointLight = new PointLight(0xffffff, 30);
     pointLight.position.set(0, 6, 7);
     scene.add(pointLight);
 
-    const updateLightIntensity = () => {
-      const isDarkMode = document.documentElement.classList.contains("dark");
-
-      ambientLight.intensity = isDarkMode ? 0.3 : 8;
-    };
-
-    updateLightIntensity();
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "class") {
-          updateLightIntensity();
+    const mutObs = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        if (m.attributeName === "class") {
+          ambientLight.intensity = document.documentElement.classList.contains("dark") ? 0.3 : 8;
         }
       });
     });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-    });
-
-    document.addEventListener(
-      "astro:before-swap",
-      () => observer.disconnect(),
-      { once: true },
-    );
+    mutObs.observe(document.documentElement, { attributes: true });
+    document.addEventListener("astro:before-swap", () => mutObs.disconnect(), { once: true });
 
     const radius = 1;
-    const detail = 0;
-    const geometry = new TetrahedronGeometry(radius, detail);
-
+    const geometry = new TetrahedronGeometry(radius, 0);
     const upAxis = new Vector3(1, 0, -1).normalize();
-    const angle = Math.atan(Math.sqrt(2));
-    const rotationMatrix = new Matrix4().makeRotationAxis(upAxis, angle);
+    const rotationMatrix = new Matrix4().makeRotationAxis(upAxis, Math.atan(Math.sqrt(2)));
     geometry.applyMatrix4(rotationMatrix);
+    geometry.translate(0, radius / 3, 0);
 
-    const distanceToBase = radius / 3;
-    geometry.translate(0, distanceToBase, 0);
-
-    // Material and Mesh
-    const material = new MeshStandardMaterial({
-      color: 0x0077ff,
-      metalness: 0.8,
-      roughness: 0.35,
-      wireframe: false,
-    });
-
-    const tetrahedron = new Mesh(geometry, material);
+    const tetrahedron = new Mesh(
+      geometry,
+      new MeshStandardMaterial({ color: 0x0077ff, metalness: 0.8, roughness: 0.35 })
+    );
     scene.add(tetrahedron);
-
     camera.position.z = 5.2;
     camera.position.y = 0.5;
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        // Use the entry data directly instead of querying the DOM
-        const { inlineSize: newWidth, blockSize: newHeight } =
-          entry.contentBoxSize[0];
-
-        camera.aspect = newWidth / newHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(newWidth, newHeight, false);
-      }
+    const resizeObs = new ResizeObserver((entries) => {
+      const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
     });
-
-    resizeObserver.observe(canvas);
+    resizeObs.observe(canvas);
 
     const animate = () => {
       requestAnimationFrame(animate);
       tetrahedron.rotation.y += 0.002;
       renderer.render(scene, camera);
     };
-
     animate();
   };
 
-  window.addEventListener("load", () => {
-    if (window.requestIdleCallback) {
-      window.requestIdleCallback(() => init());
-    } else {
-      window.setTimeout(init, 200);
-    }
-  });
+  const supportsOffscreen =
+    typeof OffscreenCanvas !== "undefined" &&
+    typeof canvas.transferControlToOffscreen === "function";
+
+  const intersectionObs = new IntersectionObserver(
+    (entries, obs) => {
+      if (entries[0].isIntersecting) {
+        obs.disconnect();
+        if (supportsOffscreen) {
+          startWithWorker();
+        } else {
+          startOnMainThread();
+        }
+      }
+    },
+    { rootMargin: "500px" }
+  );
+  intersectionObs.observe(canvas);
 </script>

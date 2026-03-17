@@ -1,0 +1,16 @@
+# Cloudflare Pages custom headers
+
+# Hashed Astro assets — immutable, cache for 1 year
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static assets in public/ with stable names
+/icon.png
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+# HTML pages — always revalidate
+/*
+  Cache-Control: public, max-age=0, must-revalidate

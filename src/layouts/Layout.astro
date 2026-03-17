@@ -7,8 +7,6 @@ import { useTranslator } from "@/i18n/utils";
 import defaultOgpImage from "@/assets/og-default.png";
 import type { ImageMetadata } from "astro";
 
-import OldGatsbyCacheKillSwitch from "@/components/OldGatsbyCacheKillSwitch.astro";
-
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 import { SITE_TITLE } from "@/consts";
 
@@ -55,12 +53,6 @@ const displayedOgpImage =
     <link rel="canonical" href={canonicalURL} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
-      crossorigin="anonymous"
-    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap"
@@ -115,7 +107,6 @@ const displayedOgpImage =
     <main id="main-content">
       <slot />
     </main>
-    <OldGatsbyCacheKillSwitch />
     <GoogleAnalytics />
   </body>
 </html>
@@ -150,18 +141,6 @@ const displayedOgpImage =
     padding: 2px 6px;
     border-radius: 4px;
     margin: 0 2px;
-  }
-
-  :root,
-  .dark {
-    transition:
-      --color-text 0.3s ease,
-      --color-text-sub 0.3s ease,
-      --color-background 0.3s ease,
-      --color-primary 0.3s ease,
-      --color-surface 0.3s ease,
-      --color-card 0.3s ease,
-      --color-blogcard 0.3s ease;
   }
 
   /* Light theme */
