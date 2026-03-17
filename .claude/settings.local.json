@@ -4,7 +4,9 @@
       "Bash(npx lighthouse:*)",
       "Bash(which google-chrome:*)",
       "Bash(npx playwright:*)",
-      "Bash(bun run:*)"
+      "Bash(bun run:*)",
+      "Bash(ls:*)",
+      "Bash(sleep:*)"
     ]
   }
 }

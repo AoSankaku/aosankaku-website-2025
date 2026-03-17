@@ -17,12 +17,7 @@
   const canvas = document.getElementById("tetrahedron-canvas") as HTMLCanvasElement | null;
   if (!canvas) throw new Error("Canvas element not found");
 
-  const rect = canvas.getBoundingClientRect();
-  const width = rect.width || canvas.offsetWidth;
-  const height = rect.height || canvas.offsetHeight;
-  const isDark = document.documentElement.classList.contains("dark");
-
-  const startWithWorker = () => {
+  const startWithWorker = (width: number, height: number, isDark: boolean) => {
     const offscreen = canvas.transferControlToOffscreen();
     const worker = new Worker(
       new URL("../workers/tetrahedron.worker.js", import.meta.url),
@@ -70,7 +65,7 @@
     );
   };
 
-  const startOnMainThread = async () => {
+  const startOnMainThread = async (width: number, height: number, isDark: boolean) => {
     // Test WebGL availability before loading Three.js to avoid console errors
     const testCanvas = document.createElement("canvas");
     const testGl = testCanvas.getContext("webgl2") || testCanvas.getContext("webgl");
@@ -171,10 +166,15 @@
     (entries, obs) => {
       if (entries[0].isIntersecting) {
         obs.disconnect();
+        // Read dimensions here: layout is already computed by the IntersectionObserver
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width || canvas.offsetWidth;
+        const height = rect.height || canvas.offsetHeight;
+        const isDark = document.documentElement.classList.contains("dark");
         if (supportsOffscreen) {
-          startWithWorker();
+          startWithWorker(width, height, isDark);
         } else {
-          startOnMainThread();
+          startOnMainThread(width, height, isDark);
         }
       }
     },
