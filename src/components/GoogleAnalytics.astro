@@ -4,19 +4,26 @@ const isProd = import.meta.env.PROD;
 ---
 
 {isProd && (
-  <>
-    <script 
-      is:inline
-      type="text/partytown" 
-      async 
-      src={`https://www.googletagmanager.com/gtag/js?id=G-Z49MSPZWTY`}
-    ></script>
-    
-    <script is:inline type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-Z49MSPZWTY');
-    </script>
-  </>
+  <script is:inline>
+    {/* Defer GA until after page is interactive to avoid TBT impact.
+        Fires on first user interaction or after window.load + 2s, whichever comes first. */}
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z49MSPZWTY');
+
+    var _gaLoaded = false;
+    function _loadGA() {
+      if (_gaLoaded) return;
+      _gaLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-Z49MSPZWTY';
+      s.async = true;
+      document.head.appendChild(s);
+    }
+    ['click', 'scroll', 'touchstart', 'keydown'].forEach(function(e) {
+      document.addEventListener(e, _loadGA, { once: true, passive: true });
+    });
+    window.addEventListener('load', function() { setTimeout(_loadGA, 5000); });
+  </script>
 )}

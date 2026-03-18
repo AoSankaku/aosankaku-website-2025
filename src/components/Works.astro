@@ -134,40 +134,26 @@ import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_gene
 </style>
 
 <script>
-  import EmblaCarousel from "embla-carousel";
-  import Autoplay from "embla-carousel-autoplay";
-  // If you add other plugins (like navigation dots), import them here
-
-  const initEmbla = () => {
+  // Dynamic imports: Embla only loads when the carousel is about to enter the viewport
+  const initEmbla = async () => {
     const rootNode = document.querySelector("#works-embla") as HTMLElement;
     const viewportNode = rootNode?.querySelector(
       ".embla__viewport",
     ) as HTMLElement;
-
     if (!viewportNode) return;
 
-    const emblaApi = EmblaCarousel(
-      viewportNode,
-      {
-        loop: true,
-        align: "center",
-        skipSnaps: false,
-        duration: 30,
-      },
-      [
-        // Add plugins here
-        Autoplay({
-          delay: 8000,
-          stopOnInteraction: false,
-        }),
-      ],
-    );
+    const [{ default: EmblaCarousel }, { default: Autoplay }] = await Promise.all([
+      import("embla-carousel"),
+      import("embla-carousel-autoplay"),
+    ]);
 
-    // Optional: Add event listeners for custom navigation (e.g., dots, arrows)
-    // emblaApi.on('select', () => { /* Update active dot */ });
+    EmblaCarousel(
+      viewportNode,
+      { loop: true, align: "center", skipSnaps: false, duration: 30 },
+      [Autoplay({ delay: 8000, stopOnInteraction: false })],
+    );
   };
 
-  // Lazy load Embla using IntersectionObserver
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

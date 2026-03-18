@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
@@ -10,7 +9,6 @@ import { remarkYoutube } from './src/plugins/remark-youtube.mjs';
 import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
-import partytown from '@astrojs/partytown'
 
 import expressiveCode from 'astro-expressive-code';
 import remarkLinkCard from 'remark-link-card-plus';
@@ -22,7 +20,7 @@ export default defineConfig({
   site: 'https://aosankaku.net',
 
   prefetch: {
-    prefetchAll: true,
+    defaultStrategy: 'hover',
   },
 
   redirects: {
@@ -38,7 +36,7 @@ export default defineConfig({
   },
 
   // Integrations
-  integrations: [react(), icon(), sitemap({
+  integrations: [icon(), sitemap({
     /*
     i18n: {
       defaultLocale: 'ja',
@@ -64,11 +62,6 @@ export default defineConfig({
       }
     }
   }),
-  partytown({
-    config: {
-      forward: ['dataLayer.push', 'gtag'],
-    }
-  })
   ],
 
   // i18n
@@ -121,9 +114,6 @@ export default defineConfig({
   // Vite
   vite: {
     plugins: [yaml()],
-    ssr: {
-      noExternal: ['styled-components']
-    },
     server: {
       watch: {
         ignored: ['**/node_modules/**', '**/.git/**'],

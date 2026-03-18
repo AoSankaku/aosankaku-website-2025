@@ -3,8 +3,7 @@ import { YouTube } from "astro-embed";
 import { type Lang } from "@/types/i18n";
 import { useTranslator } from "@/i18n/utils";
 const t = useTranslator(Astro.currentLocale as Lang);
-import { getMonthlySeed } from "@/utils/random";
-import { seededRandom } from "three/src/math/MathUtils.js";
+import { getMonthlySeed, seededRandomValue } from "@/utils/random";
 
 const videoIds = [
   "nZtMQEcHaMg", // 間違いだらけのきみを見せて
@@ -63,7 +62,7 @@ const videoIds = [
 ];
 
 const seed = getMonthlySeed();
-const random = seededRandom(seed);
+const random = seededRandomValue(seed);
 const randomIndex = Math.floor(random * videoIds.length);
 const randomVideoId = videoIds[randomIndex];
 ---
