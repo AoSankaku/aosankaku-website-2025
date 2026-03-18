@@ -1,104 +1,102 @@
-import { Scene } from "three/src/scenes/Scene.js";
-import { PerspectiveCamera } from "three/src/cameras/PerspectiveCamera.js";
-import { WebGLRenderer } from "three/src/renderers/WebGLRenderer.js";
-import { TetrahedronGeometry } from "three/src/geometries/TetrahedronGeometry.js";
-import { MeshStandardMaterial } from "three/src/materials/MeshStandardMaterial.js";
-import { Mesh } from "three/src/objects/Mesh.js";
-import { AmbientLight } from "three/src/lights/AmbientLight.js";
-import { PointLight } from "three/src/lights/PointLight.js";
-import { Vector3 } from "three/src/math/Vector3.js";
-import { Matrix4 } from "three/src/math/Matrix4.js";
+import {
+  VERT_SRC, FRAG_SRC,
+  buildGeometry,
+  mat4Perspective, mat4LookAt, mat4RotateY,
+} from '../utils/tetrahedron-webgl.js';
 
-let renderer, camera, tetrahedron, ambientLight;
-let animating = false;
+let gl, prog;
+let uModelLoc, uAmbientLoc, uProjLoc;
+let rotY = 0, animating = false;
 
 function init(canvas, width, height, isDark) {
-  // Suppress Three.js console.error for WebGL failures (e.g. headless/no-GPU environments).
-  // Three.js calls console.error internally before throwing, so we intercept it here.
-  const origConsoleError = console.error;
-  let webglFailed = false;
-  console.error = (...args) => {
-    if (String(args[0]).includes("WebGL")) {
-      webglFailed = true;
-      return;
-    }
-    origConsoleError.apply(console, args);
-  };
-  try {
-    renderer = new WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
-  } catch (_) {
-    webglFailed = true;
-  }
-  console.error = origConsoleError;
-
-  if (webglFailed || !renderer) {
-    self.postMessage({ type: "webgl-unsupported" });
+  gl = canvas.getContext('webgl') || canvas.getContext('webgl2');
+  if (!gl) {
+    self.postMessage({ type: 'webgl-unsupported' });
     return;
   }
 
-  const scene = new Scene();
-  camera = new PerspectiveCamera(35, width / height, 0.1, 1000);
+  // Set drawing-buffer resolution
+  const maxDpr = width < 768 ? 1.5 : 2;
+  const dpr = Math.min(self.devicePixelRatio ?? 1, maxDpr);
+  canvas.width  = Math.round(width  * dpr);
+  canvas.height = Math.round(height * dpr);
 
-  const maxPixelRatio = width < 768 ? 1.5 : 2;
-  renderer.setPixelRatio(Math.min(self.devicePixelRatio ?? 1, maxPixelRatio));
-  renderer.setSize(width, height, false);
+  // Compile shaders
+  function makeShader(type, src) {
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    return sh;
+  }
+  prog = gl.createProgram();
+  gl.attachShader(prog, makeShader(gl.VERTEX_SHADER,   VERT_SRC));
+  gl.attachShader(prog, makeShader(gl.FRAGMENT_SHADER, FRAG_SRC));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
 
-  ambientLight = new AmbientLight(0xffffff, isDark ? 0.3 : 8);
-  scene.add(ambientLight);
+  // Upload geometry
+  const geo = buildGeometry();
 
-  const pointLight = new PointLight(0xffffff, 30);
-  pointLight.position.set(0, 6, 7);
-  scene.add(pointLight);
+  const posBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, geo.positions, gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'aPos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
 
-  const radius = 1;
-  const geometry = new TetrahedronGeometry(radius, 0);
+  const nrmBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, nrmBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, geo.normals, gl.STATIC_DRAW);
+  const aNorm = gl.getAttribLocation(prog, 'aNorm');
+  gl.enableVertexAttribArray(aNorm);
+  gl.vertexAttribPointer(aNorm, 3, gl.FLOAT, false, 0, 0);
 
-  const upAxis = new Vector3(1, 0, -1).normalize();
-  const angle = Math.atan(Math.sqrt(2));
-  const rotationMatrix = new Matrix4().makeRotationAxis(upAxis, angle);
-  geometry.applyMatrix4(rotationMatrix);
-  geometry.translate(0, radius / 3, 0);
+  // Cache uniform locations
+  uModelLoc   = gl.getUniformLocation(prog, 'uModel');
+  uAmbientLoc = gl.getUniformLocation(prog, 'uAmbient');
+  uProjLoc    = gl.getUniformLocation(prog, 'uProj');
 
-  const material = new MeshStandardMaterial({
-    color: 0x0077ff,
-    metalness: 0.8,
-    roughness: 0.35,
-  });
+  // Set static uniforms
+  gl.uniformMatrix4fv(gl.getUniformLocation(prog, 'uView'), false,
+    mat4LookAt(0, 0.5, 5.2, 0, 0, 0));
+  gl.uniformMatrix4fv(uProjLoc, false,
+    mat4Perspective(35, width / height, 0.1, 1000));
+  gl.uniform1f(uAmbientLoc, isDark ? 0.0 : 1.0);
 
-  tetrahedron = new Mesh(geometry, material);
-  scene.add(tetrahedron);
-
-  camera.position.z = 5.2;
-  camera.position.y = 0.5;
+  // GL state
+  gl.enable(gl.DEPTH_TEST);
+  gl.clearColor(0, 0, 0, 0);
+  gl.viewport(0, 0, canvas.width, canvas.height);
 
   animating = true;
   const animate = () => {
     if (!animating) return;
+    rotY += 0.002;
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.uniformMatrix4fv(uModelLoc, false, mat4RotateY(rotY));
+    gl.drawArrays(gl.TRIANGLES, 0, 12);
     self.requestAnimationFrame(animate);
-    tetrahedron.rotation.y += 0.002;
-    renderer.render(scene, camera);
   };
   animate();
 }
 
 self.onmessage = (e) => {
   const { type } = e.data;
-  if (type === "init") {
+  if (type === 'init') {
     init(e.data.canvas, e.data.width, e.data.height, e.data.isDark);
-  } else if (type === "resize") {
-    if (!renderer || !camera) return;
-    camera.aspect = e.data.width / e.data.height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(e.data.width, e.data.height, false);
-  } else if (type === "theme") {
-    if (ambientLight) ambientLight.intensity = e.data.isDark ? 0.3 : 8;
-  } else if (type === "stop") {
+  } else if (type === 'resize') {
+    if (!gl || !prog) return;
+    const { width, height } = e.data;
+    const maxDpr = width < 768 ? 1.5 : 2;
+    const dpr = Math.min(self.devicePixelRatio ?? 1, maxDpr);
+    gl.canvas.width  = Math.round(width  * dpr);
+    gl.canvas.height = Math.round(height * dpr);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.uniformMatrix4fv(uProjLoc, false, mat4Perspective(35, width / height, 0.1, 1000));
+  } else if (type === 'theme') {
+    if (uAmbientLoc) gl.uniform1f(uAmbientLoc, e.data.isDark ? 0.0 : 1.0);
+  } else if (type === 'stop') {
     animating = false;
-    renderer?.dispose();
+    if (gl) gl.getExtension('WEBGL_lose_context')?.loseContext();
   }
 };

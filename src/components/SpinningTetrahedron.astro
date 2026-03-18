@@ -65,97 +65,98 @@
     );
   };
 
-  const startOnMainThread = async (width: number, height: number, isDark: boolean) => {
-    // Test WebGL availability before loading Three.js to avoid console errors
-    const testCanvas = document.createElement("canvas");
-    const testGl = testCanvas.getContext("webgl2") || testCanvas.getContext("webgl");
-    if (!testGl) {
-      return;
-    }
+  const startOnMainThread = (width: number, height: number, isDark: boolean) => {
+    import("../utils/tetrahedron-webgl.js").then(
+      ({ VERT_SRC, FRAG_SRC, buildGeometry, mat4Perspective, mat4LookAt, mat4RotateY }) => {
+        const gl = (canvas.getContext("webgl") || canvas.getContext("webgl2")) as WebGLRenderingContext | null;
+        if (!gl) return;
 
-    const [
-      { Scene },
-      { PerspectiveCamera },
-      { WebGLRenderer },
-      { TetrahedronGeometry },
-      { MeshStandardMaterial },
-      { Mesh },
-      { AmbientLight },
-      { PointLight },
-      { Vector3 },
-      { Matrix4 },
-    ] = await Promise.all([
-      import("three/src/scenes/Scene.js"),
-      import("three/src/cameras/PerspectiveCamera.js"),
-      import("three/src/renderers/WebGLRenderer.js"),
-      import("three/src/geometries/TetrahedronGeometry.js"),
-      import("three/src/materials/MeshStandardMaterial.js"),
-      import("three/src/objects/Mesh.js"),
-      import("three/src/lights/AmbientLight.js"),
-      import("three/src/lights/PointLight.js"),
-      import("three/src/math/Vector3.js"),
-      import("three/src/math/Matrix4.js"),
-    ]);
+        // Set drawing-buffer resolution
+        const maxDpr = width < 768 ? 1.5 : 2;
+        const dpr = Math.min(window.devicePixelRatio, maxDpr);
+        canvas.width  = Math.round(width  * dpr);
+        canvas.height = Math.round(height * dpr);
 
-    const scene = new Scene();
-    const camera = new PerspectiveCamera(35, width / height, 0.1, 1000);
+        // Compile shaders
+        const makeShader = (type: number, src: string) => {
+          const sh = gl.createShader(type)!;
+          gl.shaderSource(sh, src);
+          gl.compileShader(sh);
+          return sh;
+        };
+        const prog = gl.createProgram()!;
+        gl.attachShader(prog, makeShader(gl.VERTEX_SHADER,   VERT_SRC));
+        gl.attachShader(prog, makeShader(gl.FRAGMENT_SHADER, FRAG_SRC));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
 
-    const renderer = new WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
+        // Upload geometry
+        const geo = buildGeometry();
 
-    const maxPixelRatio = window.innerWidth < 768 ? 1.5 : 2;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
-    renderer.setSize(width, height, false);
+        const posBuf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, geo.positions, gl.STATIC_DRAW);
+        const aPos = gl.getAttribLocation(prog, "aPos");
+        gl.enableVertexAttribArray(aPos);
+        gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
 
-    const ambientLight = new AmbientLight(0xffffff, isDark ? 0.3 : 8);
-    scene.add(ambientLight);
-    const pointLight = new PointLight(0xffffff, 30);
-    pointLight.position.set(0, 6, 7);
-    scene.add(pointLight);
+        const nrmBuf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, nrmBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, geo.normals, gl.STATIC_DRAW);
+        const aNorm = gl.getAttribLocation(prog, "aNorm");
+        gl.enableVertexAttribArray(aNorm);
+        gl.vertexAttribPointer(aNorm, 3, gl.FLOAT, false, 0, 0);
 
-    const mutObs = new MutationObserver((mutations) => {
-      mutations.forEach((m) => {
-        if (m.attributeName === "class") {
-          ambientLight.intensity = document.documentElement.classList.contains("dark") ? 0.3 : 8;
-        }
-      });
-    });
-    mutObs.observe(document.documentElement, { attributes: true });
-    document.addEventListener("astro:before-swap", () => mutObs.disconnect(), { once: true });
+        // Cache uniform locations
+        const uModelLoc   = gl.getUniformLocation(prog, "uModel");
+        const uAmbientLoc = gl.getUniformLocation(prog, "uAmbient");
+        const uProjLoc    = gl.getUniformLocation(prog, "uProj");
 
-    const radius = 1;
-    const geometry = new TetrahedronGeometry(radius, 0);
-    const upAxis = new Vector3(1, 0, -1).normalize();
-    const rotationMatrix = new Matrix4().makeRotationAxis(upAxis, Math.atan(Math.sqrt(2)));
-    geometry.applyMatrix4(rotationMatrix);
-    geometry.translate(0, radius / 3, 0);
+        // Set static uniforms
+        gl.uniformMatrix4fv(gl.getUniformLocation(prog, "uView"), false,
+          mat4LookAt(0, 0.5, 5.2, 0, 0, 0));
+        gl.uniformMatrix4fv(uProjLoc, false,
+          mat4Perspective(35, width / height, 0.1, 1000));
+        gl.uniform1f(uAmbientLoc, isDark ? 0.0 : 1.0);
 
-    const tetrahedron = new Mesh(
-      geometry,
-      new MeshStandardMaterial({ color: 0x0077ff, metalness: 0.8, roughness: 0.35 })
+        // GL state
+        gl.enable(gl.DEPTH_TEST);
+        gl.clearColor(0, 0, 0, 0);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+
+        const mutObs = new MutationObserver((mutations) => {
+          mutations.forEach((m) => {
+            if (m.attributeName === "class") {
+              gl.uniform1f(uAmbientLoc,
+                document.documentElement.classList.contains("dark") ? 0.0 : 1.0);
+            }
+          });
+        });
+        mutObs.observe(document.documentElement, { attributes: true });
+        document.addEventListener("astro:before-swap", () => mutObs.disconnect(), { once: true });
+
+        const resizeObs = new ResizeObserver((entries) => {
+          const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
+          const newDpr = Math.min(window.devicePixelRatio, maxDpr);
+          canvas.width  = Math.round(w * newDpr);
+          canvas.height = Math.round(h * newDpr);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+          gl.uniformMatrix4fv(uProjLoc, false, mat4Perspective(35, w / h, 0.1, 1000));
+        });
+        resizeObs.observe(canvas);
+        document.addEventListener("astro:before-swap", () => resizeObs.disconnect(), { once: true });
+
+        let rotY = 0;
+        const animate = () => {
+          rotY += 0.002;
+          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+          gl.uniformMatrix4fv(uModelLoc, false, mat4RotateY(rotY));
+          gl.drawArrays(gl.TRIANGLES, 0, 12);
+          requestAnimationFrame(animate);
+        };
+        animate();
+      }
     );
-    scene.add(tetrahedron);
-    camera.position.z = 5.2;
-    camera.position.y = 0.5;
-
-    const resizeObs = new ResizeObserver((entries) => {
-      const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
-    });
-    resizeObs.observe(canvas);
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      tetrahedron.rotation.y += 0.002;
-      renderer.render(scene, camera);
-    };
-    animate();
   };
 
   const supportsOffscreen =
