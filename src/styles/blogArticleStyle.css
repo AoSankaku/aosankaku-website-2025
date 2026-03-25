@@ -125,6 +125,9 @@ p.desc {
 
   h2 {
     margin-top: 60px;
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   h3,
