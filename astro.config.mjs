@@ -12,13 +12,12 @@ import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
 
 import rehypeExpressiveCode from 'rehype-expressive-code';
-import remarkLinkCard from 'remark-link-card-plus';
+import { remarkLinkCardCached } from './src/plugins/remark-link-card-cached.mjs';
 
-const isDevCommand = process.argv.includes('dev');
-const enableLinkCards = !isDevCommand || process.env.LINK_CARD_IN_DEV === 'true';
 
-const remarkLinkCardPlugin = [remarkLinkCard, {
+const remarkLinkCardPlugin = [remarkLinkCardCached, {
   cache: true,
+  ogCacheTtlMs: 1000 * 60 * 60 * 24 * 30,
   shortenUrl: true,
   thumbnailPosition: "right",
   noThumbnail: false,
@@ -109,7 +108,7 @@ export default defineConfig({
         gemoji,
         remarkGithubAlerts,
         remarkYoutube,
-        ...(enableLinkCards ? [remarkLinkCardPlugin] : []),
+        remarkLinkCardPlugin,
       ],
       rehypePlugins: [
         [rehypeTwemoji, {
