@@ -108,7 +108,7 @@ const displayedOgpImage =
     color: var(--color-text);
     max-width: 100vw;
     overflow-x: hidden;
-    line-height: 1.5em;
+    line-height: 1.5;
     transition:
       background-color 0.5s ease,
       color 0.5s ease;
@@ -118,8 +118,16 @@ const displayedOgpImage =
     color: var(--color-primary);
   }
 
-  :global(h1, h2, h3, h4, h5, h6, p, li, a) {
-    line-height: 1.6em;
+  :global(h1),
+  :global(h2),
+  :global(h3),
+  :global(h4),
+  :global(h5),
+  :global(h6),
+  :global(p),
+  :global(li),
+  :global(a) {
+    line-height: 1.6;
   }
 
   :global(code) {
