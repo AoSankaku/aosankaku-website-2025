@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
@@ -13,7 +15,6 @@ import remarkGithubAlerts from 'remark-github-alerts';
 
 import rehypeExpressiveCode from 'rehype-expressive-code';
 import { remarkLinkCardCached } from './src/plugins/remark-link-card-cached.mjs';
-
 
 const remarkLinkCardPlugin = [remarkLinkCardCached, {
   cache: true,
@@ -109,8 +110,10 @@ export default defineConfig({
         remarkGithubAlerts,
         remarkYoutube,
         remarkLinkCardPlugin,
+        remarkMath,
       ],
       rehypePlugins: [
+        [rehypeKatex],
         [rehypeTwemoji, {
           format: 'svg',
           // This ensures the images have a specific class for CSS styling

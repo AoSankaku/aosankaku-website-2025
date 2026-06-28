@@ -127,3 +127,59 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     container.appendChild(list);
   }
 </script>
+
+<script>
+  const katexFontUrls = import.meta.glob("/node_modules/katex/dist/fonts/*", {
+    eager: true,
+    import: "default",
+    query: "?url",
+  }) as Record<string, string>;
+  const katexFontUrlByName = Object.fromEntries(
+    Object.entries(katexFontUrls).map(([path, url]) => [
+      path.split("/").pop(),
+      url,
+    ]),
+  );
+
+  const mathElements = document.querySelectorAll(".katex");
+
+  if (mathElements.length > 0) {
+    let stylesheetPromise: Promise<void> | undefined;
+    let observer: IntersectionObserver | undefined;
+
+    const loadKatexStylesheet = () => {
+      stylesheetPromise ??= import("katex/dist/katex.min.css?raw").then(
+        ({ default: css }) => {
+          if (document.getElementById("katex-stylesheet")) return;
+
+          const stylesheet = document.createElement("style");
+          stylesheet.id = "katex-stylesheet";
+          stylesheet.textContent = css.replace(
+            /url\((["']?)fonts\/([^"')]+)\1\)/g,
+            (match, quote, fontName) => {
+              const fontUrl = katexFontUrlByName[fontName];
+              return fontUrl ? `url(${quote}${fontUrl}${quote})` : match;
+            },
+          );
+          document.head.append(stylesheet);
+        },
+      );
+      observer?.disconnect();
+    };
+
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            loadKatexStylesheet();
+          }
+        },
+        { rootMargin: "800px 0px" },
+      );
+
+      mathElements.forEach((element) => observer?.observe(element));
+    } else {
+      window.addEventListener("load", loadKatexStylesheet, { once: true });
+    }
+  }
+</script>

@@ -395,6 +395,17 @@ p.desc {
     margin-top: 1.2lh;
     margin-bottom: 1.8lh;
   }
+
+  .katex-display {
+    margin: calc(1em + 0.5lh) 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .katex-display>.katex {
+    min-width: max-content;
+  }
 }
 
 div.tags {
