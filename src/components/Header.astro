@@ -1,20 +1,32 @@
 ---
 import { Icon } from "astro-icon/components";
+import { DEFAULT_LOCALE, type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+
 const currentPath = Astro.url.pathname;
+const currentLocale = (Astro.currentLocale ?? DEFAULT_LOCALE) as Lang;
+const t = useTranslator(currentLocale);
 const iconSize = 30;
+const homeHref = currentLocale === "en" ? "/en/" : "/";
+const isHome = currentPath === "/" || currentPath === "/en/";
+const languageHref = currentLocale === "en" ? "/" : "/en/";
+const languageIcon =
+  currentLocale === "en" ? "twemoji:flag-japan" : "twemoji:flag-united-states";
+const languageLabel =
+  currentLocale === "en" ? t("header.switch-to-ja") : t("header.switch-to-en");
 ---
 
 <header class="header-container">
   <div class="left">
     {
-      currentPath !== "/" && (
-        <a href="../">
+      !isHome && (
+        <a href={homeHref}>
           <Icon
             name="carbon:folder-parent"
             width={iconSize}
             height={iconSize}
           />
-          <span>一つ上の階層へ</span>
+          <span>{t("header.home")}</span>
         </a>
       )
     }
@@ -22,11 +34,11 @@ const iconSize = 30;
   <div class="right">
     <a href="/blog/">
       <Icon name="carbon:blog" width={iconSize} height={iconSize} />
-      <span>ブログ全記事一覧</span>
+      <span>{t("header.blog")}</span>
     </a>
     <a href="/about/">
       <Icon name="carbon:help" width={iconSize} height={iconSize} />
-      <span>このブログについて</span>
+      <span>{t("header.about")}</span>
     </a>
     <button id="themeToggle" aria-label="Toggle light and dark theme">
       <Icon
@@ -41,10 +53,11 @@ const iconSize = 30;
         width={iconSize}
         height={iconSize}
       />
-      <button id="toggle-language" aria-label="Toggle language">
-        <Icon name="twemoji:flag-japan" width={iconSize} height={iconSize} />
-      </button>
     </button>
+    <a id="toggle-language" href={languageHref} aria-label={languageLabel}>
+      <Icon name={languageIcon} width={iconSize} height={iconSize} />
+      <span>{languageLabel}</span>
+    </a>
   </div>
 </header>
 
@@ -75,19 +88,6 @@ const iconSize = 30;
   // Button Click Listener
   themeToggle.addEventListener("click", toggleAndSetTheme);
 
-  document.getElementById("toggle-language")?.addEventListener("click", () => {
-    /*
-    const currentPath = window.location.pathname;
-    if (currentPath.startsWith("/blog/")) {
-      // Switch to Japanese homepage
-      window.location.href = "/";
-    } else {
-      // Switch to English blog page
-      window.location.href = "/blog/";
-    }
-    */
-    alert("Language toggle is coming sooooooooon™");
-  });
 </script>
 
 <style>
@@ -144,6 +144,10 @@ const iconSize = 30;
     border: 0;
     background: none;
     cursor: pointer;
+  }
+
+  #toggle-language {
+    color: var(--color-text);
   }
 
   .sun {

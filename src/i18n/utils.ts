@@ -14,21 +14,31 @@ for (const locale of Object.keys(LOCALES_SETTING)) {
 type Locale = keyof typeof translations;
 type Replacements = Record<string, string | number>;
 
+function normalizeLocale(locale?: string): Locale {
+  return (locale && locale in translations
+    ? locale
+    : DEFAULT_LOCALE_SETTING) as Locale;
+}
+
 /**
  * Base translator: looks up a key in the given locale and optionally replaces placeholders.
  * Placeholders are in the form {name}, {count}, etc.
  */
-export function t(locale: Locale, key: string, replacements?: Replacements): string {
+export function t(locale: string | undefined, key: string, replacements?: Replacements): string {
   const parts = key.split('.');
+  const normalizedLocale = normalizeLocale(locale);
   let value = parts.reduce<unknown>((obj, part) => {
     if (typeof obj === 'object' && obj !== null && part in obj) {
       return (obj as Record<string, unknown>)[part];
     }
     return undefined;
-  }, translations[locale]) as string;
+  }, translations[normalizedLocale]) as string;
 
   if (typeof value !== 'string') {
-    return '';
+    if (normalizedLocale !== DEFAULT_LOCALE_SETTING) {
+      return t(DEFAULT_LOCALE_SETTING, key, replacements);
+    }
+    return key;
   }
 
   if (replacements) {
@@ -43,7 +53,7 @@ export function t(locale: Locale, key: string, replacements?: Replacements): str
 /**
  * Creates a translator bound to a specific locale.
  */
-export function useTranslator(locale: Locale) {
+export function useTranslator(locale?: string) {
   return (key: string, replacements?: Replacements) => t(locale, key, replacements);
 }
 

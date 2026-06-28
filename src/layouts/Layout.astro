@@ -23,6 +23,7 @@ interface Props {
   type?: "website" | "article" | "profile" | "book" | "music" | "video";
   ogpImage?: URL | ImageMetadata;
   disableTrailingWebsiteName?: Boolean;
+  alternateLocales?: Partial<Record<keyof typeof LOCALES_SETTING, string>>;
 }
 
 const defaultOgpImageUrl = new URL(defaultOgpImage.src, Astro.site);
@@ -33,6 +34,7 @@ const {
   type = "website",
   ogpImage = defaultOgpImageUrl,
   disableTrailingWebsiteName = false,
+  alternateLocales,
 } = Astro.props;
 
 const displayedTitle = !disableTrailingWebsiteName
@@ -53,6 +55,25 @@ const isDev = import.meta.env.DEV;
     <link rel="icon" type="image/svg+xml" href="/icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonicalURL} />
+    {
+      alternateLocales &&
+        Object.entries(alternateLocales).map(([locale, path]) => (
+          <link
+            rel="alternate"
+            hreflang={LOCALES_SETTING[locale]?.lang ?? locale}
+            href={new URL(path, Astro.site)}
+          />
+        ))
+    }
+    {
+      alternateLocales?.[DEFAULT_LOCALE] && (
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={new URL(alternateLocales[DEFAULT_LOCALE], Astro.site)}
+        />
+      )
+    }
     <meta name="generator" content={Astro.generator} />
     <title>{displayedTitle}</title>
     <meta name="description" slot="head" content={description} />

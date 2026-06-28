@@ -3,11 +3,83 @@ site-description: "Blue Trinagle's personal hobby website. Mainly explores front
 
 homepage:
   hidden-h1: Blue Triangle's Website - Frontend Dev, Servers and Minecraft.
-  profile: Profile
+  random-video: Hello there! Wanna try this song?
+  random-video-desc: I feature one underrated song each month.
+  profile:
+    title: Profile
+    name: Blue Triangle
+    subname: AoSankaku
+    basic-title: Basics
+    nickname: "Names: Blue Triangle, AoSankaku, Aosan, or whatever feels right."
+    gender: "Gender: nonexistent, because I'm just a shape."
+    age: "Age: old enough to drink, though not necessarily good at it."
+    job: "Work: frontend engineer and assorted random things."
+  tech-stacks:
+    title: Tools I Have Used
+  details:
+    website-title: Website Building
+    website-desc: I built this site myself from scratch. I like React, but i18n was painful with Next.js, Gatsby, and Vike, so I use Astro here.
+    dev-title: Hobby Development
+    dev-desc: I build whatever I feel like building when the idea shows up.
+    english-title: I Know Some English
+    english-desc: I still have not passed Eiken Grade 1 (equivalent to CEFR C1), which bothers me. I want to hang out in VRChat in English someday.
+    hobby-title: Narrow Hobbies
+    hobby-desc: "Mostly Minecraft. Sometimes Arknights, #COMPASS, and a few other things."
+    casual-title: Casual Chats Welcome
+    casual-desc: I like reaction sprees, like storms, and low-stakes chatting too. Keep it within common sense.
+    music-title: Music Taste
+    music-desc: I like electronic sounds, strong vocals, and guitars. Recommend that kind of music and I will probably be happy.
+  works:
+    title: Showcase
+    mirinkuyan:
+      title: Our Greatly Respected Mirin-kuyan
+      desc: Apparently mastering karaoke lately. Let us all show due respect.
+      link: Praise
+    moremobility:
+      desc: This was made by sysnote, not me. It is an Automobility addon that adds things like huge harvesters and netherite engines.
+      link: View on Modrinth
+    server:
+      title: Create Cities Server
+      desc: I also run a Minecraft server with a very large, mostly tech-focused modpack. It is friends-only, but people I know are welcome to ask.
+    cpu:
+      title: CPU Monitor for Stream Deck
+      desc: I made a Stream Deck plugin where PartyParrot shows CPU usage. It was also one of my first mostly vibe-coded projects.
+      link: Download on GitHub
+    station-sign:
+      title: Station Sign Generator
+      desc: I am building a web app for creating station signs. The basic features work, but it still needs larger changes before I call it finished.
+    typing:
+      title: Competitive Typing
+      desc: I became a typing god. I do not have a convenient certificate to prove it, so let me know if you know a good one.
+    craftsky:
+      title: Craftsky
+      desc: I'm running a Misskey server where people who make things can casually gather.
+      link: Visit
+    icon:
+      title: About My Icon
+      desc: A close friend drew it for me. I have used it for over eight years. For the record, I am quite bad at drawing.
+
+header:
+  home: Home
+  blog: Blog posts in Japanese
+  about: About in Japanese
+  switch-to-ja: Switch to Japanese
+  switch-to-en: Switch to English
 
 blog: 
   all-articles: All Posts
   search-articles: You can also search and filter articles here.
+  recent-articles: Recent Blog Posts
+  all-articles-search: All Posts and Search
+  unset-description: No description set
+  search-placeholder: Search posts by title...
+  filter: Filter
+  reset-all: Reset all
+  category: Category
+  tags: Tags
+  collapse: Collapse
+  nothing-found: Nothing was found.
+  nothing-found-desc: Try removing tags or changing the keyword.
 
 error: 
   untranslated: <Untranslated>

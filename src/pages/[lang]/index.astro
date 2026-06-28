@@ -1,8 +1,8 @@
 ---
-import Header from "../components/Header.astro";
-import Layout from "../layouts/Layout.astro";
-import SpinningTetrahedron from "../components/SpinningTetrahedron.astro";
-import ProfileIcon from "../components/ProfileIcon.astro";
+import Header from "@/components/Header.astro";
+import Layout from "@/layouts/Layout.astro";
+import SpinningTetrahedron from "@/components/SpinningTetrahedron.astro";
+import ProfileIcon from "@/components/ProfileIcon.astro";
 import HiddenH1 from "@/components/HiddenH1.astro";
 import RandomVideo from "@/components/RandomVideo.astro";
 import SocialIcons from "@/components/SocialIcons.astro";
@@ -12,6 +12,10 @@ import ProfileDetails from "@/components/ProfileDetails.astro";
 import Works from "@/components/Works.astro";
 import TechStacks from "@/components/TechStacks.astro";
 import RecentArticles from "@/components/RecentArticles.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }];
+}
 ---
 
 <Layout

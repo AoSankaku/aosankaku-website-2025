@@ -9,10 +9,77 @@ homepage:
     title: プロフィール
     name: あおさんかく
     subname: Blue Triangle
+    basic-title: 基本情報
+    nickname: 呼称：ぶるとら あおさんかく あおさん　等お好みでどうぞ
+    gender: 性別：図形のため存在しない
+    age: 年齢：お酒が飲める歳（強いとは言ってない）
+    job: 職業：フロントエンドエンジニア その他いろいろ
+  tech-stacks:
+    title: 使ったことあるやつ
+  details:
+    website-title: サイト作りとか
+    website-desc: このサイトも自分で1から錬成しました。Reactが好きですが、Next.jsもGatsbyもVikeも多言語対応がしんどいのでAstro使っています。
+    dev-title: その他趣味開発
+    dev-desc: 思いついたときに作りたいものを作っています。そういう人間です。諦めてください。
+    english-title: 英語がﾁｮｯﾄできます
+    english-desc: 英検1級取れてないのがコンプレックスです。モチベがありません。英語でVRChatをするのが夢です。
+    hobby-title: 趣味が狭いです
+    hobby-desc: 基本マイクラばっかりしてます。気が向いたときにアークナイツやコンパスとかやってたりします。
+    casual-title: ダル絡み歓迎
+    casual-desc: リアクションシューティング・いいね爆撃や頭を使わない会話も好きです。でも常識的な範囲でね。初対面なのにグイグイ来られるのは誰でも嫌だよ。
+    music-title: 音楽の好み
+    music-desc: 電子音、声を張ったボーカル、ギターが好きです。そういう曲を薦めると喜びます。アークナイツのOSTもよく聴きます。
+  works:
+    title: みてみてコーナー
+    mirinkuyan:
+      title: 我らが最大限に 尊敬し敬愛する みりんくゃん 御大同志将軍
+      desc: 最近はカラオケを極めているらしいです。みんなで崇めましょう。
+      link: 礼賛する
+    moremobility:
+      desc: 俺が作ったものではなく、sysnoteくゃんが作ってくれました。Automobilityを拡張するアドオンです。でっかい収穫機やネザライトエンジンなどを追加します。
+      link: Modrinthで見る
+    server:
+      title: Create Citiesサーバー
+      desc: マイクラサバもやってます。恐ろしい量のMODが工業を中心に入っています。友人限定ですが、知り合いの方で興味があれば広く参加を受け付けています。
+    cpu:
+      title: StreamDeck用CPUモニター
+      desc: StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
+      link: ダウンロード（GitHub）
+    station-sign:
+      title: 【作成中】駅名標ジェネレーター
+      desc: 駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
+    typing:
+      title: タイピングガチ勢
+      desc: 神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
+    craftsky:
+      title: くらふとすきー
+      desc: 「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを作りました。
+      link: 見に行く
+    icon:
+      title: アイコンについて
+      desc: 親友に描いてもらったものです。なんだかんだ8年以上愛用しています。ちなみにあおさんかくは普通に絵が下手です。
+
+header:
+  home: ホームへ
+  blog: ブログ全記事一覧
+  about: このブログについて
+  switch-to-ja: 日本語に切り替え
+  switch-to-en: Englishに切り替え
 
 blog: 
   all-articles: ブログ全記事一覧
   search-articles: 記事の検索もこちらから可能です。
+  recent-articles: 最近のブログ記事
+  all-articles-search: ブログ全記事一覧（検索）
+  unset-description: 【説明未設定】
+  search-placeholder: タイトルから記事を検索...
+  filter: フィルター
+  reset-all: すべてリセット
+  category: カテゴリー
+  tags: タグ
+  collapse: 折りたたむ
+  nothing-found: 何も見つからなかったらしい。
+  nothing-found-desc: タグを消したりキーワードを変えたりしてみてね。
 
 error: 
   untranslated: <未翻訳>

@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { title, imageSrc, link, linkText, disableAutoWbr } = Astro.props;
-const splitTitle = title.split(" ");
+const splitTitle = title.split(/(\s+)/).filter(Boolean);
 ---
 
 <section class="info-box-wrapper">
@@ -32,12 +32,16 @@ const splitTitle = title.split(" ");
         <h2>{title}</h2>
       ) : (
         <h2 class="split-title">
-          {splitTitle.map((part, index) => (
-            <>
-              {part}
-              {index < splitTitle.length - 1 && <wbr />}
-            </>
-          ))}
+          {splitTitle.map((part) =>
+            /^\s+$/.test(part) ? (
+              <>
+                {part}
+                <wbr />
+              </>
+            ) : (
+              part
+            ),
+          )}
         </h2>
       )
     }

@@ -8,21 +8,25 @@ import typingImage from "@/assets/homepage/works/typing_340.jpg";
 import mirinkuyan from "@/assets/homepage/works/mirinkuyan.jpg";
 import profileIcon250 from "@/assets/profileicon250.png";
 import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_generator.png";
+import { type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
-<h2>みてみてコーナー</h2>
+<h2>{t("homepage.works.title")}</h2>
 
 <section class="embla" id="works-embla">
   <div class="embla__viewport">
     <div class="embla__container">
       <div class="embla__slide">
         <WorkCard
-          title="我らが最大限に 尊敬し敬愛する みりんくゃん 御大同志将軍"
+          title={t("homepage.works.mirinkuyan.title")}
           imageSrc={mirinkuyan}
           link="https://twitter.com/intent/follow?region=follow_link&screen_name=ymag_h"
-          linkText="礼賛する"
+          linkText={t("homepage.works.mirinkuyan.link")}
         >
-          最近はカラオケを極めているらしいです。みんなで崇めましょう。
+          {t("homepage.works.mirinkuyan.desc")}
         </WorkCard>
       </div>
 
@@ -31,58 +35,58 @@ import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_gene
           title="Moremobility Mod"
           imageSrc={moremobilityImage}
           link="https://modrinth.com/mod/moremobility"
-          linkText="Modrinthで見る"
+          linkText={t("homepage.works.moremobility.link")}
         >
-          俺が作ったものではなく、sysnoteくゃんが作ってくれました。Automobilityを拡張するアドオンです。でっかい収穫機やネザライトエンジンなどを追加します。
+          {t("homepage.works.moremobility.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
-        <WorkCard title="Create Citiesサーバー" imageSrc={serverImage1}>
-          マイクラサバもやってます。恐ろしい量のMODが工業を中心に入っています。友人限定ですが、知り合いの方で興味があれば広く参加を受け付けています。
+        <WorkCard title={t("homepage.works.server.title")} imageSrc={serverImage1}>
+          {t("homepage.works.server.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
         <WorkCard
-          title="StreamDeck用CPUモニター"
+          title={t("homepage.works.cpu.title")}
           imageSrc={partyparrotStreamdeckImage}
           link="https://github.com/AoSankaku/cpu-partyparrot/releases"
-          linkText="ダウンロード（GitHub）"
+          linkText={t("homepage.works.cpu.link")}
         >
-          StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
+          {t("homepage.works.cpu.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
         <WorkCard
-          title="【作成中】駅名標ジェネレーター"
+          title={t("homepage.works.station-sign.title")}
           imageSrc={stationSignGeneratorImage}
         >
-          駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
+          {t("homepage.works.station-sign.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
-        <WorkCard title="タイピングガチ勢" imageSrc={typingImage}>
-          神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
+        <WorkCard title={t("homepage.works.typing.title")} imageSrc={typingImage}>
+          {t("homepage.works.typing.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
         <WorkCard
-          title="くらふとすきー"
+          title={t("homepage.works.craftsky.title")}
           imageSrc={craftskyImage}
           link="https://crafters.aosankaku.net"
-          linkText="見に行く"
+          linkText={t("homepage.works.craftsky.link")}
         >
-          「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを作りました。
+          {t("homepage.works.craftsky.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
-        <WorkCard title="アイコンについて" imageSrc={profileIcon250}>
-          親友に描いてもらったものです。なんだかんだ8年以上愛用しています。ちなみにあおさんかくは普通に絵が下手です。
+        <WorkCard title={t("homepage.works.icon.title")} imageSrc={profileIcon250}>
+          {t("homepage.works.icon.desc")}
         </WorkCard>
       </div>
     </div>

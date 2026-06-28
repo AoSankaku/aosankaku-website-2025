@@ -1,11 +1,15 @@
 ---
 import ProfileInfoContainer from "./atoms/ProfileInfoContainer.astro";
 import { Icon } from "astro-icon/components";
+import { type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+
 const iconSize = "2.8em";
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
 <ProfileInfoContainer
-  title="使ったことあるやつ"
+  title={t("homepage.tech-stacks.title")}
   icon="mdi:code-tags"
   boxType="large"
 >

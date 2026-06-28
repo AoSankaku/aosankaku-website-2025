@@ -62,7 +62,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
     <input
       type="text"
       id="searchInput"
-      placeholder="タイトルから記事を検索..."
+      placeholder={t("blog.search-placeholder")}
       style="width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box;"
     />
 
@@ -70,7 +70,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
       <summary id="summary">
         <p class="filter-desc">
           <Icon name="mdi:filter-variant" size="1.4em" />
-          <span>フィルター</span>
+          <span>{t("blog.filter")}</span>
           <span
             id="activeFilterCount"
             class="filter-badge"
@@ -78,12 +78,12 @@ const t = useTranslator(Astro.currentLocale as Lang);
           >
         </p>
         <button id="clearTags"
-          ><Icon name="mdi:trash" size="2em" /> すべてリセット</button
+          ><Icon name="mdi:trash" size="2em" /> {t("blog.reset-all")}</button
         >
       </summary>
 
       <div class="filter-section">
-        <p class="filter-label">カテゴリー</p>
+        <p class="filter-label">{t("blog.category")}</p>
         <div id="categoryFilters">
           {
             categories.map((cat) => (
@@ -96,7 +96,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
           }
         </div>
 
-        <p class="filter-label">タグ</p>
+        <p class="filter-label">{t("blog.tags")}</p>
         <div id="tagFilters">
           {
             sortedTags.map((tag) => (
@@ -107,7 +107,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
           }
         </div>
         <button id="closeSummary"
-          ><Icon name="mdi:chevron-up" size="1.5em" />折りたたむ</button
+          ><Icon name="mdi:chevron-up" size="1.5em" />{t("blog.collapse")}</button
         >
       </div>
     </details>
@@ -130,8 +130,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
     <div id="nothingFound">
       <Icon name="twemoji:person-shrugging" size="64px" />
       <p>
-        何も見つからなかったらしい。<br
-        />タグを消したりキーワードを変えたりしてみてね。
+        {t("blog.nothing-found")}<br />{t("blog.nothing-found-desc")}
       </p>
     </div>
   </div>

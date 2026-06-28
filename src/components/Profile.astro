@@ -1,18 +1,22 @@
 ---
 import ProfileInfoContainer from "./atoms/ProfileInfoContainer.astro";
+import { type Lang } from "@/types/i18n";
+import { useTranslator } from "@/i18n/utils";
+
+const t = useTranslator(Astro.currentLocale as Lang);
 ---
 
 <div class="container">
   <ProfileInfoContainer
-    title="基本情報"
+    title={t("homepage.profile.basic-title")}
     icon="carbon:user-profile-alt"
     boxType="large"
   >
     <ul>
-      <li>呼称：ぶるとら あおさんかく あおさん　等お好みでどうぞ</li>
-      <li>性別：図形のため存在しない</li>
-      <li>年齢：お酒が飲める歳<wbr />（強いとは言ってない）</li>
-      <li>職業：フロントエンドエンジニア<wbr />その他いろいろ</li>
+      <li>{t("homepage.profile.nickname")}</li>
+      <li>{t("homepage.profile.gender")}</li>
+      <li>{t("homepage.profile.age")}</li>
+      <li>{t("homepage.profile.job")}</li>
     </ul>
   </ProfileInfoContainer>
 </div>
