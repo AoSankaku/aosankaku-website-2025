@@ -11,8 +11,46 @@ import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
 import remarkGithubAlerts from 'remark-github-alerts';
 
-import expressiveCode from 'astro-expressive-code';
+import rehypeExpressiveCode from 'rehype-expressive-code';
 import remarkLinkCard from 'remark-link-card-plus';
+
+const isDevCommand = process.argv.includes('dev');
+const enableLinkCards = !isDevCommand || process.env.LINK_CARD_IN_DEV === 'true';
+
+const remarkLinkCardPlugin = [remarkLinkCard, {
+  cache: true,
+  shortenUrl: true,
+  thumbnailPosition: "right",
+  noThumbnail: false,
+  noFavicon: false,
+  ignoreExtensions: ['.mp4', '.pdf'],
+  ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
+    if (url.hostname === 'github.com') {
+      return { ...og, title: `GitHub: ${og.title}` };
+    }
+    if (og.title === og.description) {
+      return { ...og, description: 'custom description' };
+    }
+    return og;
+  }
+}];
+
+const expressiveCodeOptions = {
+  themes: ['one-light', 'one-dark-pro'],
+  useDarkModeMediaQuery: false,
+  themeCssSelector: (theme) => {
+    // If the theme is 'one-dark-pro', trigger it when .dark class is on <html>
+    if (theme.name === 'one-dark-pro') return '.dark';
+    // Otherwise, it's the default theme (one-light)
+    return false;
+  },
+  shiki: {
+    langAlias: {
+      'cfg': 'ini',
+      'zs': 'java',
+    }
+  }
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -47,21 +85,6 @@ export default defineConfig({
       }
     }
     */
-  }), expressiveCode({
-    themes: ['one-light', 'one-dark-pro'],
-    useDarkModeMediaQuery: false,
-    themeCssSelector: (theme, { styleVariants }) => {
-      // If the theme is 'one-dark-pro', trigger it when .dark class is on <html>
-      if (theme.name === 'one-dark-pro') return '.dark';
-      // Otherwise, it's the default theme (one-light)
-      return false;
-    },
-    shiki: {
-      langAlias: {
-        'cfg': 'ini',
-        'zs': 'java',
-      }
-    }
   }),
   ],
 
@@ -79,36 +102,22 @@ export default defineConfig({
   trailingSlash: 'always',
 
   markdown: {
+    syntaxHighlight: false,
     processor: unified({
       remarkPlugins: [
         remarkTocTrigger,
         gemoji,
         remarkGithubAlerts,
         remarkYoutube,
-        [remarkLinkCard, {
-          cache: true,
-          shortenUrl: true,
-          thumbnailPosition: "right",
-          noThumbnail: false,
-          noFavicon: false,
-          ignoreExtensions: ['.mp4', '.pdf'],
-          ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
-            if (url.hostname === 'github.com') {
-              return { ...og, title: `GitHub: ${og.title}` };
-            }
-            if (og.title === og.description) {
-              return { ...og, description: 'custom description' };
-            }
-            return og;
-          }
-        }],
+        ...(enableLinkCards ? [remarkLinkCardPlugin] : []),
       ],
       rehypePlugins: [
         [rehypeTwemoji, {
           format: 'svg',
           // This ensures the images have a specific class for CSS styling
           className: 'twemoji'
-        }]
+        }],
+        [rehypeExpressiveCode, expressiveCodeOptions],
       ],
       gfm: true,
     }),

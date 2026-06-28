@@ -32,12 +32,12 @@
         "@types/styled-components": "^5.1.36",
         "astro": "7.0.3",
         "astro-embed": "^0.9.2",
-        "astro-expressive-code": "^0.41.5",
         "astro-icon": "^1.1.5",
         "embla-carousel": "^8.6.0",
         "embla-carousel-autoplay": "^8.6.0",
         "react": "^19.2.1",
         "react-dom": "^19.2.1",
+        "rehype-expressive-code": "^0.41.5",
         "rehype-twemoji": "^0.0.6",
         "remark-gemoji": "^8.0.0",
         "remark-github-alerts": "^0.1.1",
@@ -546,8 +546,6 @@
     "astro-auto-import": ["astro-auto-import@0.4.5", "", { "dependencies": { "@types/node": "^18.0.0", "acorn": "^8.8.0" }, "peerDependencies": { "astro": "^2.0.0 || ^3.0.0-beta || ^4.0.0-beta || ^5.0.0-beta" } }, "sha512-KU1qFJ97Qks2aT+qSxjrOY6tcwzzLVhY/8w1eM8vwqpP+MDpHKAlbr8Otg9T8g/Mfl/FOdG3nO9lydv1zbtyQA=="],
 
     "astro-embed": ["astro-embed@0.9.2", "", { "dependencies": { "@astro-community/astro-embed-baseline-status": "^0.2.1", "@astro-community/astro-embed-bluesky": "^0.1.5", "@astro-community/astro-embed-integration": "^0.8.3", "@astro-community/astro-embed-link-preview": "^0.2.3", "@astro-community/astro-embed-twitter": "^0.5.9", "@astro-community/astro-embed-vimeo": "^0.3.11", "@astro-community/astro-embed-youtube": "^0.5.9" }, "peerDependencies": { "astro": "^2.0.0 || ^3.0.0-beta || ^4.0.0-beta || ^5.0.0-beta" } }, "sha512-MUeNrfnNgcrV9E8WqEW9IYK8+Y3etDLyyi8Uf35rM5WJ53wkh511ye9oi15taJuqOaYRk2hQ9P5G2+/JS1Mjxg=="],
-
-    "astro-expressive-code": ["astro-expressive-code@0.41.5", "", { "dependencies": { "rehype-expressive-code": "^0.41.5" }, "peerDependencies": { "astro": "^4.0.0-beta || ^5.0.0-beta || ^3.3.0" } }, "sha512-6jfABbPO0fkRD1ROAPBQtJR2p7gjbmk/GjfblOpo5Z7F+gwhL7+s8bEhLz9GdW10yfbn+gJvwEf7f9Lu2clh2A=="],
 
     "astro-icon": ["astro-icon@1.1.5", "", { "dependencies": { "@iconify/tools": "^4.0.5", "@iconify/types": "^2.0.0", "@iconify/utils": "^2.1.30" } }, "sha512-CJYS5nWOw9jz4RpGWmzNQY7D0y2ZZacH7atL2K9DeJXJVaz7/5WrxeyIxO8KASk1jCM96Q4LjRx/F3R+InjJrw=="],
 
