@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
@@ -78,37 +79,39 @@ export default defineConfig({
   trailingSlash: 'always',
 
   markdown: {
-    remarkPlugins: [
-      remarkTocTrigger,
-      gemoji,
-      remarkGithubAlerts,
-      remarkYoutube,
-      [remarkLinkCard, {
-        cache: true,
-        shortenUrl: true,
-        thumbnailPosition: "right",
-        noThumbnail: false,
-        noFavicon: false,
-        ignoreExtensions: ['.mp4', '.pdf'],
-        ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
-          if (url.hostname === 'github.com') {
-            return { ...og, title: `GitHub: ${og.title}` };
+    processor: unified({
+      remarkPlugins: [
+        remarkTocTrigger,
+        gemoji,
+        remarkGithubAlerts,
+        remarkYoutube,
+        [remarkLinkCard, {
+          cache: true,
+          shortenUrl: true,
+          thumbnailPosition: "right",
+          noThumbnail: false,
+          noFavicon: false,
+          ignoreExtensions: ['.mp4', '.pdf'],
+          ogTransformer: (/** @type {any} */og, /** @type {URL} */url) => {
+            if (url.hostname === 'github.com') {
+              return { ...og, title: `GitHub: ${og.title}` };
+            }
+            if (og.title === og.description) {
+              return { ...og, description: 'custom description' };
+            }
+            return og;
           }
-          if (og.title === og.description) {
-            return { ...og, description: 'custom description' };
-          }
-          return og;
-        }
-      }],
-    ],
-    rehypePlugins: [
-      [rehypeTwemoji, {
-        format: 'svg',
-        // This ensures the images have a specific class for CSS styling
-        className: 'twemoji'
-      }]
-    ],
-    gfm: true,
+        }],
+      ],
+      rehypePlugins: [
+        [rehypeTwemoji, {
+          format: 'svg',
+          // This ensures the images have a specific class for CSS styling
+          className: 'twemoji'
+        }]
+      ],
+      gfm: true,
+    }),
   },
 
   // Vite

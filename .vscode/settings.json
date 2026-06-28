@@ -1,0 +1,55 @@
+{
+  "frontMatter.framework.id": "astro",
+  "frontMatter.content.pageFolders": [
+    {
+      "path": "[[workspace]]/src/pages",
+      "title": "pages"
+    },
+    {
+      "path": "[[workspace]]/src/content/blog",
+      "title": "Blog"
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "default",
+      "pageBundle": true,
+      "fileType": "md",
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "title": "Description",
+          "name": "desc",
+          "type": "string"
+        },
+        {
+          "title": "Published date",
+          "name": "date",
+          "type": "datetime"
+        },
+        {
+          "title": "Thumbnail image",
+          "name": "thumbnail",
+          "type": "image"
+        },
+        {
+          "title": "Thumbnail image alt text",
+          "name": "alt",
+          "type": "string"
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags"
+        },
+      ]
+    }
+  ],
+  "frontMatter.panel.freeform": false,
+  "frontMatter.git.enabled": true
+}
