@@ -5,6 +5,8 @@ date: "2026-06-29T03:00:00+09:00"
 desc: "パスワードは人類に向いていません。今すぐ使うのをやめましょう。この記事ではパスワードをやめるために重要なキーワードであるパスフレーズ、パスキーについて説明しています。"
 tags:
 - セキュリティ
+- 生活
+- BitWarden
 thumbnail: thumbnail.png
 alt: パソコンを瓦割りする男
 ---
@@ -200,3 +202,13 @@ $$
 https://pasufure-zu.aosankaku.net
 
 このツールがみなさんのお役に立つことを、心から祈っています。
+
+## おすすめパスワードマネージャー
+
+https://bitwarden.com/#/
+
+※BitWardenは最近運営会社が変わりました。今後の改悪に警戒。
+
+https://proton.me/ja/pass
+
+https://1password.com/jp
