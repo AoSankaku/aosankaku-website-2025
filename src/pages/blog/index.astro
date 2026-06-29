@@ -9,8 +9,17 @@ import categoryIcons, { getIcon } from "@/consts/categoryIcons";
 
 import { useTranslator } from "@/i18n/utils";
 import { type Lang } from "@/types/i18n";
+import { DEFAULT_LOCALE_SETTING } from "@/i18n/locales";
+import {
+  filterBlogEntriesByLocale,
+  getBlogRouteInfo,
+} from "@/utils/blogRouting";
 
-const allPosts = await getCollection("blog");
+const currentLocale = Astro.currentLocale ?? DEFAULT_LOCALE_SETTING;
+const allPosts = filterBlogEntriesByLocale(
+  await getCollection("blog"),
+  currentLocale,
+);
 
 // Sort
 allPosts.sort((a, b) => {
@@ -50,7 +59,7 @@ const sortedTags = Object.keys(tagCountMap).sort((a, b) => {
   return countDiff !== 0 ? countDiff : a.localeCompare(b);
 });
 
-const t = useTranslator(Astro.currentLocale as Lang);
+const t = useTranslator(currentLocale as Lang);
 ---
 
 <Layout title={t("blog.all-articles")}>
@@ -119,7 +128,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
             data-tags={(post.data.tags || []).join(",")}
             data-category={post.data.category || "uncategorized"}
           >
-            <a href={`/blog/${post.id.replace(/\/index$/, "")}/`}>
+            <a href={getBlogRouteInfo(post.id).href}>
               {post.data.title}
             </a>
           </li>
@@ -331,10 +340,34 @@ const t = useTranslator(Astro.currentLocale as Lang);
   const postList = document.querySelectorAll("ul li");
   const nothingFound = document.getElementById("nothingFound");
 
-  let activeTags: string[] = JSON.parse(
-    sessionStorage.getItem("blog-active-tags") || "[]",
-  );
-  let activeCategory = sessionStorage.getItem("blog-active-cat") || "";
+  const getUrlActiveTags = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return Array.from(
+      new Set(searchParams.getAll("tag").filter((tag) => tag.trim() !== "")),
+    );
+  };
+
+  const updateUrlActiveTags = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.delete("tag");
+    activeTags.forEach((tag) => searchParams.append("tag", tag));
+
+    const query = searchParams.toString();
+    const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${
+      window.location.hash
+    }`;
+    window.history.replaceState(null, "", nextUrl);
+  };
+
+  const urlActiveTags = getUrlActiveTags();
+  let activeTags: string[] =
+    urlActiveTags.length > 0
+      ? urlActiveTags
+      : JSON.parse(sessionStorage.getItem("blog-active-tags") || "[]");
+  let activeCategory =
+    urlActiveTags.length > 0
+      ? ""
+      : sessionStorage.getItem("blog-active-cat") || "";
 
   const filterArticles = () => {
     let hasVisible = false;
@@ -344,6 +377,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
     sessionStorage.setItem("blog-search-query", searchInput.value);
     sessionStorage.setItem("blog-active-tags", JSON.stringify(activeTags));
     sessionStorage.setItem("blog-active-cat", activeCategory);
+    updateUrlActiveTags();
 
     // 2. Dynamic Tag Count Logic
     // We create a temporary map to count tags available within the current category + search
@@ -445,13 +479,21 @@ const t = useTranslator(Astro.currentLocale as Lang);
   // 4. Handle Safari/Mobile Back-Forward Cache (BFCache)
   window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
-      const persistedSearch = sessionStorage.getItem("blog-search-query");
-      if (persistedSearch !== null) searchInput.value = persistedSearch;
+      const persistedUrlTags = getUrlActiveTags();
 
-      activeTags = JSON.parse(
-        sessionStorage.getItem("blog-active-tags") || "[]",
-      );
-      activeCategory = sessionStorage.getItem("blog-active-cat") || "";
+      if (persistedUrlTags.length > 0) {
+        activeTags = persistedUrlTags;
+        activeCategory = "";
+        searchInput.value = "";
+      } else {
+        const persistedSearch = sessionStorage.getItem("blog-search-query");
+        if (persistedSearch !== null) searchInput.value = persistedSearch;
+
+        activeTags = JSON.parse(
+          sessionStorage.getItem("blog-active-tags") || "[]",
+        );
+        activeCategory = sessionStorage.getItem("blog-active-cat") || "";
+      }
 
       filterArticles();
     }

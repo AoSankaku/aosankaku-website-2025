@@ -418,14 +418,33 @@ div.tags {
     margin-bottom: 8px;
   }
 
-  span.tag {
-    display: inline-block;
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     background-color: var(--color-card);
-    padding: 0px 12px;
+    color: var(--color-text);
+    border: 1px solid var(--color-text-sub);
+    text-decoration: none;
+    padding: 2px 12px;
     line-height: 1.4em;
-    margin: 1px 4px;
+    margin: 3px 4px;
     border-radius: 12px;
     font-size: 0.85em;
     vertical-align: middle;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.1s ease;
+  }
+
+  .tag:hover,
+  .tag:focus-visible {
+    background-color: var(--color-surface);
+    border-color: var(--color-text);
+  }
+
+  .tag:active {
+    transform: translateY(1px);
   }
 }

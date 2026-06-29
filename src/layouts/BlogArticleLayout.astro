@@ -9,24 +9,35 @@ import type { MarkdownHeading } from "astro";
 import { getIcon } from "@/consts/categoryIcons";
 import ShareButtons from "@/components/ShareButtons.astro";
 import RelatedArticles from "@/components/atoms/RelatedArticles.astro";
+import { useTranslator } from "@/i18n/utils";
+import type { Lang } from "@/types/i18n";
 import "remark-github-alerts/styles/github-base.css";
 import "@/styles/blogArticleStyle.css";
 import getArticleImage, {
   getDefaultArticleImage,
 } from "@/utils/getArticleImage";
 import NextPrevPosts from "@/components/atoms/NextPrevPosts.astro";
+import {
+  getBlogIndexTagFilterHref,
+  getBlogRouteInfo,
+} from "@/utils/blogRouting";
 
 interface Props {
   frontmatter: any;
   headings: MarkdownHeading[];
-  slug: string;
+  slug?: string;
+  postId?: string;
 }
 
-const { frontmatter, headings, slug } = Astro.props;
+const { frontmatter, headings, slug, postId = slug } = Astro.props;
+const routeInfo = postId ? getBlogRouteInfo(postId) : null;
+const articleLocale = (routeInfo?.locale ?? Astro.currentLocale) as Lang;
+const tagFilterLocale = articleLocale;
+const t = useTranslator(articleLocale);
 
 // When the slug is undefined, this article doesn't belong to /blog/
 const articleImage = slug
-  ? getArticleImage(slug, frontmatter.thumbnail)
+  ? getArticleImage(routeInfo?.slug ?? slug, frontmatter.thumbnail)
   : frontmatter.thumbnail
     ? frontmatter.thumbnail // Use the specified fetchable thumbnail if exists
     : getDefaultArticleImage(); // Use the default thumbnail if blank
@@ -72,23 +83,23 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <div class="container">
     <slot />
   </div>
-  <RelatedArticles slug={slug} />
+  {postId && <RelatedArticles postId={postId} locale={articleLocale} />}
 
   {
     frontmatter.tags && (
       <div class="tags">
-        <h3>記事のタグ</h3>
+        <h3>{t("blog.article-tags")}</h3>
         {frontmatter.tags.map((tag: string) => (
-          <span class="tag">
+          <a class="tag" href={getBlogIndexTagFilterHref(tag, tagFilterLocale)}>
             <Icon name="mdi:tag" size="0.8em" />
             {tag}
-          </span>
+          </a>
         ))}
       </div>
     )
   }
-  <ShareButtons title={frontmatter.title} />
-  <NextPrevPosts slug={slug} />
+  <ShareButtons title={frontmatter.title} locale={articleLocale} />
+  {postId && <NextPrevPosts postId={postId} />}
   <Footer />
 </Layout>
 
