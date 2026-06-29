@@ -1,17 +1,23 @@
 ---
 import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
+import { useTranslator } from "@/i18n/utils";
+import { getBlogRouteInfo } from "@/utils/blogRouting";
 
-const { slug } = Astro.props;
+const { postId } = Astro.props;
 
 const allPosts = await getCollection("blog");
-const sortedPosts = allPosts.sort(
-  (a, b) =>
-    (b.data.lastUpdate?.valueOf() ?? b.data.date.valueOf()) -
-    (a.data.lastUpdate?.valueOf() ?? a.data.date.valueOf()),
-);
+const currentRouteInfo = getBlogRouteInfo(postId);
+const t = useTranslator(currentRouteInfo.locale);
+const sortedPosts = allPosts
+  .filter((post) => getBlogRouteInfo(post.id).locale === currentRouteInfo.locale)
+  .sort(
+    (a, b) =>
+      (b.data.lastUpdate?.valueOf() ?? b.data.date.valueOf()) -
+      (a.data.lastUpdate?.valueOf() ?? a.data.date.valueOf()),
+  );
 
-const currentIndex = sortedPosts.findIndex((post) => post.id === slug);
+const currentIndex = sortedPosts.findIndex((post) => post.id === postId);
 const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 const nextPost =
   currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
@@ -20,10 +26,10 @@ const nextPost =
 <div class="article-navigation">
   {
     nextPost ? (
-      <a href={`/blog/${nextPost.id}/`} class="nav-button prev">
+      <a href={getBlogRouteInfo(nextPost.id).href} class="nav-button prev">
         <Icon name="mdi:chevron-left" size="1.4em" />
         <div class="nav-content">
-          <span>前の記事</span>
+          <span>{t("blog.previous-article")}</span>
           <p>{nextPost.data.title}</p>
         </div>
       </a>
@@ -33,9 +39,9 @@ const nextPost =
   }
   {
     prevPost ? (
-      <a href={`/blog/${prevPost.id}/`} class="nav-button next">
+      <a href={getBlogRouteInfo(prevPost.id).href} class="nav-button next">
         <div class="nav-content">
-          <span>次の記事</span>
+          <span>{t("blog.next-article")}</span>
           <p>{prevPost.data.title}</p>
         </div>
         <Icon name="mdi:chevron-right" size="1.4em" />

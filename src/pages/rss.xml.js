@@ -2,9 +2,15 @@
 import rss from '@astrojs/rss';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/consts';
 import { getCollection } from "astro:content";
+import {
+  getBlogRouteInfo,
+  isDefaultLocaleBlogEntry,
+} from "@/utils/blogRouting";
 
 export async function GET(context) {
-  const blog = await getCollection("blog");
+  const blog = (await getCollection("blog")).filter((post) =>
+    isDefaultLocaleBlogEntry(post.id),
+  );
 
   // Sort items by date so the feed is chronological
   const sortedBlog = blog.sort((a, b) => {
@@ -21,7 +27,7 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.lastUpdate || post.data.date,
       description: post.data.desc,
-      link: `/blog/${post.id.replace(/\/index$/, "")}/`,
+      link: getBlogRouteInfo(post.id).href,
     })),
     // REMOVED SPACES: Changed < language > to <language>
     customData: `<language>ja-jp</language>`,

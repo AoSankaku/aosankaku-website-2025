@@ -1,0 +1,12 @@
+---
+import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from "@/i18n/locales";
+import BlogIndexPage from "../../blog/index.astro";
+
+export function getStaticPaths() {
+  return Object.keys(LOCALES_SETTING)
+    .filter((lang) => lang !== DEFAULT_LOCALE_SETTING)
+    .map((lang) => ({ params: { lang } }));
+}
+---
+
+<BlogIndexPage />

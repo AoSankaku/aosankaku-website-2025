@@ -1,18 +1,22 @@
 ---
+import { useTranslator } from "@/i18n/utils";
+import type { Lang } from "@/types/i18n";
 import ShareIconButton from "./atoms/ShareIconButton.astro";
 const encodedUrl = encodeURIComponent(Astro.url.href);
 
 interface Props {
   title: string;
+  locale?: Lang;
 }
 
-const { title } = Astro.props;
+const { title, locale = Astro.currentLocale as Lang } = Astro.props;
+const t = useTranslator(locale);
 
 const encodedShareText = encodeURIComponent(title);
 ---
 
 <div class="outer-icon-container">
-  <h2>役に立ったら記事をバラ撒こう</h2>
+  <h2>{t("blog.share-article")}</h2>
   <div class="icon-container">
     <ShareIconButton
       iconName="simple-icons:misskey"

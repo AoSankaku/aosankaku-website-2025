@@ -9,14 +9,16 @@ import {
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
 
-  return posts.filter((post) => isDefaultLocaleBlogEntry(post.id)).map((post) => {
-    const routeInfo = getBlogRouteInfo(post.id);
+  return posts
+    .filter((post) => !isDefaultLocaleBlogEntry(post.id))
+    .map((post) => {
+      const routeInfo = getBlogRouteInfo(post.id);
 
-    return {
-      params: { slug: routeInfo.slug },
-      props: { post },
-    };
-  });
+      return {
+        params: { lang: routeInfo.locale, slug: routeInfo.slug },
+        props: { post },
+      };
+    });
 }
 
 const { post } = Astro.props;

@@ -3,6 +3,12 @@ declare module '*.yml' {
   export default content;
 }
 
+declare module 'bun:test' {
+  export const describe: any;
+  export const expect: any;
+  export const test: any;
+}
+
 interface String {
   /**
    * Converts Hiragana characters in the string to their corresponding Katakana characters.
