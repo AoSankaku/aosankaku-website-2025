@@ -77,6 +77,12 @@ blog:
   reset-all: すべてリセット
   category: カテゴリー
   tags: タグ
+  article-tags: 記事のタグ
+  share-article: 役に立ったら記事をバラ撒こう
+  related-articles: 関連記事
+  no-related-articles: 関連記事はありません。
+  previous-article: 前の記事
+  next-article: 次の記事
   collapse: 折りたたむ
   nothing-found: 何も見つからなかったらしい。
   nothing-found-desc: タグを消したりキーワードを変えたりしてみてね。

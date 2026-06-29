@@ -77,6 +77,12 @@ blog:
   reset-all: Reset all
   category: Category
   tags: Tags
+  article-tags: Article Tags
+  share-article: Share this article if it helped
+  related-articles: Related Articles
+  no-related-articles: No related articles.
+  previous-article: Previous Article
+  next-article: Next Article
   collapse: Collapse
   nothing-found: Nothing was found.
   nothing-found-desc: Try removing tags or changing the keyword.
