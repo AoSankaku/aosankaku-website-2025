@@ -1,15 +1,28 @@
 ---
+import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import { DEFAULT_LOCALE, type Lang } from "@/types/i18n";
 import { useTranslator } from "@/i18n/utils";
+import {
+  getBlogIndexHref,
+  getLanguageSwitchHref,
+} from "@/utils/blogRouting";
 
 const currentPath = Astro.url.pathname;
 const currentLocale = (Astro.currentLocale ?? DEFAULT_LOCALE) as Lang;
 const t = useTranslator(currentLocale);
 const iconSize = 30;
 const homeHref = currentLocale === "en" ? "/en/" : "/";
+const blogHref = getBlogIndexHref(currentLocale);
 const isHome = currentPath === "/" || currentPath === "/en/";
-const languageHref = currentLocale === "en" ? "/" : "/en/";
+const targetLocale = currentLocale === "en" ? DEFAULT_LOCALE : "en";
+const allPosts = await getCollection("blog");
+const languageHref = getLanguageSwitchHref({
+  pathname: currentPath,
+  search: Astro.url.search,
+  targetLocale,
+  blogEntries: allPosts,
+});
 const languageIcon =
   currentLocale === "en" ? "twemoji:flag-japan" : "twemoji:flag-united-states";
 const languageLabel =
@@ -32,7 +45,7 @@ const languageLabel =
     }
   </div>
   <div class="right">
-    <a href="/blog/">
+    <a href={blogHref}>
       <Icon name="carbon:blog" width={iconSize} height={iconSize} />
       <span>{t("header.blog")}</span>
     </a>
