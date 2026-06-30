@@ -14,6 +14,7 @@ import {
   filterBlogEntriesByLocale,
   getBlogRouteInfo,
 } from "@/utils/blogRouting";
+import { compareBlogPostsByNewestDate } from "@/utils/blogPostDates";
 
 const currentLocale = Astro.currentLocale ?? DEFAULT_LOCALE_SETTING;
 const allPosts = filterBlogEntriesByLocale(
@@ -22,11 +23,7 @@ const allPosts = filterBlogEntriesByLocale(
 );
 
 // Sort
-allPosts.sort((a, b) => {
-  const dateA = new Date(a.data.lastUpdate || a.data.date).getTime();
-  const dateB = new Date(b.data.lastUpdate || b.data.date).getTime();
-  return dateB - dateA; // Use dateA - dateB for Oldest first
-});
+allPosts.sort(compareBlogPostsByNewestDate);
 
 // Category Logic
 const categoryOrder = Object.keys(categoryIcons);

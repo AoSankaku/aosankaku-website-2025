@@ -10,6 +10,7 @@ import {
   getBlogIndexHref,
   getBlogRouteInfo,
 } from "@/utils/blogRouting";
+import { compareBlogPostsByNewestDate } from "@/utils/blogPostDates";
 
 const allPosts = await getCollection("blog");
 const currentLocale = Astro.currentLocale ?? DEFAULT_LOCALE_SETTING;
@@ -22,11 +23,7 @@ const blogIndexHref = getBlogIndexHref(currentLocale);
 <ul>
   {
     filterBlogEntriesByLocale(allPosts, currentLocale)
-      .toSorted((a: any, b: any) => {
-        const dateA = new Date(a.data.lastUpdate ?? a.data.date);
-        const dateB = new Date(b.data.lastUpdate ?? b.data.date);
-        return dateB.getTime() - dateA.getTime();
-      })
+      .toSorted(compareBlogPostsByNewestDate)
       .slice(0, 12)
       .map((post: any) => (
         <li>
