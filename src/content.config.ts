@@ -31,6 +31,7 @@ const blog = defineCollection({
     date: jstDateSchema.catch(new Date(100000)),
     originalDate: jstDateSchema.optional(),
     lastUpdate: jstDateSchema.optional(),
+    draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     thumbnail: z.string().optional(),
     alt: z.string().default("Blog Article Image"),

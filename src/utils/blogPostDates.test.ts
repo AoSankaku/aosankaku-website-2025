@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   compareBlogPostsByNewestDate,
+  getVisibleBlogPosts,
   getNewestBlogPostTimestamp,
 } from "./blogPostDates";
 
@@ -44,5 +45,52 @@ describe("blogPostDates", () => {
         "newer-by-original-date",
         "newer-by-date",
       ]);
+  });
+
+  test("keeps draft posts at the top when sorting by newest date", () => {
+    const posts = [
+      {
+        id: "newest-published",
+        data: { date: new Date("2026-01-01T00:00:00+09:00") },
+      },
+      {
+        id: "old-draft",
+        data: {
+          draft: true,
+          date: new Date("2024-01-01T00:00:00+09:00"),
+        },
+      },
+      {
+        id: "older-published",
+        data: { date: new Date("2025-01-01T00:00:00+09:00") },
+      },
+    ];
+
+    expect(posts.toSorted(compareBlogPostsByNewestDate).map((post) => post.id))
+      .toEqual(["old-draft", "newest-published", "older-published"]);
+  });
+
+  test("shows draft posts only in development", () => {
+    const posts = [
+      {
+        id: "published",
+        data: { date: new Date("2024-01-01T00:00:00+09:00") },
+      },
+      {
+        id: "draft",
+        data: {
+          draft: true,
+          date: new Date("2024-01-02T00:00:00+09:00"),
+        },
+      },
+    ];
+
+    expect(getVisibleBlogPosts(posts, true).map((post) => post.id)).toEqual([
+      "published",
+      "draft",
+    ]);
+    expect(getVisibleBlogPosts(posts, false).map((post) => post.id)).toEqual([
+      "published",
+    ]);
   });
 });

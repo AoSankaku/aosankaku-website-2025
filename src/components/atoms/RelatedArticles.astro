@@ -5,6 +5,7 @@ import getArticleImage from "@/utils/getArticleImage";
 import { useTranslator } from "@/i18n/utils";
 import type { Lang } from "@/types/i18n";
 import { getBlogRouteInfo } from "@/utils/blogRouting";
+import { getVisibleBlogPosts } from "@/utils/blogPostDates";
 
 interface Props {
   postId: string;
@@ -14,7 +15,10 @@ interface Props {
 const { postId, locale } = Astro.props;
 
 // 1. Fetch all blog posts
-const allPosts = await getCollection("blog");
+const allPosts = getVisibleBlogPosts(
+  await getCollection("blog"),
+  import.meta.env.DEV,
+);
 
 // 2. Find the current post to get its tags and category
 const currentPost = allPosts.find((post) => post.id === postId);

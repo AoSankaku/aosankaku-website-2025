@@ -7,6 +7,7 @@ import {
   getBlogIndexHref,
   getLanguageSwitchHref,
 } from "@/utils/blogRouting";
+import { getVisibleBlogPosts } from "@/utils/blogPostDates";
 
 const currentPath = Astro.url.pathname;
 const currentLocale = (Astro.currentLocale ?? DEFAULT_LOCALE) as Lang;
@@ -16,7 +17,10 @@ const homeHref = currentLocale === "en" ? "/en/" : "/";
 const blogHref = getBlogIndexHref(currentLocale);
 const isHome = currentPath === "/" || currentPath === "/en/";
 const targetLocale = currentLocale === "en" ? DEFAULT_LOCALE : "en";
-const allPosts = await getCollection("blog");
+const allPosts = getVisibleBlogPosts(
+  await getCollection("blog"),
+  import.meta.env.DEV,
+);
 const languageHref = getLanguageSwitchHref({
   pathname: currentPath,
   search: Astro.url.search,

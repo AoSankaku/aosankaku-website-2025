@@ -10,9 +10,15 @@ import {
   getBlogIndexHref,
   getBlogRouteInfo,
 } from "@/utils/blogRouting";
-import { compareBlogPostsByNewestDate } from "@/utils/blogPostDates";
+import {
+  compareBlogPostsByNewestDate,
+  getVisibleBlogPosts,
+} from "@/utils/blogPostDates";
 
-const allPosts = await getCollection("blog");
+const allPosts = getVisibleBlogPosts(
+  await getCollection("blog"),
+  import.meta.env.DEV,
+);
 const currentLocale = Astro.currentLocale ?? DEFAULT_LOCALE_SETTING;
 const t = useTranslator(currentLocale as Lang);
 const blogIndexHref = getBlogIndexHref(currentLocale);

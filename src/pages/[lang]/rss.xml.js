@@ -20,6 +20,7 @@ export async function GET(context) {
   const sortedBlog = getRssPostsForLocale(
     await getCollection("blog"),
     locale,
+    import.meta.env.DEV,
   );
 
   return rss({

@@ -1,12 +1,17 @@
 import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from "../i18n/locales";
 import { isBlogEntryLocale } from "./blogRouting";
 import type { Multilingual } from "../types/i18n";
+import {
+  compareBlogPostsByNewestDate,
+  getVisibleBlogPosts,
+} from "./blogPostDates";
 
 interface RssPostLike {
   id: string;
   data: {
     date: Date;
     lastUpdate?: Date;
+    draft?: boolean;
   };
 }
 
@@ -30,13 +35,9 @@ export function getLocalizedRssText(
 export function getRssPostsForLocale<T extends RssPostLike>(
   posts: T[],
   locale: string,
+  isDev = false,
 ): T[] {
-  return posts
+  return getVisibleBlogPosts(posts, isDev)
     .filter((post) => isBlogEntryLocale(post.id, locale))
-    .sort((a, b) => {
-      const dateA = new Date(a.data.lastUpdate || a.data.date).getTime();
-      const dateB = new Date(b.data.lastUpdate || b.data.date).getTime();
-
-      return dateB - dateA;
-    });
+    .sort(compareBlogPostsByNewestDate);
 }

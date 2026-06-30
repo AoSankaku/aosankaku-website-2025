@@ -5,9 +5,13 @@ import {
   getBlogRouteInfo,
   isDefaultLocaleBlogEntry,
 } from "@/utils/blogRouting";
+import { getVisibleBlogPosts } from "@/utils/blogPostDates";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = getVisibleBlogPosts(
+    await getCollection("blog"),
+    import.meta.env.DEV,
+  );
 
   return posts
     .filter((post) => !isDefaultLocaleBlogEntry(post.id))

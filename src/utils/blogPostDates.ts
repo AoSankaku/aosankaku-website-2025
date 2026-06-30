@@ -4,6 +4,7 @@ interface BlogPostDateData {
   date: BlogPostDateValue;
   originalDate?: BlogPostDateValue;
   lastUpdate?: BlogPostDateValue;
+  draft?: boolean;
 }
 
 interface BlogPostDateLike {
@@ -24,7 +25,19 @@ export const getNewestBlogPostTimestamp = (data: BlogPostDateData) =>
     toTimestamp(data.date),
   );
 
+export const getVisibleBlogPosts = <T extends BlogPostDateLike>(
+  posts: T[],
+  isDev: boolean,
+): T[] => (isDev ? posts : posts.filter((post) => post.data.draft !== true));
+
 export const compareBlogPostsByNewestDate = (
   a: BlogPostDateLike,
   b: BlogPostDateLike,
-) => getNewestBlogPostTimestamp(b.data) - getNewestBlogPostTimestamp(a.data);
+) => {
+  const draftPriority =
+    Number(b.data.draft === true) - Number(a.data.draft === true);
+
+  if (draftPriority !== 0) return draftPriority;
+
+  return getNewestBlogPostTimestamp(b.data) - getNewestBlogPostTimestamp(a.data);
+};

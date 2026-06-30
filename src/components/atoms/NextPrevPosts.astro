@@ -3,19 +3,22 @@ import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import { useTranslator } from "@/i18n/utils";
 import { getBlogRouteInfo } from "@/utils/blogRouting";
+import {
+  compareBlogPostsByNewestDate,
+  getVisibleBlogPosts,
+} from "@/utils/blogPostDates";
 
 const { postId } = Astro.props;
 
-const allPosts = await getCollection("blog");
+const allPosts = getVisibleBlogPosts(
+  await getCollection("blog"),
+  import.meta.env.DEV,
+);
 const currentRouteInfo = getBlogRouteInfo(postId);
 const t = useTranslator(currentRouteInfo.locale);
 const sortedPosts = allPosts
   .filter((post) => getBlogRouteInfo(post.id).locale === currentRouteInfo.locale)
-  .sort(
-    (a, b) =>
-      (b.data.lastUpdate?.valueOf() ?? b.data.date.valueOf()) -
-      (a.data.lastUpdate?.valueOf() ?? a.data.date.valueOf()),
-  );
+  .sort(compareBlogPostsByNewestDate);
 
 const currentIndex = sortedPosts.findIndex((post) => post.id === postId);
 const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
