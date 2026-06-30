@@ -2,7 +2,8 @@
 
 title: "[Linux/Ubuntu] Setting Up an ARK: Survival Evolved Server Was a Huge Pain, So I Used a Tool Instead"
 category: "Tech"
-date: "2025-05-23T03:35:00+09:00"
+originalDate: "2025-05-23T03:35:00+09:00"
+date: "2026-06-30T13:05:00+09:00"
 desc: "I tried setting up an ARK SE server normally with steamcmd, but it mysteriously refused to start and nothing worked, so I used a tool instead. I am leaving the steps here. At the end of the article, I also explain how to disable BattlEye and how to set up a whitelist."
 tags:
 - Server

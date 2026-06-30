@@ -43,9 +43,23 @@ const articleImage = slug
     : getDefaultArticleImage(); // Use the default thumbnail if blank
 
 const articleDate = formatToJSTDate(frontmatter.date);
+const originalDate = frontmatter.originalDate
+  ? formatToJSTDate(frontmatter.originalDate)
+  : null;
 const lastUpdate = frontmatter.lastUpdate
   ? formatToJSTDate(frontmatter.lastUpdate)
   : null;
+const toDateTime = (date: string | Date) => {
+  const parsedDate = new Date(date);
+  return isNaN(parsedDate.getTime()) ? undefined : parsedDate.toISOString();
+};
+const articleDateTime = toDateTime(frontmatter.date);
+const originalDateTime = frontmatter.originalDate
+  ? toDateTime(frontmatter.originalDate)
+  : undefined;
+const lastUpdateDateTime = frontmatter.lastUpdate
+  ? toDateTime(frontmatter.lastUpdate)
+  : undefined;
 
 // TOC generation
 
@@ -69,13 +83,32 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     <h1>{frontmatter.title}</h1>
     <p class="desc">{frontmatter.desc}</p>
     <div class="date-container">
-      <Icon name="mdi:calendar" size="1.1em" /><p class="date">{articleDate}</p>
+      {
+        originalDate && (
+          <span
+            class="date-item date-item-hint"
+            title="original date"
+            aria-label={`original date: ${originalDate}`}
+          >
+            <Icon name="mdi:calendar-start" size="1.1em" />
+            <time class="date" datetime={originalDateTime}>
+              {originalDate}
+            </time>
+          </span>
+        )
+      }
+      <span class="date-item">
+        <Icon name="mdi:calendar" size="1.1em" />
+        <time class="date" datetime={articleDateTime}>{articleDate}</time>
+      </span>
       {
         lastUpdate && (
-          <>
+          <span class="date-item">
             <Icon name="mdi:update" size="1.1em" />
-            <p class="date">{lastUpdate}</p>
-          </>
+            <time class="date" datetime={lastUpdateDateTime}>
+              {lastUpdate}
+            </time>
+          </span>
         )
       }
     </div>

@@ -2,7 +2,8 @@
 
 title: "[Smartphone and PC] How to Block Access to Annoying Websites with AdGuard"
 category: "Tech"
-date: "2024-08-29T22:00:00+09:00"
+originalDate: "2024-08-29T22:00:00+09:00"
+date: "2026-06-30T13:10:00+09:00"
 desc: "This article explains how to block access to specific websites using AdGuard. It can prevent you from accidentally opening sites you do not want to visit, so your casual web browsing life may become a bit more comfortable."
 tags:
 - Adblock

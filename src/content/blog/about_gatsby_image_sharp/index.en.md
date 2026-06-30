@@ -2,7 +2,8 @@
 
 title: "[Gatsby] What Even Is gatsby-plugin-sharp, Anyway?"
 category: "Tech"
-date: "2025-04-26T23:06:00+09:00"
+originalDate: "2025-04-26T23:06:00+09:00"
+date: "2026-06-30T13:00:00+09:00"
 desc: "Gatsby has a plugin called gatsby-plugin-sharp that does nice things to images. But what exactly is this \"sharp\" thing? I looked into it a bit."
 tags:
 - Frontend

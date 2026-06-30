@@ -29,6 +29,7 @@ const blog = defineCollection({
     desc: z.string().optional(),
     // Use the custom JST schema here
     date: jstDateSchema.catch(new Date(100000)),
+    originalDate: jstDateSchema.optional(),
     lastUpdate: jstDateSchema.optional(),
     tags: z.array(z.string()).default([]),
     thumbnail: z.string().optional(),

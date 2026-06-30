@@ -65,7 +65,7 @@ p.desc {
 }
 
 .date {
-  padding-right: 0.5em;
+  padding-right: 0.25em;
 }
 
 .date-container {
@@ -76,8 +76,19 @@ p.desc {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  height: 1.2em;
+  flex-wrap: wrap;
+  min-height: 1.2em;
   color: var(--color-text-sub);
+}
+
+.date-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.date-item-hint {
+  cursor: help;
 }
 
 .container {
