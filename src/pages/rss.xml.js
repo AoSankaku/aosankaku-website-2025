@@ -2,26 +2,23 @@
 import rss from '@astrojs/rss';
 import { SITE_TITLE, SITE_DESCRIPTION } from '@/consts';
 import { getCollection } from "astro:content";
+import { DEFAULT_LOCALE_SETTING } from "@/i18n/locales";
+import { getBlogRouteInfo } from "@/utils/blogRouting";
 import {
-  getBlogRouteInfo,
-  isDefaultLocaleBlogEntry,
-} from "@/utils/blogRouting";
+  getLocalizedRssText,
+  getRssLanguageCode,
+  getRssPostsForLocale,
+} from "@/utils/rssFeed";
 
 export async function GET(context) {
-  const blog = (await getCollection("blog")).filter((post) =>
-    isDefaultLocaleBlogEntry(post.id),
+  const sortedBlog = getRssPostsForLocale(
+    await getCollection("blog"),
+    DEFAULT_LOCALE_SETTING,
   );
 
-  // Sort items by date so the feed is chronological
-  const sortedBlog = blog.sort((a, b) => {
-    const dateA = new Date(a.data.lastUpdate || a.data.date).getTime();
-    const dateB = new Date(b.data.lastUpdate || b.data.date).getTime();
-    return dateB - dateA;
-  });
-
   return rss({
-    title: SITE_TITLE.ja,
-    description: SITE_DESCRIPTION.ja,
+    title: getLocalizedRssText(SITE_TITLE, DEFAULT_LOCALE_SETTING),
+    description: getLocalizedRssText(SITE_DESCRIPTION, DEFAULT_LOCALE_SETTING),
     site: context.site,
     items: sortedBlog.map((post) => ({
       title: post.data.title,
@@ -29,7 +26,6 @@ export async function GET(context) {
       description: post.data.desc,
       link: getBlogRouteInfo(post.id).href,
     })),
-    // REMOVED SPACES: Changed < language > to <language>
-    customData: `<language>ja-jp</language>`,
+    customData: `<language>${getRssLanguageCode(DEFAULT_LOCALE_SETTING)}</language>`,
   });
 }
