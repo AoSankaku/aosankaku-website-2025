@@ -114,6 +114,11 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     </div>
   </div>
   <div class="container">
+    <ShareButtons
+      title={frontmatter.title}
+      locale={articleLocale}
+      variant="compact"
+    />
     <slot />
   </div>
   {postId && <RelatedArticles postId={postId} locale={articleLocale} />}

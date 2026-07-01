@@ -7,49 +7,84 @@ const encodedUrl = encodeURIComponent(Astro.url.href);
 interface Props {
   title: string;
   locale?: Lang;
+  variant?: "default" | "compact";
 }
 
-const { title, locale = Astro.currentLocale as Lang } = Astro.props;
+const {
+  title,
+  locale = Astro.currentLocale as Lang,
+  variant = "default",
+} = Astro.props;
 const t = useTranslator(locale);
 
+const isCompact = variant === "compact";
 const encodedShareText = encodeURIComponent(title);
+const misskeySharePath = locale === "en" ? "/en/share/" : "/ja/share";
+const misskeyShareUrl = `https://misskey-hub.net${misskeySharePath}?text=${encodedShareText}&url=${encodedUrl}&visibility=public&localOnly=0`;
+const mastodonShareBaseUrl =
+  locale === "en" ? "https://mastodonshare.com/" : "https://mastodonshare.com/share";
+const mastodonShareUrl = `${mastodonShareBaseUrl}?text=${encodedShareText}&url=${encodedUrl}`;
 ---
 
-<div class="outer-icon-container">
-  <h2>{t("blog.share-article")}</h2>
+<div
+  class:list={[
+    "outer-icon-container",
+    isCompact ? "outer-icon-container--compact" : "outer-icon-container--default",
+  ]}
+  aria-label={t("blog.share-article")}
+>
+  {
+    !isCompact && (
+      <h2>{t("blog.share-article")}</h2>
+    )
+  }
   <div class="icon-container">
     <ShareIconButton
       iconName="simple-icons:misskey"
-      url=`https://misskey-hub.net/share/?text=${encodedShareText}&url=${encodedUrl}&visibility=public&localOnly=0`
+      url={misskeyShareUrl}
       color="#8cc330"
+      label="Misskey"
+      variant={variant}
     />
     <ShareIconButton
       iconName="logos:mastodon-icon"
-      url=`https://mastodonshare.com/share?text=${encodedShareText}&url=${encodedUrl}`
+      url={mastodonShareUrl}
+      label="Mastodon"
+      variant={variant}
     />
     <ShareIconButton
       iconName="hugeicons:twitter"
       url=`https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedUrl}`
+      label="Twitter"
+      variant={variant}
     />
     <ShareIconButton
       iconName="hugeicons:new-twitter"
       url=`https://x.com/intent/post?text=${encodedShareText}&url=${encodedUrl}`
+      label="X"
+      variant={variant}
     />
     <!--
     <ShareIconButton
       iconName="simple-icons:line"
       url=`https://social-plugins.line.me/lineit/share?text=${encodedShareText}&url=${encodedUrl}`
       color="#06c655"
+      label="LINE"
+      variant={variant}
     />
     -->
     <ShareIconButton
       iconName="mdi:ios-share"
       url=`${title}\n${Astro.url.href}`
+      label={locale === "ja" ? "共有メニュー" : "Share menu"}
+      variant={variant}
       shareLink
     />
     <ShareIconButton
       iconName="mdi:content-copy"
       url=`${title}\n${Astro.url.href}`
+      label={locale === "ja" ? "リンクをコピー" : "Copy link"}
+      variant={variant}
       copyLink
     />
   </div>
@@ -71,6 +106,15 @@ const encodedShareText = encodeURIComponent(title);
     padding: 0 20px 20px 20px;
   }
 
+  div.outer-icon-container--compact {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: -56px 0 28px 0;
+    padding: 10px 0;
+  }
+
   div.icon-container {
     display: flex;
     justify-content: center;
@@ -78,5 +122,23 @@ const encodedShareText = encodeURIComponent(title);
     flex-wrap: wrap;
     gap: 12px;
     padding-top: 20px;
+  }
+
+  div.outer-icon-container--compact div.icon-container {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+    padding-top: 0;
+  }
+
+  @media (max-width: 420px) {
+    div.outer-icon-container--compact {
+      margin-top: -60px;
+    }
+
+    div.outer-icon-container--compact div.icon-container {
+      gap: 6px;
+    }
   }
 </style>

@@ -5,55 +5,122 @@ interface Props {
   iconName: string;
   url: string;
   color?: string;
+  label?: string;
+  variant?: "default" | "compact";
   shareLink?: boolean;
   copyLink?: boolean;
 }
-const { iconName, url, color, shareLink, copyLink } = Astro.props;
+const {
+  iconName,
+  url,
+  color,
+  label,
+  variant = "default",
+  shareLink,
+  copyLink,
+} = Astro.props;
 
-const iconColor = color ? color : "var(--color-background)";
+const iconColor =
+  color ?? (variant === "compact" ? "var(--color-text)" : "var(--color-background)");
+const className = `share-icon-button share-icon-button--${variant}`;
+const accessibleLabel = label ?? iconName;
 ---
 
 {
   shareLink ? (
-    <button class="share-button-component">
+    <button
+      class={className}
+      type="button"
+      aria-label={accessibleLabel}
+      title={accessibleLabel}
+      data-share-url={url}
+    >
       <Icon name={iconName} />
     </button>
   ) : copyLink ? (
-    <button class="copy-button-component">
+    <button
+      class={className}
+      type="button"
+      aria-label={accessibleLabel}
+      title={accessibleLabel}
+      data-copy-url={url}
+    >
       <Icon name={iconName} />
     </button>
   ) : (
-    <a href={url} target="_blank">
+    <a
+      class={className}
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={accessibleLabel}
+      title={accessibleLabel}
+    >
       <Icon name={iconName} />
     </a>
   )
 }
 
 <style define:vars={{ iconColor }}>
-  a,
-  button {
-    box-sizing: content-box;
+  .share-icon-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--color-text);
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.12s ease;
+  }
+
+  .share-icon-button--default {
+    box-sizing: content-box;
     width: 1em;
     height: 1em;
-    line-height: 1;
     font-size: 36px;
     padding: 10px;
     border-radius: 50%;
+    background: var(--color-text);
     color: var(--iconColor);
-    cursor: pointer;
     border: none;
+  }
+
+  .share-icon-button--compact {
+    box-sizing: border-box;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--iconColor), transparent 70%);
+    background: color-mix(in srgb, var(--iconColor), transparent 94%);
+    color: var(--iconColor);
+    font-size: 19px;
+  }
+
+  .share-icon-button--compact:hover,
+  .share-icon-button--compact:focus-visible {
+    background: color-mix(in srgb, var(--iconColor), transparent 86%);
+    border-color: color-mix(in srgb, var(--iconColor), transparent 45%);
+    transform: translateY(-1px);
+  }
+
+  .share-icon-button--compact:active {
+    transform: translateY(0);
   }
 </style>
 
-<script is:inline define:vars={{ url }}>
-  const shareButtons = document.querySelectorAll(".share-button-component");
+<script>
+  const shareButtons = document.querySelectorAll<HTMLElement>("[data-share-url]");
 
   shareButtons.forEach((button) => {
     button.addEventListener("click", async () => {
+      const url = button.dataset.shareUrl;
+      if (!url) return;
+
       if (!window.navigator.share) {
         alert("Not available on your browser");
         return;
@@ -66,10 +133,13 @@ const iconColor = color ? color : "var(--color-background)";
     });
   });
 
-  const copyButtons = document.querySelectorAll(".copy-button-component");
+  const copyButtons = document.querySelectorAll<HTMLElement>("[data-copy-url]");
 
   copyButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      const url = button.dataset.copyUrl;
+      if (!url) return;
+
       navigator.clipboard.writeText(url);
     });
   });
