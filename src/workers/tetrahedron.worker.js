@@ -71,7 +71,7 @@ function init(canvas, width, height, isDark) {
   animating = true;
   const animate = () => {
     if (!animating) return;
-    rotY += 0.002;
+    rotY += 0.0024;
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv(uModelLoc, false, mat4RotateY(rotY));
     gl.drawArrays(gl.TRIANGLES, 0, 12);
