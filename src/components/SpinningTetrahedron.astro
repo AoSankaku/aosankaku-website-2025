@@ -14,8 +14,11 @@
 </style>
 
 <script>
-  const canvas = document.getElementById("tetrahedron-canvas") as HTMLCanvasElement | null;
-  if (!canvas) throw new Error("Canvas element not found");
+  document.addEventListener("astro:page-load", () => {
+  const canvas = document.getElementById(
+    "tetrahedron-canvas",
+  ) as HTMLCanvasElement | null;
+  if (!canvas) return;
 
   const startWithWorker = (width: number, height: number, isDark: boolean) => {
     const offscreen = canvas.transferControlToOffscreen();
@@ -68,6 +71,8 @@
   const startOnMainThread = (width: number, height: number, isDark: boolean) => {
     import("../utils/tetrahedron-webgl.js").then(
       ({ VERT_SRC, FRAG_SRC, buildGeometry, mat4Perspective, mat4LookAt, mat4RotateY }) => {
+        if (!canvas.isConnected) return;
+
         const gl = (canvas.getContext("webgl") || canvas.getContext("webgl2")) as WebGLRenderingContext | null;
         if (!gl) return;
 
@@ -147,14 +152,25 @@
         document.addEventListener("astro:before-swap", () => resizeObs.disconnect(), { once: true });
 
         let rotY = 0;
+        let animationFrame = 0;
+        let isRunning = true;
         const animate = () => {
+          if (!isRunning) return;
           rotY += 0.0024;
           gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
           gl.uniformMatrix4fv(uModelLoc, false, mat4RotateY(rotY));
           gl.drawArrays(gl.TRIANGLES, 0, 12);
-          requestAnimationFrame(animate);
+          animationFrame = requestAnimationFrame(animate);
         };
         animate();
+        document.addEventListener(
+          "astro:before-swap",
+          () => {
+            isRunning = false;
+            cancelAnimationFrame(animationFrame);
+          },
+          { once: true },
+        );
       }
     );
   };
@@ -182,4 +198,10 @@
     { rootMargin: "500px" }
   );
   intersectionObs.observe(canvas);
+  document.addEventListener(
+    "astro:before-swap",
+    () => intersectionObs.disconnect(),
+    { once: true },
+  );
+  });
 </script>

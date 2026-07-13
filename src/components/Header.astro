@@ -79,32 +79,20 @@ const languageLabel =
 </header>
 
 <script>
-  // Get the HTML element and button
-  const htmlElement = document.documentElement;
-  const themeToggle = document.getElementById("themeToggle") as HTMLElement;
+  document.addEventListener("astro:page-load", () => {
+    const htmlElement = document.documentElement;
+    const themeToggle = document.getElementById("themeToggle");
+    if (!themeToggle) return;
 
-  // Function to save and apply the new theme
-  function toggleAndSetTheme() {
-    // Check if the HTML element currently has the 'dark' class
-    const isDark = htmlElement.classList.contains("dark");
+    themeToggle.addEventListener("click", () => {
+      const newTheme = htmlElement.classList.contains("dark")
+        ? "light"
+        : "dark";
 
-    // Determine the new theme
-    const newTheme = isDark ? "light" : "dark";
-
-    // Toggle the class on the HTML element
-    if (newTheme === "dark") {
-      htmlElement.classList.add("dark");
-    } else {
-      htmlElement.classList.remove("dark");
-    }
-
-    // Save the new preference to localStorage
-    localStorage.setItem("theme", newTheme);
-  }
-
-  // Button Click Listener
-  themeToggle.addEventListener("click", toggleAndSetTheme);
-
+      htmlElement.classList.toggle("dark", newTheme === "dark");
+      localStorage.setItem("theme", newTheme);
+    });
+  });
 </script>
 
 <style>

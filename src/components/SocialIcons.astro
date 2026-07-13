@@ -138,24 +138,25 @@ import ProfileSocialIconButton from "./atoms/ProfileSocialIconButton.astro";
 </style>
 
 <script>
-  const showMoreIconsButton = document.getElementById("show_more_icons_button");
-  const moreSocialIcons = document.getElementById("more_social_icons");
+  document.addEventListener("astro:page-load", () => {
+    const showMoreIconsButton = document.getElementById(
+      "show_more_icons_button",
+    );
+    const moreSocialIcons = document.getElementById("more_social_icons");
 
-  if (showMoreIconsButton && moreSocialIcons) {
+    if (!showMoreIconsButton || !moreSocialIcons) return;
+
     showMoreIconsButton.addEventListener("click", () => {
       const isHidden = !moreSocialIcons.classList.contains("show");
 
       if (isHidden) {
-        // Show logic
         moreSocialIcons.classList.remove("hiding");
         moreSocialIcons.classList.add("show");
-      } else {
-        // Hide logic with animation delay
-        moreSocialIcons.classList.add("hiding");
-        setTimeout(() => {
-          moreSocialIcons.classList.remove("show");
-        }, 300); // Matches animation duration
+        return;
       }
+
+      moreSocialIcons.classList.add("hiding");
+      setTimeout(() => moreSocialIcons.classList.remove("show"), 300);
     });
-  }
+  });
 </script>

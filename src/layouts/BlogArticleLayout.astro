@@ -113,7 +113,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
       }
     </div>
   </div>
-  <div class="container">
+  <div class="container" data-toc={JSON.stringify(toc)}>
     <ShareButtons
       title={frontmatter.title}
       locale={articleLocale}
@@ -141,9 +141,20 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
   <Footer />
 </Layout>
 
-<script is:inline define:vars={{ toc }}>
-  const container = document.getElementById("article-toc-trigger");
-  if (container && toc.length > 0) {
+<script>
+  function setupTableOfContents() {
+    const container = document.getElementById("article-toc-trigger");
+    if (!container || container.dataset.tocInitialized === "true") return;
+
+    const articleContainer = container.closest<HTMLElement>("[data-toc]");
+    const toc = JSON.parse(articleContainer?.dataset.toc ?? "[]") as Array<{
+      depth: number;
+      slug: string;
+      text: string;
+    }>;
+    if (toc.length === 0) return;
+
+    container.dataset.tocInitialized = "true";
     const title = document.createElement("h2");
     title.innerText = "Table of Contents";
 
@@ -175,9 +186,9 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     container.appendChild(title);
     container.appendChild(list);
   }
-</script>
 
-<script>
+  document.addEventListener("astro:page-load", setupTableOfContents);
+
   const katexFontUrls = import.meta.glob("/node_modules/katex/dist/fonts/*", {
     eager: true,
     import: "default",
@@ -190,9 +201,10 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     ]),
   );
 
-  const mathElements = document.querySelectorAll(".katex");
+  document.addEventListener("astro:page-load", () => {
+    const mathElements = document.querySelectorAll(".katex");
+    if (mathElements.length === 0) return;
 
-  if (mathElements.length > 0) {
     let stylesheetPromise: Promise<void> | undefined;
     let observer: IntersectionObserver | undefined;
 
@@ -227,8 +239,13 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
       );
 
       mathElements.forEach((element) => observer?.observe(element));
+      document.addEventListener(
+        "astro:before-swap",
+        () => observer?.disconnect(),
+        { once: true },
+      );
     } else {
-      window.addEventListener("load", loadKatexStylesheet, { once: true });
+      loadKatexStylesheet();
     }
-  }
+  });
 </script>

@@ -15,12 +15,10 @@ import { Icon } from "astro-icon/components";
 </footer>
 
 <script>
-  const icon = document.getElementById("rainbow-icon");
-  if (icon) {
-    icon.addEventListener("click", () => {
-      icon.classList.toggle("rainbow");
-    });
-  }
+  document.addEventListener("astro:page-load", () => {
+    const icon = document.getElementById("rainbow-icon");
+    icon?.addEventListener("click", () => icon.classList.toggle("rainbow"));
+  });
 </script>
 
 <style>

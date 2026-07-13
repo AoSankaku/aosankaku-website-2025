@@ -9,6 +9,7 @@ import type { ImageMetadata } from "astro";
 
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 import { SITE_TITLE } from "@/consts";
+import { ClientRouter } from "astro:transitions";
 
 const lang = (Astro.currentLocale ||
   DEFAULT_LOCALE) as keyof typeof LOCALES_SETTING;
@@ -89,6 +90,7 @@ const isDev = import.meta.env.DEV;
     <meta property="og:locale" content={langFull?.replace("-", "_")} />
     <meta property="og:url" content={Astro.url} />
     <slot name="head" />
+    <ClientRouter />
     <script is:inline>
       const getThemePreference = () => {
         if (
@@ -103,13 +105,14 @@ const isDev = import.meta.env.DEV;
         return "light";
       };
 
-      const theme = getThemePreference();
+      const applyTheme = () => {
+        const theme = getThemePreference();
 
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      };
+
+      document.addEventListener("astro:after-swap", applyTheme);
+      applyTheme();
     </script>
   </head>
   <body>

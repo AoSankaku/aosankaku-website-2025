@@ -329,9 +329,12 @@ const t = useTranslator(currentLocale as Lang);
 <script>
   import "../../utils/prototypes";
 
+  document.addEventListener("astro:page-load", () => {
   const searchInput = document.getElementById(
     "searchInput",
-  ) as HTMLInputElement;
+  ) as HTMLInputElement | null;
+  if (!searchInput) return;
+
   const tagButtons = document.querySelectorAll(".tag-button");
   const catButtons = document.querySelectorAll(".category-button");
   const filterBadge = document.getElementById("activeFilterCount");
@@ -477,8 +480,12 @@ const t = useTranslator(currentLocale as Lang);
   filterArticles();
 
   // 4. Handle Safari/Mobile Back-Forward Cache (BFCache)
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
+  const pageShowController = new AbortController();
+  window.addEventListener(
+    "pageshow",
+    (event) => {
+      if (!event.persisted) return;
+
       const persistedUrlTags = getUrlActiveTags();
 
       if (persistedUrlTags.length > 0) {
@@ -496,8 +503,14 @@ const t = useTranslator(currentLocale as Lang);
       }
 
       filterArticles();
-    }
-  });
+    },
+    { signal: pageShowController.signal },
+  );
+  document.addEventListener(
+    "astro:before-swap",
+    () => pageShowController.abort(),
+    { once: true },
+  );
 
   searchInput?.addEventListener("input", () => {
     filterArticles();
@@ -505,5 +518,6 @@ const t = useTranslator(currentLocale as Lang);
 
   closeSummary?.addEventListener("click", () => {
     summary?.click();
+  });
   });
 </script>

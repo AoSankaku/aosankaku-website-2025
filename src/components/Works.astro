@@ -138,38 +138,48 @@ const t = useTranslator(Astro.currentLocale as Lang);
 </style>
 
 <script>
-  // Dynamic imports: Embla only loads when the carousel is about to enter the viewport
-  const initEmbla = async () => {
-    const rootNode = document.querySelector("#works-embla") as HTMLElement;
-    const viewportNode = rootNode?.querySelector(
-      ".embla__viewport",
-    ) as HTMLElement;
-    if (!viewportNode) return;
+  document.addEventListener("astro:page-load", () => {
+    const target = document.querySelector("#works-embla");
+    if (!target) return;
 
-    const [{ default: EmblaCarousel }, { default: Autoplay }] = await Promise.all([
-      import("embla-carousel"),
-      import("embla-carousel-autoplay"),
-    ]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
 
-    EmblaCarousel(
-      viewportNode,
-      { loop: true, align: "center", skipSnaps: false, duration: 30 },
-      [Autoplay({ delay: 8000, stopOnInteraction: false })],
+        observer.disconnect();
+        void initEmbla();
+      },
+      { rootMargin: "400px" },
     );
-  };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          initEmbla();
-          observer.disconnect();
-        }
+    observer.observe(target);
+
+    async function initEmbla() {
+      const viewportNode = target.querySelector<HTMLElement>(
+        ".embla__viewport",
+      );
+      if (!viewportNode || !viewportNode.isConnected) return;
+
+      const [{ default: EmblaCarousel }, { default: Autoplay }] =
+        await Promise.all([
+          import("embla-carousel"),
+          import("embla-carousel-autoplay"),
+        ]);
+      if (!viewportNode.isConnected) return;
+
+      const embla = EmblaCarousel(
+        viewportNode,
+        { loop: true, align: "center", skipSnaps: false, duration: 30 },
+        [Autoplay({ delay: 8000, stopOnInteraction: false })],
+      );
+
+      document.addEventListener("astro:before-swap", () => embla.destroy(), {
+        once: true,
       });
-    },
-    { rootMargin: "400px" },
-  );
+    }
 
-  const target = document.querySelector("#works-embla");
-  if (target) observer.observe(target);
+    document.addEventListener("astro:before-swap", () => observer.disconnect(), {
+      once: true,
+    });
+  });
 </script>

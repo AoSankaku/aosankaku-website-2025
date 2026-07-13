@@ -114,33 +114,37 @@ const accessibleLabel = label ?? iconName;
 </style>
 
 <script>
-  const shareButtons = document.querySelectorAll<HTMLElement>("[data-share-url]");
+  document.addEventListener("astro:page-load", () => {
+    const shareButtons =
+      document.querySelectorAll<HTMLElement>("[data-share-url]");
 
-  shareButtons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      const url = button.dataset.shareUrl;
-      if (!url) return;
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const url = button.dataset.shareUrl;
+        if (!url) return;
 
-      if (!window.navigator.share) {
-        alert("Not available on your browser");
-        return;
-      }
-      try {
-        await window.navigator.share({ text: url });
-      } catch (e) {
-        console.error(e);
-      }
+        if (!window.navigator.share) {
+          alert("Not available on your browser");
+          return;
+        }
+        try {
+          await window.navigator.share({ text: url });
+        } catch (e) {
+          console.error(e);
+        }
+      });
     });
-  });
 
-  const copyButtons = document.querySelectorAll<HTMLElement>("[data-copy-url]");
+    const copyButtons =
+      document.querySelectorAll<HTMLElement>("[data-copy-url]");
 
-  copyButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const url = button.dataset.copyUrl;
-      if (!url) return;
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const url = button.dataset.copyUrl;
+        if (!url) return;
 
-      navigator.clipboard.writeText(url);
+        navigator.clipboard.writeText(url);
+      });
     });
   });
 </script>
