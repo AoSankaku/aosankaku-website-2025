@@ -35,6 +35,16 @@ describe("Astro client-side routing", () => {
     );
   });
 
+  test("the header parent button targets the current path's parent directory", async () => {
+    const header = await readProjectFile("src/components/Header.astro");
+
+    expect(header).toContain("getParentPathHref");
+    expect(header).toContain("const parentHref = getParentPathHref(currentPath);");
+    expect(header).toContain("<a href={parentHref}>");
+    expect(header).toContain('t("header.parent")');
+    expect(header).not.toContain("<a href={homeHref}>");
+  });
+
   test("interactive bundled scripts initialize after every page navigation", async () => {
     const interactiveFiles = [
       "src/components/Footer.astro",

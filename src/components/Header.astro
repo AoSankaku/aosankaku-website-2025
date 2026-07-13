@@ -6,6 +6,7 @@ import { useTranslator } from "@/i18n/utils";
 import {
   getBlogIndexHref,
   getLanguageSwitchHref,
+  getParentPathHref,
 } from "@/utils/blogRouting";
 import { getVisibleBlogPosts } from "@/utils/blogPostDates";
 
@@ -13,7 +14,7 @@ const currentPath = Astro.url.pathname;
 const currentLocale = (Astro.currentLocale ?? DEFAULT_LOCALE) as Lang;
 const t = useTranslator(currentLocale);
 const iconSize = 30;
-const homeHref = currentLocale === "en" ? "/en/" : "/";
+const parentHref = getParentPathHref(currentPath);
 const blogHref = getBlogIndexHref(currentLocale);
 const isHome = currentPath === "/" || currentPath === "/en/";
 const targetLocale = currentLocale === "en" ? DEFAULT_LOCALE : "en";
@@ -37,13 +38,13 @@ const languageLabel =
   <div class="left">
     {
       !isHome && (
-        <a href={homeHref}>
+        <a href={parentHref}>
           <Icon
             name="carbon:folder-parent"
             width={iconSize}
             height={iconSize}
           />
-          <span>{t("header.home")}</span>
+          <span>{t("header.parent")}</span>
         </a>
       )
     }

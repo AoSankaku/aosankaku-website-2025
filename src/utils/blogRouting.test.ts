@@ -6,6 +6,7 @@ import {
   getLanguageSwitchHref,
   getBlogRouteInfo,
   getLocaleHomeHref,
+  getParentPathHref,
   isDefaultLocaleBlogEntry,
 } from "./blogRouting";
 
@@ -81,6 +82,15 @@ describe("blogRouting", () => {
   test("gets the home href for a locale", () => {
     expect(getLocaleHomeHref("ja")).toBe("/");
     expect(getLocaleHomeHref("en")).toBe("/en/");
+  });
+
+  test("gets the parent directory href for site paths", () => {
+    expect(getParentPathHref("/blog/article/")).toBe("/blog/");
+    expect(getParentPathHref("/blog/series/article/")).toBe("/blog/series/");
+    expect(getParentPathHref("/en/blog/article/")).toBe("/en/blog/");
+    expect(getParentPathHref("/blog/")).toBe("/");
+    expect(getParentPathHref("/about/")).toBe("/");
+    expect(getParentPathHref("/")).toBe("/");
   });
 
   test("gets a blog index href with a tag filter query", () => {

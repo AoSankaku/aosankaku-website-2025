@@ -60,7 +60,7 @@ homepage:
       desc: A close friend drew it for me. I have used it for over eight years. For the record, I am quite bad at drawing.
 
 header:
-  home: Home
+  parent: Up one level
   blog: Blog posts in Japanese
   about: About in Japanese
   switch-to-ja: Switch to Japanese

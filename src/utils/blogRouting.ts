@@ -61,6 +61,13 @@ export function getLocaleHomeHref(
   return locale === DEFAULT_LOCALE_SETTING ? "/" : `/${locale}/`;
 }
 
+export function getParentPathHref(pathname: string): string {
+  const pathSegments = pathname.split("/").filter(Boolean);
+  pathSegments.pop();
+
+  return pathSegments.length > 0 ? `/${pathSegments.join("/")}/` : "/";
+}
+
 export function getBlogIndexTagFilterHref(
   tag: string,
   locale: string = DEFAULT_LOCALE_SETTING,
