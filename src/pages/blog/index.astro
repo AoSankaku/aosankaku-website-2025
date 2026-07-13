@@ -359,7 +359,7 @@ const t = useTranslator(currentLocale as Lang);
     const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${
       window.location.hash
     }`;
-    window.history.replaceState(null, "", nextUrl);
+    window.history.replaceState(window.history.state, "", nextUrl);
   };
 
   const urlActiveTags = getUrlActiveTags();

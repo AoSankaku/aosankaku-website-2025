@@ -16,6 +16,25 @@ describe("Astro client-side routing", () => {
     expect(layout).toContain("<ClientRouter />");
   });
 
+  test("the shared layout disables the root crossfade that causes page flashes", async () => {
+    const layout = await readProjectFile("src/layouts/Layout.astro");
+
+    expect(layout).toContain(
+      '<html lang={langFull} transition:name="root" transition:animate="none">',
+    );
+  });
+
+  test("blog filter URL updates preserve Astro router history state", async () => {
+    const blogIndex = await readProjectFile("src/pages/blog/index.astro");
+
+    expect(blogIndex).toContain(
+      'window.history.replaceState(window.history.state, "", nextUrl);',
+    );
+    expect(blogIndex).not.toContain(
+      'window.history.replaceState(null, "", nextUrl);',
+    );
+  });
+
   test("interactive bundled scripts initialize after every page navigation", async () => {
     const interactiveFiles = [
       "src/components/Footer.astro",
