@@ -68,6 +68,7 @@ export default defineConfig({
     '/links': '/',
     '/profile': '/',
     '/tags': '/blog/',
+    '/station_sign_generator/': 'https://stationsigngen.aosankaku.net',
   },
 
   image: {
