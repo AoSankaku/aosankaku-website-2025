@@ -8,6 +8,7 @@ import { Icon } from "astro-icon/components";
 import type { MarkdownHeading } from "astro";
 import { getIcon } from "@/consts/categoryIcons";
 import ShareButtons from "@/components/ShareButtons.astro";
+import GooglePreferredSourceButton from "@/components/GooglePreferredSourceButton.astro";
 import RelatedArticles from "@/components/atoms/RelatedArticles.astro";
 import { useTranslator } from "@/i18n/utils";
 import type { Lang } from "@/types/i18n";
@@ -137,6 +138,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
     )
   }
   <ShareButtons title={frontmatter.title} locale={articleLocale} />
+  <GooglePreferredSourceButton locale={articleLocale} />
   {postId && <NextPrevPosts postId={postId} />}
   <Footer />
 </Layout>

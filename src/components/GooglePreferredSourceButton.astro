@@ -1,0 +1,160 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Lang } from "@/types/i18n";
+
+interface Props {
+  locale?: Lang;
+}
+
+const { locale = Astro.currentLocale as Lang } = Astro.props;
+const isJapanese = locale !== "en";
+const label = isJapanese
+  ? "Google検索でこのブログを優先する"
+  : "Prioritize this blog on Google Search";
+const description = isJapanese
+  ? "よく読むサイトとして Google に追加できます"
+  : "Add it to your preferred sources on Google";
+---
+
+<aside class="preferred-source" aria-label={label}>
+  <a
+    class="preferred-source__button"
+    href="https://google.com/preferences/source?q=aosankaku.net"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={label}
+  >
+    <span class="preferred-source__logo" aria-hidden="true">
+      <Icon name="logos:google-icon" />
+    </span>
+    <span class="preferred-source__copy">
+      <span class="preferred-source__label">{label}</span>
+      <span class="preferred-source__description">{description}</span>
+    </span>
+    <Icon
+      class="preferred-source__arrow"
+      name="mdi:arrow-top-right"
+      aria-hidden="true"
+    />
+  </a>
+</aside>
+
+<style>
+  .preferred-source {
+    box-sizing: border-box;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .preferred-source__button {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    padding: 14px 16px;
+    border: 1px solid var(--color-text-sub);
+    border-radius: 12px;
+    background: var(--color-background);
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      background-color 0.2s ease,
+      border-color 180ms ease,
+      color 0.2s ease;
+  }
+
+  .preferred-source__button::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: linear-gradient(
+      to bottom,
+      #4285f4 0 25%,
+      #ea4335 25% 50%,
+      #fbbc05 50% 75%,
+      #34a853 75%
+    );
+    content: "";
+  }
+
+  .preferred-source__button:hover,
+  .preferred-source__button:focus-visible {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+  }
+
+  .preferred-source__button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--color-primary), transparent 55%);
+    outline-offset: 3px;
+  }
+
+  .preferred-source__logo {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    font-size: 28px;
+  }
+
+  .preferred-source__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .preferred-source__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.45;
+    word-break: auto-phrase;
+  }
+
+  .preferred-source__description {
+    color: var(--color-text-sub);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    word-break: auto-phrase;
+  }
+
+  .preferred-source__arrow {
+    color: var(--color-text-sub);
+    font-size: 20px;
+    transition: color 0.2s ease;
+  }
+
+  .preferred-source__button:hover .preferred-source__arrow,
+  .preferred-source__button:focus-visible .preferred-source__arrow {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 420px) {
+    .preferred-source {
+      padding: 12px 16px 0;
+    }
+
+    .preferred-source__button {
+      grid-template-columns: 28px minmax(0, 1fr) 20px;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .preferred-source__logo {
+      width: 28px;
+      height: 28px;
+      font-size: 25px;
+    }
+
+    .preferred-source__label {
+      font-size: 0.9rem;
+    }
+
+    .preferred-source__description {
+      font-size: 0.72rem;
+    }
+  }
+</style>
