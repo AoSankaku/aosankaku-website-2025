@@ -3,6 +3,7 @@ title: "【AndroidからWindowsに】画面を写したいので、ScreenStream�
 category: "Tech"
 date: "2026-07-14T03:00:00+09:00"
 desc: "Androidの画面をScreenStreamからRTSPで配信したところ、VLCではしばらくすると映像が途切れる問題が発生しました。Live555のストリームトランスポートを変更したら直ったので、設定方法を紹介します。"
+thumbnail: "thumbnailforrtsp.png"
 tags:
   - Android
   - VLC
