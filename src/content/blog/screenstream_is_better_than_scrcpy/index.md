@@ -4,6 +4,7 @@ category: "Tech"
 date: "2026-07-14T03:00:00+09:00"
 desc: "Androidの画面をScreenStreamからRTSPで配信したところ、VLCではしばらくすると映像が途切れる問題が発生しました。Live555のストリームトランスポートを変更したら直ったので、設定方法を紹介します。"
 thumbnail: "thumbnailforrtsp.png"
+alt: "ストリーミングをしていることを表したかったらしいビーム"
 tags:
   - Android
   - VLC
@@ -35,11 +36,11 @@ ScreenStreamは、Androidの画面をネットワーク経由で配信できる�
 
 ScreenStreamでRTSPサーバーを開始し、表示されたURLをVLCの「メディア→ネットワークストリームを開く」に入力します。
 
-![alt text](image.png)
+![ネットワークストリームを開く](image.png)
 
 ScreenStreamで「RTSP mode」にすれば接続情報は出るので、それを入れるだけです。
 
-![alt text](image-1.png)
+![ネットワークプロトコルとURL](image-1.png)
 
 これだけでAndroidの画面がWindowsに表示されました。USBケーブルもADBも不要です。これはいい感じです。
 
@@ -62,9 +63,9 @@ VLCで以下の順番に設定を開きます。
 3. 下部にある「ネットワーク」を確認する
 4. 「Live555ストリームトランスポート」を変更する
 
-![alt text](image-2.png)
+![ツールから設定を開く](image-2.png)
 
-![alt text](image-3.png)
+![入力/コーデックに入って一番下のLive5555ストリームトランスポートを選ぶ](image-3.png)
 
 デフォルトでは`HTTP`が選択されているため、これを`RTPオーバーRTSP（TCP）`に変更します。
 
