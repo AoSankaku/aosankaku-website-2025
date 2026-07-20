@@ -251,7 +251,7 @@ https://emoji-gen.ninja
 
 ![akkymoji一覧](image-1.png)
 
-https://neomenia.net/ja/posts/akkymoji/
+https://neomenia.net/ja/projects/akkymoji/
 
 | 注意 | 規約内容                 | 解説                                          |
 | ---- | ------------------------ | --------------------------------------------- |
