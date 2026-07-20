@@ -69,6 +69,7 @@ export default defineConfig({
     '/profile': '/',
     '/tags': '/blog/',
     '/station_sign_generator/': 'https://stationsigngen.aosankaku.net',
+    '/cps_resume/': 'https://cpsresume.aosankaku.net',
   },
 
   image: {
