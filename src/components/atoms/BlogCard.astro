@@ -11,13 +11,14 @@ interface Props {
   desc: string;
   thumbnail: string;
   link: string;
+  postId: string;
   date: string;
   lastUpdate?: string;
 }
 
-const { title, desc, thumbnail, link, date, lastUpdate } = Astro.props;
+const { title, desc, thumbnail, link, postId, date, lastUpdate } = Astro.props;
 
-const articleImage = getArticleImage(link, thumbnail);
+const articleImage = getArticleImage(postId, thumbnail);
 
 const JSTDate = formatToJSTDate(date);
 const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;

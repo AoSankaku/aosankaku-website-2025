@@ -38,7 +38,7 @@ const t = useTranslator(articleLocale);
 
 // When the slug is undefined, this article doesn't belong to /blog/
 const articleImage = slug
-  ? getArticleImage(routeInfo?.slug ?? slug, frontmatter.thumbnail)
+  ? getArticleImage(postId ?? slug, frontmatter.thumbnail)
   : frontmatter.thumbnail
     ? frontmatter.thumbnail // Use the specified fetchable thumbnail if exists
     : getDefaultArticleImage(); // Use the default thumbnail if blank

@@ -38,6 +38,7 @@ const blogIndexHref = getBlogIndexHref(currentLocale);
             desc={post.data.desc || t("blog.unset-description")}
             thumbnail={post.data.thumbnail || undefined}
             link={getBlogRouteInfo(post.id).href}
+            postId={post.id}
             date={post.data.date || ""}
             lastUpdate={post.data.lastUpdate || ""}
           />

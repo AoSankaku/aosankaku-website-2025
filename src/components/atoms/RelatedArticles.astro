@@ -74,7 +74,7 @@ const finalRelatedPosts = [...relatedByTag, ...relatedByCategory];
             <a href={getBlogRouteInfo(post.id).href}>
               <Image
                 src={getArticleImage(
-                  getBlogRouteInfo(post.id).slug,
+                  post.id,
                   post.data.thumbnail,
                 )}
                 alt="Blog Thumbnail"

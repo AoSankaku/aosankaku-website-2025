@@ -6,13 +6,35 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
-export default function getArticleImage(slug: string, thumbnail: string | undefined) {
-  if (!slug) { return ogDefaultImage }
-  const path = `/src/content/blog/${slug
-    .replace(/^\/(?:[a-z][a-z0-9-]*\/)?blog\//i, '')
-    .replace(/\/$/, '')
-    }/${thumbnail ? thumbnail.replace(/^\.\//, "") : "null"}`;
-  return images[path]?.default ?? ogDefaultImage;
+export default function getArticleImage(entryId: string, thumbnail: string | undefined) {
+  if (!entryId) { return ogDefaultImage }
+  const normalizedEntryId = entryId
+    .replace(/^\/(?:[a-z][a-z0-9-]*\/)?blog\//i, "")
+    .replace(/^\/+|\/+$/g, "");
+  const parentDirectory = normalizedEntryId.split("/").slice(0, -1).join("/");
+  const candidateDirectories = [normalizedEntryId, parentDirectory];
+
+  for (const directory of candidateDirectories) {
+    const relativeImagePath = `${directory}/${thumbnail ?? "null"}`;
+    const normalizedImagePath = relativeImagePath.split("/").reduce<string[]>(
+      (segments, segment) => {
+        if (!segment || segment === ".") return segments;
+        if (segment === "..") {
+          segments.pop();
+          return segments;
+        }
+
+        segments.push(segment);
+        return segments;
+      },
+      [],
+    ).join("/");
+    const image = images[`/src/content/blog/${normalizedImagePath}`]?.default;
+
+    if (image) return image;
+  }
+
+  return ogDefaultImage;
 }
 
 export const getDefaultArticleImage = () => {
