@@ -1,12 +1,14 @@
 import type { ImageMetadata } from "astro";
 import ogDefaultImage from "@/assets/og-default.png";
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
+const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
   "/src/content/blog/**/*.{jpeg,jpg,png,gif}",
-  { eager: true }
 );
 
-export default function getArticleImage(entryId: string, thumbnail: string | undefined) {
+export default async function getArticleImage(
+  entryId: string,
+  thumbnail: string | undefined,
+) {
   if (!entryId) { return ogDefaultImage }
   const normalizedEntryId = entryId
     .replace(/^\/(?:[a-z][a-z0-9-]*\/)?blog\//i, "")
@@ -29,9 +31,9 @@ export default function getArticleImage(entryId: string, thumbnail: string | und
       },
       [],
     ).join("/");
-    const image = images[`/src/content/blog/${normalizedImagePath}`]?.default;
+    const loadImage = imageLoaders[`/src/content/blog/${normalizedImagePath}`];
 
-    if (image) return image;
+    if (loadImage) return (await loadImage()).default;
   }
 
   return ogDefaultImage;

@@ -62,21 +62,24 @@ const relatedByCategory = otherPosts
   .slice(0, 2);
 
 const finalRelatedPosts = [...relatedByTag, ...relatedByCategory];
+const finalRelatedPostsWithImages = await Promise.all(
+  finalRelatedPosts.map(async (post) => ({
+    post,
+    image: await getArticleImage(post.id, post.data.thumbnail),
+  })),
+);
 ---
 
 <aside class="related-articles-container">
   <h2>{t("blog.related-articles")}</h2>
   {
-    finalRelatedPosts.length > 0 ? (
+    finalRelatedPostsWithImages.length > 0 ? (
       <ul class="related-list">
-        {finalRelatedPosts.map((post) => (
+        {finalRelatedPostsWithImages.map(({ post, image }) => (
           <li>
             <a href={getBlogRouteInfo(post.id).href}>
               <Image
-                src={getArticleImage(
-                  post.id,
-                  post.data.thumbnail,
-                )}
+                src={image}
                 alt="Blog Thumbnail"
                 class="blog-thumbnail"
                 width={160}

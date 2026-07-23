@@ -38,7 +38,7 @@ const t = useTranslator(articleLocale);
 
 // When the slug is undefined, this article doesn't belong to /blog/
 const articleImage = slug
-  ? getArticleImage(postId ?? slug, frontmatter.thumbnail)
+  ? await getArticleImage(postId ?? slug, frontmatter.thumbnail)
   : frontmatter.thumbnail
     ? frontmatter.thumbnail // Use the specified fetchable thumbnail if exists
     : getDefaultArticleImage(); // Use the default thumbnail if blank
@@ -75,7 +75,13 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 >
   <Header />
   <div class="blog-hero">
-    <Image src={articleImage} alt={frontmatter.alt || ""} loading="eager" />
+    <Image
+      src={articleImage}
+      alt={frontmatter.alt || ""}
+      width={1280}
+      height={720}
+      loading="eager"
+    />
     <p class="category">
       <Icon name={getIcon(frontmatter.category)} size="1.2em" />{
         frontmatter.category

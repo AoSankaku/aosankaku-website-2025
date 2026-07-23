@@ -18,7 +18,7 @@ interface Props {
 
 const { title, desc, thumbnail, link, postId, date, lastUpdate } = Astro.props;
 
-const articleImage = getArticleImage(postId, thumbnail);
+const articleImage = await getArticleImage(postId, thumbnail);
 
 const JSTDate = formatToJSTDate(date);
 const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;
@@ -26,7 +26,13 @@ const JSTLastUpdate = lastUpdate ? formatToJSTDate(lastUpdate) : null;
 
 <a href={link}>
   <div class="blog-card">
-    <Image src={articleImage} alt="Blog Thumbnail" class="blog-thumbnail" />
+    <Image
+      src={articleImage}
+      alt="Blog Thumbnail"
+      class="blog-thumbnail"
+      width={640}
+      height={360}
+    />
     <h3 class="blog-title">{title}</h3>
     <p class="desc">{desc}</p>
     <div class="date-container">
