@@ -8,6 +8,9 @@ import typingImage from "@/assets/homepage/works/typing_340.jpg";
 import mirinkuyan from "@/assets/homepage/works/mirinkuyan.jpg";
 import profileIcon250 from "@/assets/profileicon250.png";
 import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_generator.png";
+import passphraseGeneratorJapaneseImage from "@/assets/homepage/works/passphrase-generator-japanese.png";
+import cpsresumeImage from "@/assets/homepage/works/cpsresume-square.jpg";
+import ultitypeImage from "@/assets/homepage/works/ultitype.png";
 import { type Lang } from "@/types/i18n";
 import { useTranslator } from "@/i18n/utils";
 
@@ -32,18 +35,56 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
       <div class="embla__slide">
         <WorkCard
-          title="Moremobility Mod"
-          imageSrc={moremobilityImage}
-          link="https://modrinth.com/mod/moremobility"
-          linkText={t("homepage.works.moremobility.link")}
+          title={t("homepage.works.craftsky.title")}
+          imageSrc={craftskyImage}
+          link="https://crafters.aosankaku.net"
+          linkText={t("homepage.works.craftsky.link")}
         >
-          {t("homepage.works.moremobility.desc")}
+          {t("homepage.works.craftsky.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
-        <WorkCard title={t("homepage.works.server.title")} imageSrc={serverImage1}>
-          {t("homepage.works.server.desc")}
+        <WorkCard
+          title={t("homepage.works.station-sign.title")}
+          imageSrc={stationSignGeneratorImage}
+          link="https://stationsigngen.aosankaku.net"
+          linkText={t("homepage.works.station-sign.link")}
+        >
+          {t("homepage.works.station-sign.desc")}
+        </WorkCard>
+      </div>
+
+      <div class="embla__slide">
+        <WorkCard
+          title={t("homepage.works.passphrase-generator-japanese.title")}
+          imageSrc={passphraseGeneratorJapaneseImage}
+          link="https://pasufure-zu.aosankaku.net"
+          linkText={t("homepage.works.passphrase-generator-japanese.link")}
+        >
+          {t("homepage.works.passphrase-generator-japanese.desc")}
+        </WorkCard>
+      </div>
+
+      <div class="embla__slide">
+        <WorkCard
+          title={t("homepage.works.ultitype.title")}
+          imageSrc={ultitypeImage}
+          link="https://ultitype.aosankaku.net"
+          linkText={t("homepage.works.ultitype.link")}
+        >
+          {t("homepage.works.ultitype.desc")}
+        </WorkCard>
+      </div>
+
+      <div class="embla__slide">
+        <WorkCard
+          title={t("homepage.works.cpsresume.title")}
+          imageSrc={cpsresumeImage}
+          link="https://cpsresume.aosankaku.net"
+          linkText={t("homepage.works.cpsresume.link")}
+        >
+          {t("homepage.works.cpsresume.desc")}
         </WorkCard>
       </div>
 
@@ -60,33 +101,21 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
       <div class="embla__slide">
         <WorkCard
-          title={t("homepage.works.station-sign.title")}
-          imageSrc={stationSignGeneratorImage}
+          title="Moremobility Mod"
+          imageSrc={moremobilityImage}
+          link="https://modrinth.com/mod/moremobility"
+          linkText={t("homepage.works.moremobility.link")}
         >
-          {t("homepage.works.station-sign.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard title={t("homepage.works.typing.title")} imageSrc={typingImage}>
-          {t("homepage.works.typing.desc")}
+          {t("homepage.works.moremobility.desc")}
         </WorkCard>
       </div>
 
       <div class="embla__slide">
         <WorkCard
-          title={t("homepage.works.craftsky.title")}
-          imageSrc={craftskyImage}
-          link="https://crafters.aosankaku.net"
-          linkText={t("homepage.works.craftsky.link")}
+          title={t("homepage.works.server.title")}
+          imageSrc={serverImage1}
         >
-          {t("homepage.works.craftsky.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard title={t("homepage.works.icon.title")} imageSrc={profileIcon250}>
-          {t("homepage.works.icon.desc")}
+          {t("homepage.works.server.desc")}
         </WorkCard>
       </div>
     </div>
@@ -155,9 +184,10 @@ const t = useTranslator(Astro.currentLocale as Lang);
     observer.observe(target);
 
     async function initEmbla() {
-      const viewportNode = target.querySelector<HTMLElement>(
-        ".embla__viewport",
-      );
+      if (!target) return;
+
+      const viewportNode =
+        target.querySelector<HTMLElement>(".embla__viewport");
       if (!viewportNode || !viewportNode.isConnected) return;
 
       const [{ default: EmblaCarousel }, { default: Autoplay }] =
@@ -178,8 +208,12 @@ const t = useTranslator(Astro.currentLocale as Lang);
       });
     }
 
-    document.addEventListener("astro:before-swap", () => observer.disconnect(), {
-      once: true,
-    });
+    document.addEventListener(
+      "astro:before-swap",
+      () => observer.disconnect(),
+      {
+        once: true,
+      },
+    );
   });
 </script>

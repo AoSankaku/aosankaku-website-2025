@@ -1,8 +1,8 @@
-site-name: Blue Triangle's Website
-site-description: "Blue Trinagle's personal hobby website. Mainly explores frontend, server, and minecraft."
+site-name: Blue Triangle's Iroiro Blog
+site-description: "Blue Triangle's personal hobby website. I mainly write about frontend development, servers, and Minecraft."
 
 homepage:
-  hidden-h1: Blue Triangle's Website - Frontend Dev, Servers and Minecraft.
+  hidden-h1: Blue Triangle's Iroiro Blog - Frontend Development, Servers, and Minecraft
   random-video: Hello there! Wanna try this song?
   random-video-desc: I feature one underrated song each month.
   profile:
@@ -14,21 +14,22 @@ homepage:
     gender: "Gender: nonexistent, because I'm just a shape."
     age: "Age: old enough to drink, though not necessarily good at it."
     job: "Work: frontend engineer and assorted random things."
+    profile-pic: "Profile picture: drawn by my best friend (used for over eight years)."
   tech-stacks:
     title: Tools I Have Used
   details:
     website-title: Website Building
     website-desc: I built this site myself from scratch. I like React, but i18n was painful with Next.js, Gatsby, and Vike, so I use Astro here.
     dev-title: Hobby Development
-    dev-desc: I build whatever I feel like building when the idea shows up.
+    dev-desc: I build whatever I feel like building whenever inspiration strikes. That is just who I am, so you will have to live with it.
     english-title: I Know Some English
-    english-desc: I still have not passed Eiken Grade 1 (equivalent to CEFR C1), which bothers me. I want to hang out in VRChat in English someday.
+    english-desc: I still have not passed Eiken Grade 1 (equivalent to CEFR C1), which bothers me, but I have no motivation. My dream is to use English in VRChat.
     hobby-title: Narrow Hobbies
     hobby-desc: "Mostly Minecraft. Sometimes Arknights, #COMPASS, and a few other things."
     casual-title: Casual Chats Welcome
-    casual-desc: I like reaction sprees, like storms, and low-stakes chatting too. Keep it within common sense.
+    casual-desc: I like reaction sprees, like storms, and conversations that require no thought. Just keep it reasonable—nobody likes someone coming on too strong when they have only just met.
     music-title: Music Taste
-    music-desc: I like electronic sounds, strong vocals, and guitars. Recommend that kind of music and I will probably be happy.
+    music-desc: I like electronic sounds, powerful vocals, and guitars. Recommend that kind of music and I will be happy. I also listen to the Arknights OST a lot.
   works:
     title: Showcase
     mirinkuyan:
@@ -45,15 +46,25 @@ homepage:
       title: CPU Monitor for Stream Deck
       desc: I made a Stream Deck plugin where PartyParrot shows CPU usage. It was also one of my first mostly vibe-coded projects.
       link: Download on GitHub
+    passphrase-generator-japanese:
+      title: Japanese Passphrase Generator
+      desc: Passwords are famously impossible for humans to remember, so I made a web app that automatically generates memorable ones.
+      link: Try It
     station-sign:
       title: Station Sign Generator
-      desc: I am building a web app for creating station signs. The basic features work, but it still needs larger changes before I call it finished.
-    typing:
-      title: Competitive Typing
-      desc: I became a typing god. I do not have a convenient certificate to prove it, so let me know if you know a good one.
+      desc: I am building a web app that makes it easy to create station signs. It is already quite usable, but it is still in beta, so I will keep adding features.
+      link: Try It
+    cpsresume:
+      title: "#COMPASS Resume Generator"
+      desc: "I made this out of an overwhelming desire to avoid opening a drawing app just to create a #COMPASS resume."
+      link: Make One
+    ultitype:
+      title: UltiType
+      desc: Since that damn site Monkeytype would never let me sign up, I went ahead and built my own typing practice app. I will keep expanding it. It is aimed at intermediate and advanced typists.
+      link: Play
     craftsky:
       title: Craftsky
-      desc: I'm running a Misskey server where people who make things can casually gather.
+      desc: I made a Misskey server where people who make things can casually gather. Feel free to take a look.
       link: Visit
     icon:
       title: About My Icon
@@ -73,6 +84,10 @@ blog:
   all-articles-search: All Posts and Search
   unset-description: No description set
   search-placeholder: Search posts by title...
+  view-mode: View
+  view-list: List
+  view-image-list: Image list
+  view-cards: Cards
   filter: Filter
   reset-all: Reset all
   category: Category

@@ -14,6 +14,7 @@ homepage:
     gender: 性別：図形のため存在しない
     age: 年齢：お酒が飲める歳（強いとは言ってない）
     job: 職業：フロントエンドエンジニア その他いろいろ
+    profile-pic: プロフィール画像：親友作（使用歴8年～）
   tech-stacks:
     title: 使ったことあるやつ
   details:
@@ -45,15 +46,25 @@ homepage:
       title: StreamDeck用CPUモニター
       desc: StreamDeckで、PartyParrotがCPU使用率を教えてくれるプラグインを作りました。ほぼバイブコーディングで作った初作品でもあります。
       link: ダウンロード（GitHub）
+    passphrase-generator-japanese:
+      title: 日本語パスフレーズ ジェネレーター
+      desc: 「人間が覚えられるわけがない」でおなじみのパスワードですが、覚えやすいものが自動でできるWebアプリを作ってみました。
+      link: 使ってみる
     station-sign:
-      title: 【作成中】駅名標ジェネレーター
-      desc: 駅名標を簡単に作成できるWebアプリケーションを作成中です。基本機能はできているのですが破壊的な変更を含む拡張が必要なので、完成したらここでお知らせします。
-    typing:
-      title: タイピングガチ勢
-      desc: 神になりました。いい資格とかがなくて証明方法に困っています。なんかいいもの知ってたらぜひ教えて下さい。
+      title: 駅名標ジェネレーター
+      desc: 駅名標を簡単に作成できるWebアプリケーションを作成中です。だいぶ使える状態になってきました。まだベータなので、今後も機能追加をしていきます。
+      link: 試してみる
+    cpsresume:
+      title: '#コンパス履歴書 ジェネレーター'
+      desc: '#コンパス履歴書作るためにお絵かきアプリ開くのめんどくさいな～～～～～～～～～、という凄まじい熱意を持って作りました。'
+      link: 作ってみる
+    ultitype:
+      title: UltiType
+      desc: Monkeytypeとかいうクソサイトに一生登録できないので、自分でタイピング練習アプリを作っちゃいました。今後もガンガン拡張します。タイピング中上級者向けです。
+      link: 遊んでみる
     craftsky:
       title: くらふとすきー
-      desc: 「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを作りました。
+      desc: 「なんか作ってる人」が気軽に集まることができるようなMisskeyサーバーを作りました。お気軽に覗いてみてください。
       link: 見に行く
     icon:
       title: アイコンについて
@@ -73,6 +84,10 @@ blog:
   all-articles-search: ブログ全記事一覧（検索）
   unset-description: 【説明未設定】
   search-placeholder: タイトルから記事を検索...
+  view-mode: 表示方式
+  view-list: リスト
+  view-image-list: 画像付きリスト
+  view-cards: カード
   filter: フィルター
   reset-all: すべてリセット
   category: カテゴリー
