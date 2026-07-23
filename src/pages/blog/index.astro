@@ -3,6 +3,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import BlogCard from "@/components/atoms/BlogCard.astro";
 import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import categoryIcons, { getIcon } from "@/consts/categoryIcons";
@@ -121,16 +122,59 @@ const t = useTranslator(currentLocale as Lang);
       </div>
     </details>
 
-    <ul>
+    <fieldset class="view-mode-selector">
+      <legend>{t("blog.view-mode")}</legend>
+      <div class="view-mode-buttons">
+        <button
+          type="button"
+          class="view-mode-button"
+          data-view-mode="list"
+          aria-pressed="false"
+        >
+          <Icon name="mdi:format-list-bulleted" size="1.25em" />
+          <span>{t("blog.view-list")}</span>
+        </button>
+        <button
+          type="button"
+          class="view-mode-button"
+          data-view-mode="image-list"
+          aria-pressed="true"
+        >
+          <Icon name="mdi:view-agenda-outline" size="1.25em" />
+          <span>{t("blog.view-image-list")}</span>
+        </button>
+        <button
+          type="button"
+          class="view-mode-button"
+          data-view-mode="cards"
+          aria-pressed="false"
+        >
+          <Icon name="mdi:view-grid-outline" size="1.25em" />
+          <span>{t("blog.view-cards")}</span>
+        </button>
+      </div>
+    </fieldset>
+
+    <ul id="postList" data-view-mode="image-list">
       {
         allPosts.map((post) => (
           <li
+            class="post-entry"
+            data-title={post.data.title}
             data-tags={(post.data.tags || []).join(",")}
             data-category={post.data.category || "uncategorized"}
           >
-            <a href={getBlogRouteInfo(post.id).href}>
-              {post.data.title}
-            </a>
+            <div class="post-view post-card-view">
+              <BlogCard
+                title={post.data.title}
+                desc={post.data.desc || t("blog.unset-description")}
+                thumbnail={post.data.thumbnail || ""}
+                link={getBlogRouteInfo(post.id).href}
+                postId={post.id}
+                date={post.data.date.toISOString()}
+                lastUpdate={post.data.lastUpdate?.toISOString()}
+              />
+            </div>
           </li>
         ))
       }
@@ -149,6 +193,212 @@ const t = useTranslator(currentLocale as Lang);
 <style>
   div.container {
     margin: 80px max(20px, 5%) 200px;
+  }
+
+  .view-mode-selector {
+    border: 0;
+    margin: 0 0 24px;
+    padding: 0;
+  }
+
+  .view-mode-selector legend {
+    color: var(--color-text-sub);
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .view-mode-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 640px;
+    border: 1px solid var(--color-text-sub);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .view-mode-button {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-right: 1px solid var(--color-text-sub);
+    background: var(--color-background-sub);
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font: inherit;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .view-mode-button:last-child {
+    border-right: 0;
+  }
+
+  .view-mode-button:hover {
+    background: var(--color-card);
+  }
+
+  .view-mode-button[aria-pressed="true"] {
+    background: var(--color-text);
+    color: var(--color-background);
+  }
+
+  .view-mode-button:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: -3px;
+  }
+
+  #postList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-view {
+    display: none;
+  }
+
+  #postList[data-view-mode="list"] {
+    list-style: disc;
+    padding-left: 2rem;
+  }
+
+  #postList[data-view-mode="list"] .post-entry {
+    margin: 0.4rem 0;
+  }
+
+  .post-card-view {
+    display: block;
+  }
+
+  #postList[data-view-mode="list"] .post-card-view {
+    height: auto;
+  }
+
+  #postList[data-view-mode="list"] .post-card-view > :global(a) {
+    display: inline;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  #postList[data-view-mode="list"] .post-card-view > :global(a:hover) {
+    box-shadow: none;
+  }
+
+  #postList[data-view-mode="list"] :global(.blog-card) {
+    display: inline;
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    text-align: left;
+  }
+
+  #postList[data-view-mode="list"] :global(.blog-card > img),
+  #postList[data-view-mode="list"] :global(.blog-card > .desc),
+  #postList[data-view-mode="list"] :global(.blog-card > .date-container) {
+    display: none;
+  }
+
+  #postList[data-view-mode="list"] :global(.blog-title) {
+    display: inline;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-weight: normal;
+    line-height: normal;
+  }
+
+  #postList[data-view-mode="image-list"] {
+    max-width: 768px;
+    margin-inline: auto;
+  }
+
+  #postList[data-view-mode="image-list"] .post-card-view {
+    height: 80px;
+    margin: 10px 0;
+  }
+
+  #postList[data-view-mode="image-list"] .post-card-view > :global(a) {
+    height: 80px;
+    border-radius: 8px;
+  }
+
+  #postList[data-view-mode="image-list"] .post-card-view > :global(a:hover) {
+    box-shadow: none;
+  }
+
+  #postList[data-view-mode="image-list"] :global(.blog-card) {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    align-items: center;
+    height: 80px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-text-sub);
+    border-radius: 8px;
+    background: transparent;
+    text-align: left;
+  }
+
+  #postList[data-view-mode="image-list"]
+    .post-card-view
+    > :global(a:hover .blog-card) {
+    background: var(--color-card);
+  }
+
+  #postList[data-view-mode="image-list"] :global(.blog-card > img) {
+    width: 120px;
+    height: 80px;
+    margin: 0;
+    border-radius: 8px 0 0 8px;
+    aspect-ratio: auto;
+    object-fit: cover;
+  }
+
+  #postList[data-view-mode="image-list"] :global(.blog-title) {
+    display: -webkit-box;
+    justify-content: flex-start;
+    min-height: 0;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 8px;
+    overflow: hidden;
+    font-size: 0.9rem;
+    font-weight: bold;
+    line-height: 1.3;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  #postList[data-view-mode="image-list"] :global(.blog-card > .desc),
+  #postList[data-view-mode="image-list"]
+    :global(.blog-card > .date-container) {
+    display: none;
+  }
+
+  #postList[data-view-mode="cards"] {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 45px 16px;
+    max-width: 1920px;
+    margin-inline: auto;
+  }
+
+  #postList[data-view-mode="cards"] .post-entry,
+  #postList[data-view-mode="cards"] .post-card-view {
+    width: 100%;
+    height: 100%;
   }
 
   #filterDetails {
@@ -310,6 +560,21 @@ const t = useTranslator(currentLocale as Lang);
   }
 
   @media (max-width: 600px) {
+    .view-mode-button {
+      flex-direction: column;
+      gap: 2px;
+      padding-inline: 4px;
+      font-size: 0.75rem;
+    }
+
+    #postList[data-view-mode="image-list"] :global(.blog-card) {
+      grid-template-columns: 80px 1fr;
+    }
+
+    #postList[data-view-mode="image-list"] :global(.blog-card > img) {
+      width: 80px;
+    }
+
     .category-button {
       font-size: 0.9em;
       padding: 6px 10px;
@@ -322,6 +587,12 @@ const t = useTranslator(currentLocale as Lang);
       font-size: 0.75em;
       padding: 2px 8px;
       height: 28px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #postList[data-view-mode="cards"] {
+      grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
     }
   }
 </style>
@@ -340,8 +611,52 @@ const t = useTranslator(currentLocale as Lang);
   const filterBadge = document.getElementById("activeFilterCount");
   const closeSummary = document.getElementById("closeSummary");
   const summary = document.getElementById("summary");
-  const postList = document.querySelectorAll("ul li");
+  const postListElement = document.getElementById("postList");
+  const postList = document.querySelectorAll("#postList > .post-entry");
+  const viewModeButtons =
+    document.querySelectorAll<HTMLButtonElement>(".view-mode-button");
   const nothingFound = document.getElementById("nothingFound");
+
+  type ViewMode = "list" | "image-list" | "cards";
+  const viewModeStorageKey = "blog-view-mode";
+  const defaultViewMode: ViewMode = "image-list";
+  const isViewMode = (value: string | null): value is ViewMode =>
+    value === "list" || value === "image-list" || value === "cards";
+
+  const applyViewMode = (viewMode: ViewMode) => {
+    if (!postListElement) return;
+
+    postListElement.dataset.viewMode = viewMode;
+    viewModeButtons.forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.viewMode === viewMode),
+      );
+    });
+  };
+
+  let initialViewMode = defaultViewMode;
+  try {
+    const savedViewMode = localStorage.getItem(viewModeStorageKey);
+    if (isViewMode(savedViewMode)) initialViewMode = savedViewMode;
+  } catch {
+    // Storage can be unavailable in strict privacy modes.
+  }
+  applyViewMode(initialViewMode);
+
+  viewModeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const viewMode = button.dataset.viewMode;
+      if (!isViewMode(viewMode)) return;
+
+      applyViewMode(viewMode);
+      try {
+        localStorage.setItem(viewModeStorageKey, viewMode);
+      } catch {
+        // Keep the current-page selection even when storage is unavailable.
+      }
+    });
+  });
 
   const getUrlActiveTags = () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -388,7 +703,7 @@ const t = useTranslator(currentLocale as Lang);
 
     postList.forEach((post) => {
       const el = post as HTMLElement;
-      const title = el.textContent?.toLowerCase().toKatakana() || "";
+      const title = el.dataset.title?.toLowerCase().toKatakana() || "";
       const cat = el.dataset.category || "uncategorized";
       const tags = el.dataset.tags?.split(",") || [];
 
