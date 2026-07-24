@@ -15,11 +15,17 @@ import { type Lang } from "@/types/i18n";
 import { useTranslator } from "@/i18n/utils";
 
 const t = useTranslator(Astro.currentLocale as Lang);
+const workSlideCount = 9;
 ---
 
-<h2>{t("homepage.works.title")}</h2>
+<h2 id="works-title">{t("homepage.works.title")}</h2>
 
-<section class="embla" id="works-embla">
+<section
+  class="embla"
+  id="works-embla"
+  aria-labelledby="works-title"
+  aria-roledescription="carousel"
+>
   <div class="embla__viewport">
     <div class="embla__container">
       <div class="embla__slide">
@@ -120,6 +126,68 @@ const t = useTranslator(Astro.currentLocale as Lang);
       </div>
     </div>
   </div>
+
+  <div
+    class="embla__controls"
+    role="group"
+    aria-label={t("homepage.works.carousel.controls")}
+  >
+    <button
+      class="embla__toggle"
+      type="button"
+      aria-label={t("homepage.works.carousel.pause")}
+      data-pause-label={t("homepage.works.carousel.pause")}
+      data-play-label={t("homepage.works.carousel.play")}
+    >
+      <svg
+        class="embla__toggle-progress"
+        aria-hidden="true"
+        viewBox="0 0 44 44"
+      >
+        <circle
+          class="embla__toggle-progress-track"
+          cx="22"
+          cy="22"
+          r="20"
+        ></circle>
+        <circle
+          class="embla__toggle-progress-value"
+          cx="22"
+          cy="22"
+          r="20"
+        ></circle>
+      </svg>
+      <svg
+        class="embla__toggle-pause"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+      >
+        <rect x="6.5" y="5" width="4" height="14" rx="1"></rect>
+        <rect x="13.5" y="5" width="4" height="14" rx="1"></rect>
+      </svg>
+      <svg
+        class="embla__toggle-play"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        hidden
+      >
+        <path d="M8 5.8v12.4a1 1 0 0 0 1.54.84l9.3-6.2a1 1 0 0 0 0-1.68l-9.3-6.2A1 1 0 0 0 8 5.8Z"></path>
+      </svg>
+    </button>
+
+    <div class="embla__dots">
+      {
+        Array.from({ length: workSlideCount }, (_, index) => (
+          <button
+            class="embla__dot"
+            type="button"
+            aria-label={`${t("homepage.works.carousel.go-to-slide")} ${index + 1}`}
+            aria-current={index === 0 ? "true" : undefined}
+          />
+        ))
+      }
+    </div>
+  </div>
 </section>
 
 <style>
@@ -131,7 +199,6 @@ const t = useTranslator(Astro.currentLocale as Lang);
     margin: 60px 0;
     overflow: hidden;
     contain: layout paint;
-    height: var(--slide-height);
   }
 
   @media (min-width: 768px) {
@@ -144,7 +211,7 @@ const t = useTranslator(Astro.currentLocale as Lang);
 
   .embla__viewport {
     overflow: hidden;
-    height: 100%;
+    height: var(--slide-height);
   }
 
   .embla__container {
@@ -164,12 +231,139 @@ const t = useTranslator(Astro.currentLocale as Lang);
     justify-content: center;
     align-items: center;
   }
+
+  .embla__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    margin-top: 18px;
+  }
+
+  .embla__toggle {
+    position: relative;
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .embla__toggle:hover {
+    background: var(--color-surface);
+    color: var(--color-primary);
+  }
+
+  .embla__toggle > svg:not(.embla__toggle-progress) {
+    position: relative;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .embla__toggle svg[hidden] {
+    display: none;
+  }
+
+  .embla__toggle-progress {
+    position: absolute;
+    inset: 0;
+    width: 44px;
+    height: 44px;
+    fill: none;
+    pointer-events: none;
+    transform: rotate(-90deg);
+  }
+
+  .embla__toggle-progress-track,
+  .embla__toggle-progress-value {
+    stroke-width: 3px;
+  }
+
+  .embla__toggle-progress-track {
+    stroke: var(--color-text-sub);
+    opacity: 0.35;
+  }
+
+  .embla__toggle-progress-value {
+    stroke: var(--color-primary);
+    stroke-dasharray: 125.664;
+    stroke-dashoffset: 125.664;
+    stroke-linecap: round;
+  }
+
+  .embla__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .embla__dot {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .embla__dot::after {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--color-text-sub);
+    border-radius: 999px;
+    background: transparent;
+    content: "";
+    transition:
+      width 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .embla__dot:hover::after {
+    border-color: var(--color-primary);
+  }
+
+  .embla__dot[aria-current="true"]::after {
+    width: 22px;
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+  }
+
+  .embla__toggle:focus-visible,
+  .embla__dot:focus-visible {
+    outline: 3px solid
+      color-mix(in srgb, var(--color-primary), transparent 55%);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .embla__toggle,
+    .embla__dot::after {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
+  function setupWorksCarousel() {
     const target = document.querySelector("#works-embla");
-    if (!target) return;
+    if (!target || target.getAttribute("data-embla-setup") === "true") return;
+    target.setAttribute("data-embla-setup", "true");
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -197,15 +391,163 @@ const t = useTranslator(Astro.currentLocale as Lang);
         ]);
       if (!viewportNode.isConnected) return;
 
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const autoplayDelay = 8000;
       const embla = EmblaCarousel(
         viewportNode,
         { loop: true, align: "center", skipSnaps: false, duration: 30 },
-        [Autoplay({ delay: 8000, stopOnInteraction: false })],
+        [
+          Autoplay({
+            delay: autoplayDelay,
+            stopOnInteraction: false,
+            playOnInit: !prefersReducedMotion,
+          }),
+        ],
+      );
+      const autoplay = embla.plugins().autoplay;
+      let isPausedByUser = prefersReducedMotion;
+      let progressAnimationFrame: number | undefined;
+      const toggleButton =
+        target.querySelector<HTMLButtonElement>(".embla__toggle");
+      const progressCircle = target.querySelector<SVGCircleElement>(
+        ".embla__toggle-progress-value",
+      );
+      const pauseIcon = target.querySelector<SVGElement>(
+        ".embla__toggle-pause",
+      );
+      const playIcon = target.querySelector<SVGElement>(".embla__toggle-play");
+      const dotButtons = Array.from(
+        target.querySelectorAll<HTMLButtonElement>(".embla__dot"),
       );
 
-      document.addEventListener("astro:before-swap", () => embla.destroy(), {
-        once: true,
+      const updateSelectedDot = () => {
+        const selectedIndex = embla.selectedScrollSnap();
+        dotButtons.forEach((button, index) => {
+          if (index === selectedIndex) {
+            button.setAttribute("aria-current", "true");
+          } else {
+            button.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const updateToggleButton = (isPlaying = autoplay.isPlaying()) => {
+        if (!toggleButton || !pauseIcon || !playIcon) return;
+
+        toggleButton.setAttribute(
+          "aria-label",
+          isPlaying
+            ? toggleButton.dataset.pauseLabel ?? ""
+            : toggleButton.dataset.playLabel ?? "",
+        );
+        pauseIcon.toggleAttribute("hidden", !isPlaying);
+        playIcon.toggleAttribute("hidden", isPlaying);
+      };
+
+      const progressCircleLength = 2 * Math.PI * 20;
+
+      const setCountdownProgress = (progress: number) => {
+        if (!progressCircle) return;
+
+        const clampedProgress = Math.min(Math.max(progress, 0), 1);
+        progressCircle.style.strokeDashoffset = String(
+          progressCircleLength * (1 - clampedProgress),
+        );
+      };
+
+      const stopCountdownAnimation = () => {
+        if (progressAnimationFrame === undefined) return;
+
+        window.cancelAnimationFrame(progressAnimationFrame);
+        progressAnimationFrame = undefined;
+      };
+
+      const updateCountdownProgress = () => {
+        const remaining = autoplay.timeUntilNext();
+        if (remaining === null) {
+          progressAnimationFrame = undefined;
+          return;
+        }
+
+        setCountdownProgress(1 - remaining / autoplayDelay);
+        if (autoplay.isPlaying()) {
+          progressAnimationFrame = window.requestAnimationFrame(
+            updateCountdownProgress,
+          );
+        } else {
+          progressAnimationFrame = undefined;
+        }
+      };
+
+      const restartCountdownAnimation = () => {
+        stopCountdownAnimation();
+        setCountdownProgress(0);
+        progressAnimationFrame = window.requestAnimationFrame(
+          updateCountdownProgress,
+        );
+      };
+
+      const freezeCountdownProgress = () => {
+        const remaining = autoplay.timeUntilNext();
+        if (remaining !== null) {
+          setCountdownProgress(1 - remaining / autoplayDelay);
+        }
+        stopCountdownAnimation();
+      };
+
+      dotButtons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+          embla.scrollTo(index);
+          autoplay.reset();
+        });
       });
+      toggleButton?.addEventListener("click", () => {
+        if (isPausedByUser || !autoplay.isPlaying()) {
+          isPausedByUser = false;
+          autoplay.play();
+        } else {
+          isPausedByUser = true;
+          autoplay.stop();
+        }
+        updateToggleButton();
+      });
+
+      embla.on("select", updateSelectedDot);
+      embla.on("reInit", updateSelectedDot);
+      embla.on("autoplay:play", () => {
+        if (isPausedByUser) {
+          autoplay.stop();
+        } else {
+          updateToggleButton(true);
+        }
+      });
+      embla.on("autoplay:stop", () => {
+        freezeCountdownProgress();
+        updateToggleButton(false);
+      });
+      embla.on("autoplay:timerset", restartCountdownAnimation);
+      embla.on("autoplay:timerstopped", stopCountdownAnimation);
+      updateSelectedDot();
+      updateToggleButton();
+      if (autoplay.isPlaying()) {
+        restartCountdownAnimation();
+      } else {
+        setCountdownProgress(0);
+      }
+      target.setAttribute("data-embla-ready", "true");
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          stopCountdownAnimation();
+          embla.destroy();
+        },
+        {
+          once: true,
+        },
+      );
     }
 
     document.addEventListener(
@@ -215,5 +557,8 @@ const t = useTranslator(Astro.currentLocale as Lang);
         once: true,
       },
     );
-  });
+  }
+
+  document.addEventListener("astro:page-load", setupWorksCarousel);
+  setupWorksCarousel();
 </script>

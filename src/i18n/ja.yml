@@ -32,6 +32,11 @@ homepage:
     music-desc: 電子音、声を張ったボーカル、ギターが好きです。そういう曲を薦めると喜びます。アークナイツのOSTもよく聴きます。
   works:
     title: みてみてコーナー
+    carousel:
+      controls: スライド操作
+      pause: 自動再生を一時停止
+      play: 自動再生を再開
+      go-to-slide: スライドを表示
     mirinkuyan:
       title: 我らが最大限に 尊敬し敬愛する みりんくゃん 御大同志将軍
       desc: 最近はカラオケを極めているらしいです。みんなで崇めましょう。
