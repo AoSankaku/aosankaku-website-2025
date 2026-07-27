@@ -310,6 +310,29 @@ const isDev = import.meta.env.DEV;
     --color-warning: #d29922;
     --color-caution: #f85149;
   }
+
+  @media print {
+    :root,
+    .dark {
+      color-scheme: light;
+      --color-text: #1a1a1a;
+      --color-text-sub: rgba(26, 26, 26, 0.75);
+      --color-background: #ffffff;
+      --color-primary: #0056b3;
+      --color-surface: #f4f4f4;
+      --color-card: #bebebe;
+      --color-blogcard: #ebebeb;
+    }
+
+    html,
+    body {
+      height: auto;
+      max-width: none;
+      overflow: visible;
+      background-color: #ffffff;
+      color: #1a1a1a;
+    }
+  }
 </style>
 
 <style is:global>
