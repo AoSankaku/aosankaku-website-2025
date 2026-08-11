@@ -6,9 +6,10 @@ interface Props {
   icon_name: string;
   size: number;
   label: string;
+  rel?: string;
 }
 
-const { link, icon_name, size, label } = Astro.props;
+const { link, icon_name, size, label, rel } = Astro.props;
 
 const isLink = link && link.length > 0;
 ---
@@ -16,7 +17,7 @@ const isLink = link && link.length > 0;
 <li class="icon_element">
   {
     isLink ? (
-      <a href={link} aria-label={label} target="_blank">
+      <a href={link} aria-label={label} target="_blank" rel={rel}>
         <Icon name={icon_name} width={size} height={size} />
       </a>
     ) : (
