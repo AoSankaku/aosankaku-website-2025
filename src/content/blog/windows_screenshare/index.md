@@ -7,6 +7,7 @@ desc: "Windowsに対して、無料かつ無線で画面共有をする方法に
 tags:
   - Windows
   - Android
+  - iOS
   - パソコン
   - Linux
 ---
