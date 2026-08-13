@@ -1,13 +1,30 @@
 ---
-title: "【Windowsに画面を映す】AndroidやiPhone、iPadから無線画面共有をする方法【上級者向け】"
+title: "【Windowsに画面を映す】AndroidやiPhone、iPadから無線画面共有をする方法【簡単な方法あり】"
 category: "Tech"
 date: "2025-06-23T02:00:00+09:00"
+lastUpdate: "2026-08-14T01:30:00+09:00"
 desc: "Windowsに対して、無料かつ無線で画面共有をする方法について説明します。Android、iPhone、iPad（iOS）に対応しています。Linuxに対してもできるらしいです。"
 tags:
   - Windows
   - Android
   - パソコン
   - Linux
+---
+
+## 【重要】この記事を読む前に
+
+この記事の内容は古い＆めちゃムズです。誰でも簡単にできる方法で書き直したので、こちらをご覧ください。
+
+### Android
+
+https://aosankaku.net/blog/screenstream_is_better_than_scrcpy/
+
+### iPhone/iPad
+
+https://aosankaku.net/blog/never_use_default_uxplay/
+
+この記事の残りの文章は、苦しみたい変態の方々のみお読みいただくことをおすすめします。ただし、VysorはAndroidのやり方よりも遅延が（多分）少ないので、音声共有が不要ならVysorだけ入れてみてください。
+
 ---
 
 ## 注意
