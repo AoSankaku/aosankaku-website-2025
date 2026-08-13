@@ -97,6 +97,8 @@ VLCはGUIで簡単に開けるので使っていますが、RTSPを受け取る�
 
 ---
 
-ちなみに、iPhoneの画面をWindowsに簡単に配信する方法は多分ないです。前の記事を読み、苦悶の表情で挑戦してみてください。私はもうやりたくありません。
+~~ちなみに、iPhoneの画面をWindowsに簡単に配信する方法は多分ないです。前の記事を読み、苦悶の表情で挑戦してみてください。私はもうやりたくありません。~~
 
-https://aosankaku.net/blog/windows_screenshare/
+**iPhone/iPadでも楽にできる方法を見つけちゃいました**。こっちから読めます。
+
+https://aosankaku.net/blog/never_use_default_uxplay/
