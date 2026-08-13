@@ -1,21 +1,14 @@
 ---
 import WorkCard from "./atoms/WorkCard.astro";
-import moremobilityImage from "@/assets/homepage/works/moremobility_340.png";
-import serverImage1 from "@/assets/homepage/works/server_1_340.jpg";
-import partyparrotStreamdeckImage from "@/assets/homepage/works/partyparrot_streamdeck.png";
-import craftskyImage from "@/assets/homepage/works/craftsky.png";
-import typingImage from "@/assets/homepage/works/typing_340.jpg";
-import mirinkuyan from "@/assets/homepage/works/mirinkuyan.jpg";
-import profileIcon250 from "@/assets/profileicon250.png";
-import stationSignGeneratorImage from "@/assets/homepage/works/station_sign_generator.png";
-import passphraseGeneratorJapaneseImage from "@/assets/homepage/works/passphrase-generator-japanese.png";
-import cpsresumeImage from "@/assets/homepage/works/cpsresume-square.jpg";
-import ultitypeImage from "@/assets/homepage/works/ultitype.png";
+import { projectImages } from "@/data/projectImages";
+import { getShowcaseProjects } from "@/data/projects";
 import { type Lang } from "@/types/i18n";
 import { useTranslator } from "@/i18n/utils";
 
-const t = useTranslator(Astro.currentLocale as Lang);
-const workSlideCount = 9;
+const currentLocale = Astro.currentLocale as Lang;
+const t = useTranslator(currentLocale);
+const showcaseProjects = getShowcaseProjects();
+const workSlideCount = showcaseProjects.length;
 ---
 
 <h2 id="works-title">{t("homepage.works.title")}</h2>
@@ -28,102 +21,24 @@ const workSlideCount = 9;
 >
   <div class="embla__viewport">
     <div class="embla__container">
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.mirinkuyan.title")}
-          imageSrc={mirinkuyan}
-          link="https://twitter.com/intent/follow?region=follow_link&screen_name=ymag_h"
-          linkText={t("homepage.works.mirinkuyan.link")}
-        >
-          {t("homepage.works.mirinkuyan.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.craftsky.title")}
-          imageSrc={craftskyImage}
-          link="https://crafters.aosankaku.net"
-          linkText={t("homepage.works.craftsky.link")}
-        >
-          {t("homepage.works.craftsky.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.station-sign.title")}
-          imageSrc={stationSignGeneratorImage}
-          link="https://stationsigngen.aosankaku.net"
-          linkText={t("homepage.works.station-sign.link")}
-        >
-          {t("homepage.works.station-sign.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.passphrase-generator-japanese.title")}
-          imageSrc={passphraseGeneratorJapaneseImage}
-          link="https://pasufure-zu.aosankaku.net"
-          linkText={t("homepage.works.passphrase-generator-japanese.link")}
-        >
-          {t("homepage.works.passphrase-generator-japanese.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.ultitype.title")}
-          imageSrc={ultitypeImage}
-          link="https://ultitype.aosankaku.net"
-          linkText={t("homepage.works.ultitype.link")}
-        >
-          {t("homepage.works.ultitype.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.cpsresume.title")}
-          imageSrc={cpsresumeImage}
-          link="https://cpsresume.aosankaku.net"
-          linkText={t("homepage.works.cpsresume.link")}
-        >
-          {t("homepage.works.cpsresume.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.cpu.title")}
-          imageSrc={partyparrotStreamdeckImage}
-          link="https://github.com/AoSankaku/cpu-partyparrot/releases"
-          linkText={t("homepage.works.cpu.link")}
-        >
-          {t("homepage.works.cpu.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title="Moremobility Mod"
-          imageSrc={moremobilityImage}
-          link="https://modrinth.com/mod/moremobility"
-          linkText={t("homepage.works.moremobility.link")}
-        >
-          {t("homepage.works.moremobility.desc")}
-        </WorkCard>
-      </div>
-
-      <div class="embla__slide">
-        <WorkCard
-          title={t("homepage.works.server.title")}
-          imageSrc={serverImage1}
-        >
-          {t("homepage.works.server.desc")}
-        </WorkCard>
-      </div>
+      {
+        showcaseProjects.map((project) => (
+          <div class="embla__slide">
+            <WorkCard
+              title={t(`${project.translationKey}.title`)}
+              imageSrc={projectImages[project.image]}
+              link={project.urls?.[currentLocale]}
+              linkText={
+                project.urls
+                  ? t(`${project.translationKey}.link`)
+                  : undefined
+              }
+            >
+              {t(`${project.translationKey}.desc`)}
+            </WorkCard>
+          </div>
+        ))
+      }
     </div>
   </div>
 

@@ -11,6 +11,12 @@
 /robots.txt
   Cache-Control: public, max-age=86400
 
+# Public project catalog used by other AoSankaku sites at build time
+/api/v1/projects.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
+  X-Content-Type-Options: nosniff
+
 # HTML pages — always revalidate
 /*
   Cache-Control: public, max-age=0, must-revalidate
