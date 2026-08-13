@@ -6,7 +6,8 @@ desc: "Androidの画面をScreenStreamからRTSPで配信したところ、VLC�
 thumbnail: "thumbnailforrtsp.png"
 alt: "ストリーミングをしていることを表したかったらしいビーム"
 tags:
-  - iOS
+  - Android
+  - VLC
   - Windows
   - パソコン
 ---
