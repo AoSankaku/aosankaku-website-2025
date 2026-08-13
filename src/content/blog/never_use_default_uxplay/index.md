@@ -6,8 +6,7 @@ desc: "UxPlayをWindowsに入れようとすると地獄ですが、その面倒
 thumbnail: "thumbnail.png"
 alt: "ストリーミングをしていることを表したかったらしいビーム"
 tags:
-  - Android
-  - VLC
+  - iOS
   - Windows
   - パソコン
 ---
