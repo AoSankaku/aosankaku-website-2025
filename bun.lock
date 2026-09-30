@@ -16,7 +16,7 @@
         "@iconify-json/game-icons": "^1.2.3",
         "@iconify-json/hugeicons": "^1.2.20",
         "@iconify-json/icon-park-twotone": "^1.2.4",
-        "@iconify-json/logos": "^1.2.10",
+        "@iconify-json/logos": "^1.2.15",
         "@iconify-json/material-icon-theme": "^1.2.44",
         "@iconify-json/mdi": "^1.2.3",
         "@iconify-json/pixelarticons": "^1.2.2",
@@ -285,7 +285,7 @@
 
     "@iconify-json/icon-park-twotone": ["@iconify-json/icon-park-twotone@1.2.4", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-AhnGngG6DxuIZMsz4FMrv0QWTRM/CZ3NnEeaceV6psKSgt/axW+hft7oQ6pIAFN9KB95Kp3hbJuhlhG3ao60eQ=="],
 
-    "@iconify-json/logos": ["@iconify-json/logos@1.2.10", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-qxaXKJ6fu8jzTMPQdHtNxlfx6tBQ0jXRbHZIYy5Ilh8Lx9US9FsAdzZWUR8MXV8PnWTKGDFO4ZZee9VwerCyMA=="],
+    "@iconify-json/logos": ["@iconify-json/logos@1.2.15", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-87zwqEFatvpcK7lIIp0RnCbDAPWcG8bTK5hZI5SuD71za+opSuqtGvFUiSNt6wiyuY+nolrW/JW1K4/mBczWhQ=="],
 
     "@iconify-json/material-icon-theme": ["@iconify-json/material-icon-theme@1.2.44", "", { "dependencies": { "@iconify/types": "*" } }, "sha512-fw6hluIUX2rudZucEBevvKHHnR7GQOyjHHXUXRJsv8KmdHqxsV7JPPUlNnVO/eAELuXjM+UgtuAeRE9WlCPHog=="],
 

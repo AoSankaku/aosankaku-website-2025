@@ -43,9 +43,30 @@ const t = useTranslator(Astro.currentLocale as Lang);
     <Icon name="skill-icons:vscode-dark" size={iconSize} />
     <Icon name="skill-icons:obsidian-dark" size={iconSize} />
     <Icon name="skill-icons:vim-dark" size={iconSize} />
+    <Icon name="simple-icons:openai" size={iconSize} title="ChatGPT" role="img" />
+    <Icon
+      name="logos:codex"
+      size={iconSize}
+      class="codex-icon"
+      title="Codex"
+      role="img"
+      is:inline
+    />
+    <Icon name="logos:claude-icon" size={iconSize} title="Claude" role="img" />
+    <Icon name="logos:claude-code" size={iconSize} title="Claude Code" role="img" />
+    <Icon name="material-icon-theme:gemini-ai" size={iconSize} title="Gemini" role="img" />
+    <Icon name="logos:opencode-icon" size={iconSize} title="OpenCode" role="img" />
+    <Icon name="simple-icons:ollama" size={iconSize} title="Ollama" role="img" />
+    <Icon name="simple-icons:thunderbird" size={iconSize} title="Thunderbird" role="img" />
     <Icon name="simple-icons:tailscale" size={iconSize} />
     <Icon name="logos:nginx" size={iconSize} />
     <Icon name="simple-icons:curseforge" size={iconSize} />
     <Icon name="material-icon-theme:minecraft-fabric" size={iconSize} />
   </div>
 </ProfileInfoContainer>
+
+<style>
+  .codex-icon :global(path) {
+    fill: currentColor;
+  }
+</style>
