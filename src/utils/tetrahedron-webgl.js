@@ -1,6 +1,42 @@
 // Shared native-WebGL utilities for the spinning tetrahedron.
 // Used by both the OffscreenCanvas worker and the main-thread fallback.
 
+// The object occupies the upper half of the original 250/400px scene.
+// Crop its transparent margins so 2x supersampling stays inexpensive.
+export const DRAW_HEIGHT_FRACTION = 0.5;
+export const DRAW_TOP_FRACTION = 0.06;
+
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const normalize = (v) => {
+  const length = Math.hypot(...v);
+  return v.map((component) => component / length);
+};
+const cross = (a, b) => [
+  a[1] * b[2] - a[2] * b[1],
+  a[2] * b[0] - a[0] * b[2],
+  a[0] * b[1] - a[1] * b[0],
+];
+
+function studioPanel(direction, width, height, color) {
+  const normal = normalize(direction);
+  const right = normalize(cross([0, 1, 0], normal));
+  return { normal, right, up: cross(normal, right), width, height, color };
+}
+
+const STUDIO_PANELS = [
+  studioPanel([-0.3, 1.2, 1.8], 0.30, 0.8, [3.8, 3.9, 4.0]),
+  studioPanel([1.6, 0.3, 1.0], 0.13, 1.3, [2.8, 3.2, 3.8]),
+  studioPanel([-0.8, 0.4, -1.8], 0.35, 1.0, [1.8, 2.4, 3.4]),
+  studioPanel([-1.8, 1.2, 0.3], 0.65, 0.12, [3.4, 3.6, 3.8]),
+];
+
+// Bake only four light bases into the shader, rather than a sampled image.
+// Explicit calls work in WebGL1 without dynamic uniform-array indexing.
+const glslVec3 = (values) => `vec3(${values.map((value) => value.toFixed(9)).join(", ")})`;
+const STUDIO_REFLECTIONS = STUDIO_PANELS.map((panel) =>
+  `  color += studioPanel(direction, ${glslVec3(panel.normal)}, ${glslVec3(panel.right)}, ${glslVec3(panel.up)}, vec2(${panel.width.toFixed(3)}, ${panel.height.toFixed(3)}), ${glslVec3(panel.color)});`
+).join("\n");
+
 // ── Shaders ─────────────────────────────────────────────────────────────────
 
 export const VERT_SRC = `
@@ -18,78 +54,61 @@ void main(){
   gl_Position = uProj * uView * wp;
 }`;
 
-// Camera position is constant so it's a shader constant rather than a uniform.
+// Continuous studio reflections avoid magnifying a low-resolution cubemap.
+// Blue-tinted conductor reflectance supplies the color without a diffuse fill.
 export const FRAG_SRC = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
+#endif
 varying vec3 vNorm;
 varying vec3 vWorldPos;
 uniform float uAmbient;
-const vec3  BASE_LIGHT = vec3(0.0, 0.467, 1.0);
-const vec3  BASE_DARK  = vec3(0.0, 0.39, 1.0);
-const float METAL      = 0.92;
-const vec3  LPOS      = vec3(0.0, 6.0, 7.0);
-const float LINT      = 120.0;
-const vec3  AUX_LPOS = vec3(6.5, 3.2, 3.8);
-const float AUX_LINT = 58.0;
-const vec3  AUX_TINT = vec3(0.0, 0.24, 0.72);
-const float AUX_SHININESS = 42.0;
-const float AUX_SPEC = 0.50;
-const float AUX_WRAP = 0.18;
-const vec3  CAM       = vec3(0.0, 0.5, 5.2);
-const float SHININESS = 96.0;
-const vec3  HEMI_LOW  = vec3(0.015, 0.035, 0.09);
-const vec3  HEMI_HIGH = vec3(0.03, 0.16, 0.40);
-const float DARK_FILL = 0.45;
+const vec3 CAM = vec3(0.0, 0.5, 5.2);
+const vec3 METAL_COLOR = vec3(0.075, 0.22, 0.52);
+const float PANEL_FEATHER = 0.12;
+
+vec3 studioPanel(vec3 direction, vec3 normal, vec3 right, vec3 up, vec2 extent, vec3 radiance) {
+  float facing = dot(direction, normal);
+  if (facing <= 0.01) return vec3(0.0);
+  vec2 point = vec2(dot(direction, right), dot(direction, up)) / facing;
+  vec2 mask = smoothstep(vec2(-PANEL_FEATHER), vec2(PANEL_FEATHER), extent - abs(point));
+  return radiance * mask.x * mask.y;
+}
+
+vec3 sampleStudio(vec3 direction) {
+  float sky = direction.y * 0.5 + 0.5;
+  float horizon = 1.0 - abs(direction.y);
+  vec3 color = vec3(0.023, 0.029, 0.042)
+    + vec3(0.13, 0.15, 0.195) * sky
+    + vec3(0.045, 0.052, 0.065) * horizon;
+${STUDIO_REFLECTIONS}
+  return min(vec3(4.0), color);
+}
+
 void main(){
-  vec3 N   = normalize(vNorm);
-  vec3 V   = normalize(CAM - vWorldPos);
-  vec3 toL = LPOS - vWorldPos;
-  vec3 L   = normalize(toL);
-  float att  = LINT / dot(toL, toL);
-  float NdL  = max(dot(N, L), 0.0);
-  vec3 base   = mix(BASE_DARK, BASE_LIGHT, uAmbient);
-  vec3 diff  = (1.0 - METAL) * base * NdL * att;
-  vec3 H     = normalize(L + V);
-  float NdH  = max(dot(N, H), 0.0);
-  float NdV  = max(dot(N, V), 0.0);
-  vec3 F0    = mix(vec3(0.04), base, METAL);
-  vec3 spec  = (F0 + vec3(0.15, 0.18, 0.28)) * pow(NdH, SHININESS) * att;
-  vec3 toBackL = AUX_LPOS - vWorldPos;
-  vec3 backL   = normalize(toBackL);
-  float backAtt = AUX_LINT / dot(toBackL, toBackL);
-  float backNdL = max(dot(N, backL), 0.0);
-  float backMix = mix(1.0, 0.32, uAmbient);
-  vec3 backColor = mix(base, AUX_TINT, 0.72);
-  vec3 backDiff  = (1.0 - METAL) * backColor * backNdL * backAtt * 1.15 * backMix;
-  vec3 backH     = normalize(backL + V);
-  float backNdH  = max(dot(N, backH), 0.0);
-  vec3 backSpec  = (F0 + AUX_TINT * 0.45) * pow(backNdH, AUX_SHININESS) * backAtt * AUX_SPEC * backMix;
-  float backWrap = pow(clamp(dot(N, backL) * 0.45 + 0.55, 0.0, 1.0), 3.0);
-  vec3 backSheen = AUX_TINT * backWrap * backAtt * AUX_WRAP * backMix;
-  vec3 R     = reflect(-V, N);
-  float skyMix = clamp(R.y * 0.5 + 0.5, 0.0, 1.0);
-  float horizon = pow(1.0 - abs(R.y), 2.0);
-  vec3 env   = mix(vec3(0.06, 0.09, 0.16), vec3(0.46, 0.68, 1.0), skyMix)
-             + vec3(0.10, 0.20, 0.38) * horizon;
-  float fresnel = pow(1.0 - NdV, 3.0);
-  vec3 refl  = env * (0.13 + 0.34 * fresnel) * mix(1.0, 0.35, uAmbient);
-  vec3 amb   = base * mix(0.20, 0.85, uAmbient);
-  float hemiMix = clamp(N.y * 0.5 + 0.5, 0.0, 1.0);
-  vec3 fill  = mix(HEMI_LOW, HEMI_HIGH, hemiMix) * DARK_FILL * (1.0 - uAmbient);
-  vec3 c     = amb + diff + spec + backDiff + backSpec + backSheen + refl + fill;
-  c = c / (c + 1.0);
+  vec3 N = normalize(vNorm);
+  vec3 V = normalize(CAM - vWorldPos);
+  float grazing = 1.0 - max(dot(N, V), 0.0);
+  float g2 = grazing * grazing;
+  vec3 fresnel = METAL_COLOR + (1.0 - METAL_COLOR) * g2 * g2 * grazing;
+  vec3 environment = sampleStudio(reflect(-V, N));
+  float exposure = mix(1.2, 1.0, uAmbient);
+  vec3 c = environment * fresnel * exposure;
+  c = sqrt(c / (c + 0.7));
   gl_FragColor = vec4(c, 1.0);
 }`;
 
 // ── Geometry ─────────────────────────────────────────────────────────────────
 
 /**
- * Build a flat-shaded regular tetrahedron matching Three.js's
+ * Build a subtly bevelled regular tetrahedron matching Three.js's
  * TetrahedronGeometry(1, 0) after its initial orientation transform:
  *   - rotate around (1,0,-1)/sqrt(2) by atan(sqrt(2))
  *   - translate (0, 1/3, 0)
  *
- * Returns { positions: Float32Array, normals: Float32Array, count: 12 }
+ * Four main faces, six edge strips and four corner caps (20 triangles).
  */
 export function buildGeometry() {
   const s = 1.0 / Math.sqrt(3);
@@ -135,27 +154,57 @@ export function buildGeometry() {
     [2, 3, 1],
   ];
 
-  const pos = [],
-    nrm = [];
-  for (const [i0, i1, i2] of faces) {
-    const [p0, p1, p2] = [verts[i0], verts[i1], verts[i2]];
-    const e1 = [p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]];
-    const e2 = [p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]];
-    let nx = e1[1] * e2[2] - e1[2] * e2[1];
-    let ny = e1[2] * e2[0] - e1[0] * e2[2];
-    let nz = e1[0] * e2[1] - e1[1] * e2[0];
-    const l = Math.sqrt(nx * nx + ny * ny + nz * nz);
-    nx /= l;
-    ny /= l;
-    nz /= l;
-    pos.push(...p0, ...p1, ...p2);
-    nrm.push(nx, ny, nz, nx, ny, nz, nx, ny, nz);
+  const bevel = 0.025;
+  const insetFaces = faces.map((indices) => {
+    const points = indices.map((index) => verts[index]);
+    const center = points[0].map((_, axis) =>
+      (points[0][axis] + points[1][axis] + points[2][axis]) / 3);
+    const normal = normalize(cross(
+      points[1].map((value, axis) => value - points[0][axis]),
+      points[2].map((value, axis) => value - points[0][axis]),
+    ));
+    return indices.map((index) => ({
+      index,
+      position: verts[index].map((value, axis) => value * (1 - bevel) + center[axis] * bevel),
+      normal,
+    }));
+  });
+  const pos = [], nrm = [];
+  function addTriangle(a, b, c) {
+    const geometricNormal = cross(
+      b.position.map((value, axis) => value - a.position[axis]),
+      c.position.map((value, axis) => value - a.position[axis]),
+    );
+    const outward = a.normal.map((value, axis) => value + b.normal[axis] + c.normal[axis]);
+    const facesOutward = dot(geometricNormal, outward) > 0;
+    const triangle = facesOutward ? [a, b, c] : [a, c, b];
+    // A planar chamfer catches light like a cut metal edge. Interpolating the
+    // main-face normals across it makes a rounded, continuously bright rim.
+    const normal = normalize(facesOutward ? geometricNormal : geometricNormal.map((value) => -value));
+    for (const vertex of triangle) {
+      pos.push(...vertex.position);
+      nrm.push(...normal);
+    }
+  }
+  for (const face of insetFaces) addTriangle(...face);
+  for (let i = 0; i < verts.length; i++) {
+    for (let j = i + 1; j < verts.length; j++) {
+      const adjacent = insetFaces.filter((face) =>
+        face.some((vertex) => vertex.index === i) && face.some((vertex) => vertex.index === j));
+      const [a, b] = adjacent.map((face) => [
+        face.find((vertex) => vertex.index === i), face.find((vertex) => vertex.index === j),
+      ]);
+      addTriangle(a[0], b[0], b[1]);
+      addTriangle(a[0], b[1], a[1]);
+    }
+    const corner = insetFaces.flat().filter((vertex) => vertex.index === i);
+    addTriangle(...corner);
   }
 
   return {
     positions: new Float32Array(pos),
     normals: new Float32Array(nrm),
-    count: 12,
+    count: pos.length / 3,
   };
 }
 
@@ -183,6 +232,15 @@ export function mat4Perspective(fovDeg, aspect, near, far) {
     2 * far * near * nf,
     0,
   ]);
+}
+
+/** Preserve the original camera and screen position in the cropped canvas. */
+export function mat4TetrahedronProjection(width, height) {
+  const sceneHeight = height / DRAW_HEIGHT_FRACTION;
+  const projection = mat4Perspective(35, width / sceneHeight, 0.1, 1000);
+  projection[5] /= DRAW_HEIGHT_FRACTION;
+  projection[9] = (1 - 2 * DRAW_TOP_FRACTION - DRAW_HEIGHT_FRACTION) / DRAW_HEIGHT_FRACTION;
+  return projection;
 }
 
 /**
@@ -232,8 +290,12 @@ export function mat4LookAt(ex, ey, ez, cx, cy, cz) {
 }
 
 /** Y-axis rotation matrix (right-handed, column-major). */
-export function mat4RotateY(angle) {
+export function mat4RotateY(angle, target = new Float32Array(16)) {
   const c = Math.cos(angle),
     s = Math.sin(angle);
-  return new Float32Array([c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1]);
+  target[0] = c; target[1] = 0; target[2] = -s; target[3] = 0;
+  target[4] = 0; target[5] = 1; target[6] = 0; target[7] = 0;
+  target[8] = s; target[9] = 0; target[10] = c; target[11] = 0;
+  target[12] = 0; target[13] = 0; target[14] = 0; target[15] = 1;
+  return target;
 }

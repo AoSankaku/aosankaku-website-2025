@@ -1,207 +1,313 @@
-<canvas id="tetrahedron-canvas"></canvas>
+---
+import {
+  DRAW_HEIGHT_FRACTION,
+  DRAW_TOP_FRACTION,
+} from "../utils/tetrahedron-webgl.js";
+
+const drawHeight = `${DRAW_HEIGHT_FRACTION * 100}%`;
+const drawTop = `${DRAW_TOP_FRACTION * 100}%`;
+---
+
+<div
+  class="tetrahedron-stage"
+  style={`--draw-height: ${drawHeight}; --draw-top: ${drawTop}`}
+>
+  <canvas id="tetrahedron-canvas"></canvas>
+</div>
 
 <style>
-  #tetrahedron-canvas {
-    display: block;
-    width: 100%;
+  .tetrahedron-stage {
+    position: relative;
     height: 250px;
-    background-color: transparent;
 
     @media (min-width: 768px) {
       height: 400px;
     }
   }
+
+  #tetrahedron-canvas {
+    display: block;
+    position: absolute;
+    top: var(--draw-top);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100%, 256px);
+    height: var(--draw-height);
+    background-color: transparent;
+  }
 </style>
 
 <script>
-  document.addEventListener("astro:page-load", () => {
-  const canvas = document.getElementById(
-    "tetrahedron-canvas",
-  ) as HTMLCanvasElement | null;
-  if (!canvas) return;
+  const activeCanvases = new WeakMap<HTMLCanvasElement, TetrahedronController>();
 
-  const startWithWorker = (width: number, height: number, isDark: boolean) => {
-    const offscreen = canvas.transferControlToOffscreen();
-    const worker = new Worker(
-      new URL("../workers/tetrahedron.worker.js", import.meta.url),
-      { type: "module" }
-    );
+  type Renderer = {
+    resize(width: number, height: number, dpr: number): void;
+    setTheme(isDark: boolean): void;
+    setVisible(visible: boolean): void;
+    setReducedMotion(reducedMotion: boolean): void;
+    dispose(): void;
+  };
 
-    worker.addEventListener("message", (e) => {
-      if (e.data.type === "webgl-unsupported") {
-        worker.terminate();
-      }
-    });
+  type TetrahedronController = {
+    dispose(): void;
+    start(): void;
+  };
 
-    worker.postMessage(
-      { type: "init", canvas: offscreen, width, height, isDark },
-      [offscreen]
-    );
+  class TetrahedronCanvasController implements TetrahedronController {
+    private canvas: HTMLCanvasElement;
+    private intersectionObserver: IntersectionObserver | null = null;
+    private resizeObserver: ResizeObserver | null = null;
+    private themeObserver: MutationObserver;
+    private mediaQuery: MediaQueryList;
+    private worker: Worker | null = null;
+    private renderer: Renderer | null = null;
+    private disposed = false;
+    private started = false;
+    private intersecting = false;
+    private transferred = false;
+    private backendGeneration = 0;
+    private readonly onBeforeSwap = () => this.dispose();
+    private readonly onDocumentVisibility = () => this.forwardVisibility();
+    private readonly onViewportResize = () => this.forwardResize();
+    private readonly onReducedMotionChange = (event: MediaQueryListEvent) => {
+      this.forward({ type: "motion", reducedMotion: event.matches });
+    };
 
-    const resizeObs = new ResizeObserver((entries) => {
-      const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
-      worker.postMessage({ type: "resize", width: w, height: h });
-    });
-    resizeObs.observe(canvas);
-
-    const mutObs = new MutationObserver((mutations) => {
-      mutations.forEach((m) => {
-        if (m.attributeName === "class") {
-          worker.postMessage({
-            type: "theme",
-            isDark: document.documentElement.classList.contains("dark"),
-          });
-        }
+    constructor(canvas: HTMLCanvasElement) {
+      this.canvas = canvas;
+      this.mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      this.themeObserver = new MutationObserver(() => {
+        this.forward({
+          type: "theme",
+          isDark: document.documentElement.classList.contains("dark"),
+        });
       });
-    });
-    mutObs.observe(document.documentElement, { attributes: true });
+    }
 
-    document.addEventListener(
-      "astro:before-swap",
-      () => {
-        resizeObs.disconnect();
-        mutObs.disconnect();
-        worker.postMessage({ type: "stop" });
-        worker.terminate();
-      },
-      { once: true }
-    );
-  };
-
-  const startOnMainThread = (width: number, height: number, isDark: boolean) => {
-    import("../utils/tetrahedron-webgl.js").then(
-      ({ VERT_SRC, FRAG_SRC, buildGeometry, mat4Perspective, mat4LookAt, mat4RotateY }) => {
-        if (!canvas.isConnected) return;
-
-        const gl = (canvas.getContext("webgl") || canvas.getContext("webgl2")) as WebGLRenderingContext | null;
-        if (!gl) return;
-
-        // Set drawing-buffer resolution
-        const maxDpr = width < 768 ? 1.5 : 2;
-        const dpr = Math.min(window.devicePixelRatio, maxDpr);
-        canvas.width  = Math.round(width  * dpr);
-        canvas.height = Math.round(height * dpr);
-
-        // Compile shaders
-        const makeShader = (type: number, src: string) => {
-          const sh = gl.createShader(type)!;
-          gl.shaderSource(sh, src);
-          gl.compileShader(sh);
-          return sh;
-        };
-        const prog = gl.createProgram()!;
-        gl.attachShader(prog, makeShader(gl.VERTEX_SHADER,   VERT_SRC));
-        gl.attachShader(prog, makeShader(gl.FRAGMENT_SHADER, FRAG_SRC));
-        gl.linkProgram(prog);
-        gl.useProgram(prog);
-
-        // Upload geometry
-        const geo = buildGeometry();
-
-        const posBuf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
-        gl.bufferData(gl.ARRAY_BUFFER, geo.positions, gl.STATIC_DRAW);
-        const aPos = gl.getAttribLocation(prog, "aPos");
-        gl.enableVertexAttribArray(aPos);
-        gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
-
-        const nrmBuf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, nrmBuf);
-        gl.bufferData(gl.ARRAY_BUFFER, geo.normals, gl.STATIC_DRAW);
-        const aNorm = gl.getAttribLocation(prog, "aNorm");
-        gl.enableVertexAttribArray(aNorm);
-        gl.vertexAttribPointer(aNorm, 3, gl.FLOAT, false, 0, 0);
-
-        // Cache uniform locations
-        const uModelLoc   = gl.getUniformLocation(prog, "uModel");
-        const uAmbientLoc = gl.getUniformLocation(prog, "uAmbient");
-        const uProjLoc    = gl.getUniformLocation(prog, "uProj");
-
-        // Set static uniforms
-        gl.uniformMatrix4fv(gl.getUniformLocation(prog, "uView"), false,
-          mat4LookAt(0, 0.5, 5.2, 0, 0, 0));
-        gl.uniformMatrix4fv(uProjLoc, false,
-          mat4Perspective(35, width / height, 0.1, 1000));
-        gl.uniform1f(uAmbientLoc, isDark ? 0.0 : 1.0);
-
-        // GL state
-        gl.enable(gl.DEPTH_TEST);
-        gl.clearColor(0, 0, 0, 0);
-        gl.viewport(0, 0, canvas.width, canvas.height);
-
-        const mutObs = new MutationObserver((mutations) => {
-          mutations.forEach((m) => {
-            if (m.attributeName === "class") {
-              gl.uniform1f(uAmbientLoc,
-                document.documentElement.classList.contains("dark") ? 0.0 : 1.0);
-            }
-          });
-        });
-        mutObs.observe(document.documentElement, { attributes: true });
-        document.addEventListener("astro:before-swap", () => mutObs.disconnect(), { once: true });
-
-        const resizeObs = new ResizeObserver((entries) => {
-          const { inlineSize: w, blockSize: h } = entries[0].contentBoxSize[0];
-          const newDpr = Math.min(window.devicePixelRatio, maxDpr);
-          canvas.width  = Math.round(w * newDpr);
-          canvas.height = Math.round(h * newDpr);
-          gl.viewport(0, 0, canvas.width, canvas.height);
-          gl.uniformMatrix4fv(uProjLoc, false, mat4Perspective(35, w / h, 0.1, 1000));
-        });
-        resizeObs.observe(canvas);
-        document.addEventListener("astro:before-swap", () => resizeObs.disconnect(), { once: true });
-
-        let rotY = 0;
-        let animationFrame = 0;
-        let isRunning = true;
-        const animate = () => {
-          if (!isRunning) return;
-          rotY += 0.0024;
-          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-          gl.uniformMatrix4fv(uModelLoc, false, mat4RotateY(rotY));
-          gl.drawArrays(gl.TRIANGLES, 0, 12);
-          animationFrame = requestAnimationFrame(animate);
-        };
-        animate();
-        document.addEventListener(
-          "astro:before-swap",
-          () => {
-            isRunning = false;
-            cancelAnimationFrame(animationFrame);
-          },
-          { once: true },
-        );
+    start() {
+      this.themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      document.addEventListener("visibilitychange", this.onDocumentVisibility);
+      document.addEventListener("astro:before-swap", this.onBeforeSwap, { once: true });
+      window.addEventListener("resize", this.onViewportResize);
+      this.observeCanvas();
+      if (this.mediaQuery.addEventListener) {
+        this.mediaQuery.addEventListener("change", this.onReducedMotionChange);
+      } else {
+        this.mediaQuery.addListener(this.onReducedMotionChange);
       }
-    );
-  };
+    }
 
-  const supportsOffscreen =
-    typeof OffscreenCanvas !== "undefined" &&
-    typeof canvas.transferControlToOffscreen === "function";
+    private observeCanvas() {
+      this.intersectionObserver?.disconnect();
+      this.resizeObserver?.disconnect();
 
-  const intersectionObs = new IntersectionObserver(
-    (entries, obs) => {
-      if (entries[0].isIntersecting) {
-        obs.disconnect();
-        // Read dimensions here: layout is already computed by the IntersectionObserver
-        const rect = canvas.getBoundingClientRect();
-        const width = rect.width || canvas.offsetWidth;
-        const height = rect.height || canvas.offsetHeight;
-        const isDark = document.documentElement.classList.contains("dark");
-        if (supportsOffscreen) {
-          startWithWorker(width, height, isDark);
-        } else {
-          startOnMainThread(width, height, isDark);
+      if (typeof IntersectionObserver !== "undefined") {
+        this.intersectionObserver = new IntersectionObserver((entries) => {
+          const entry = entries.find((item) => item.target === this.canvas);
+          if (!entry || this.disposed) return;
+          this.intersecting = entry.isIntersecting;
+          if (this.intersecting && !this.started) this.startBackend();
+          this.forwardVisibility();
+        }, { rootMargin: "0px" });
+        this.intersectionObserver.observe(this.canvas);
+      } else {
+        this.intersecting = true;
+        this.startBackend();
+      }
+
+      if (typeof ResizeObserver !== "undefined") {
+        this.resizeObserver = new ResizeObserver(() => this.forwardResize());
+        this.resizeObserver.observe(this.canvas);
+      }
+    }
+
+    private dimensions() {
+      const rect = this.canvas.getBoundingClientRect();
+      return {
+        width: Math.max(1, rect.width || this.canvas.offsetWidth),
+        height: Math.max(1, rect.height || this.canvas.offsetHeight),
+        dpr: this.devicePixelRatio(),
+      };
+    }
+
+    private devicePixelRatio() {
+      return 2;
+    }
+
+    private currentVisibility() {
+      return this.intersecting && !document.hidden;
+    }
+
+    private startBackend() {
+      if (this.disposed || this.started) return;
+      this.started = true;
+
+      const hasWorkerSupport =
+        typeof OffscreenCanvas !== "undefined" &&
+        typeof this.canvas.transferControlToOffscreen === "function" &&
+        typeof Worker !== "undefined";
+
+      if (hasWorkerSupport) this.startWorker();
+      else this.startMainThread();
+    }
+
+    private startWorker() {
+      const generation = ++this.backendGeneration;
+      let worker: Worker;
+
+      try {
+        worker = new Worker(new URL("../workers/tetrahedron.worker.js", import.meta.url), {
+          type: "module",
+        });
+      } catch {
+        this.startMainThread();
+        return;
+      }
+
+      this.worker = worker;
+      worker.onmessage = (event: MessageEvent) => {
+        if (this.disposed || this.worker !== worker || generation !== this.backendGeneration) return;
+        if (event.data.type === "renderer-error" || event.data.type === "webgl-unsupported") {
+          this.fallbackToMainThread(true);
+        }
+      };
+      worker.onerror = () => {
+        if (this.worker === worker) this.fallbackToMainThread(this.transferred);
+      };
+      worker.onmessageerror = () => {
+        if (this.worker === worker) this.fallbackToMainThread(this.transferred);
+      };
+
+      try {
+        const offscreen = this.canvas.transferControlToOffscreen();
+        this.transferred = true;
+        const size = this.dimensions();
+        worker.postMessage(
+          {
+            type: "init",
+            canvas: offscreen,
+            ...size,
+            isDark: document.documentElement.classList.contains("dark"),
+            reducedMotion: this.mediaQuery.matches,
+            visible: this.currentVisibility(),
+          },
+          [offscreen],
+        );
+      } catch {
+        this.fallbackToMainThread(this.transferred);
+      }
+    }
+
+    private async startMainThread() {
+      if (this.disposed) return;
+      const generation = ++this.backendGeneration;
+
+      try {
+        const { createTetrahedronRenderer } = await import("../utils/tetrahedron-renderer.js");
+        if (this.disposed || generation !== this.backendGeneration || !this.canvas.isConnected) return;
+
+        const renderer = createTetrahedronRenderer(this.canvas, {
+          ...this.dimensions(),
+          isDark: document.documentElement.classList.contains("dark"),
+          reducedMotion: this.mediaQuery.matches,
+          visible: this.currentVisibility(),
+        });
+
+        if (this.disposed || generation !== this.backendGeneration) {
+          renderer.dispose();
+          return;
+        }
+        this.renderer = renderer;
+      } catch {
+        // Keep the rest of the page usable when WebGL is unavailable.
+      }
+    }
+
+    private fallbackToMainThread(replaceTransferredCanvas: boolean) {
+      if (this.disposed) return;
+      this.worker?.terminate();
+      this.worker = null;
+
+      if (replaceTransferredCanvas) {
+        const oldCanvas = this.canvas;
+        const replacement = oldCanvas.cloneNode(false) as HTMLCanvasElement;
+        oldCanvas.replaceWith(replacement);
+        activeCanvases.delete(oldCanvas);
+        this.canvas = replacement;
+        activeCanvases.set(replacement, this);
+        this.transferred = false;
+        this.observeCanvas();
+      }
+
+      this.startMainThread();
+    }
+
+    private forward(message: Record<string, unknown>) {
+      if (this.disposed) return;
+      if (this.renderer) {
+        if (message.type === "theme") this.renderer.setTheme(message.isDark as boolean);
+        else if (message.type === "motion") this.renderer.setReducedMotion(message.reducedMotion as boolean);
+        else if (message.type === "visibility") this.renderer.setVisible(message.visible as boolean);
+      } else if (this.worker) {
+        try {
+          this.worker.postMessage(message);
+        } catch {
+          this.fallbackToMainThread(this.transferred);
         }
       }
-    },
-    { rootMargin: "500px" }
-  );
-  intersectionObs.observe(canvas);
-  document.addEventListener(
-    "astro:before-swap",
-    () => intersectionObs.disconnect(),
-    { once: true },
-  );
-  });
+    }
+
+    private forwardVisibility() {
+      this.forward({ type: "visibility", visible: this.currentVisibility() });
+    }
+
+    private forwardResize() {
+      if (this.disposed) return;
+      const { width, height, dpr } = this.dimensions();
+      if (this.renderer) this.renderer.resize(width, height, dpr);
+      else if (this.worker) {
+        try {
+          this.worker.postMessage({ type: "resize", width, height, dpr });
+        } catch {
+          this.fallbackToMainThread(this.transferred);
+        }
+      }
+    }
+
+    dispose() {
+      if (this.disposed) return;
+      this.disposed = true;
+      this.backendGeneration += 1;
+      this.intersectionObserver?.disconnect();
+      this.resizeObserver?.disconnect();
+      this.themeObserver.disconnect();
+      document.removeEventListener("visibilitychange", this.onDocumentVisibility);
+      document.removeEventListener("astro:before-swap", this.onBeforeSwap);
+      window.removeEventListener("resize", this.onViewportResize);
+      if (this.mediaQuery.removeEventListener) {
+        this.mediaQuery.removeEventListener("change", this.onReducedMotionChange);
+      } else {
+        this.mediaQuery.removeListener(this.onReducedMotionChange);
+      }
+      this.renderer?.dispose();
+      this.renderer = null;
+      this.worker?.terminate();
+      this.worker = null;
+      activeCanvases.delete(this.canvas);
+    }
+  }
+
+  const initializeTetrahedron = () => {
+    const canvas = document.getElementById("tetrahedron-canvas") as HTMLCanvasElement | null;
+    if (!canvas || activeCanvases.has(canvas)) return;
+
+    const controller = new TetrahedronCanvasController(canvas);
+    activeCanvases.set(canvas, controller);
+    controller.start();
+  };
+
+  document.addEventListener("astro:page-load", initializeTetrahedron);
 </script>
