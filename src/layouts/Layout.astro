@@ -53,6 +53,49 @@ const isDev = import.meta.env.DEV;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- Set the page canvas before any external stylesheets can delay it. -->
+    <style is:inline>
+      :root {
+        color-scheme: light;
+        --color-text: #1a1a1a;
+        --color-background: #ffffff;
+        background-color: var(--color-background);
+        color: var(--color-text);
+      }
+
+      .dark {
+        color-scheme: dark;
+        --color-text: #f0f0f0;
+        --color-background: #1a1a1a;
+      }
+    </style>
+    <script is:inline>
+      const getThemePreference = () => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      };
+
+      const applyTheme = (root = document.documentElement) => {
+        const theme = getThemePreference();
+
+        root.classList.toggle("dark", theme === "dark");
+      };
+
+      document.addEventListener("astro:before-swap", (event) => {
+        // Keep the incoming page dark throughout the DOM swap.
+        applyTheme(event.newDocument.documentElement);
+      });
+      applyTheme();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonicalURL} />
@@ -91,32 +134,6 @@ const isDev = import.meta.env.DEV;
     <meta property="og:url" content={Astro.url} />
     <slot name="head" />
     <ClientRouter />
-    <script is:inline>
-      const getThemePreference = () => {
-        if (
-          typeof localStorage !== "undefined" &&
-          localStorage.getItem("theme")
-        ) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      };
-
-      const applyTheme = (root = document.documentElement) => {
-        const theme = getThemePreference();
-
-        root.classList.toggle("dark", theme === "dark");
-      };
-
-      document.addEventListener("astro:before-swap", (event) => {
-        // Keep the incoming page dark throughout the DOM swap.
-        applyTheme(event.newDocument.documentElement);
-      });
-      applyTheme();
-    </script>
   </head>
   <body>
     <main id="main-content">
@@ -277,10 +294,7 @@ const isDev = import.meta.env.DEV;
 
   /* Light theme */
   :root {
-    color-scheme: light;
-    --color-text: #1a1a1a;
     --color-text-sub: rgba(26, 26, 26, 0.75);
-    --color-background: #ffffff;
     --color-primary: #0056b3;
     --color-surface: #f4f4f4;
     --color-card: #bebebe;
@@ -300,10 +314,7 @@ const isDev = import.meta.env.DEV;
 
   /* Dark theme */
   .dark {
-    color-scheme: dark;
-    --color-text: #f0f0f0;
     --color-text-sub: rgba(240, 240, 240, 0.75);
-    --color-background: #1a1a1a;
     --color-primary: #8ab4f8;
     --color-surface: #2c2c2c;
     --color-card: #696969;

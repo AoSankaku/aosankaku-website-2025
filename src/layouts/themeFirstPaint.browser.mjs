@@ -23,13 +23,15 @@ export default async function verifyThemeFirstPaint(page, baseURL = "http://127.
         },
       });
       let cssWaiters = [];
+      let holdCSS = true;
       const releaseCSS = () => {
+        holdCSS = false;
         for (const resolve of cssWaiters) resolve();
         cssWaiters = [];
       };
       await context.route("**/*", async route => {
         if (new URL(route.request().url()).origin !== baseURL) return route.abort();
-        if (route.request().resourceType() === "stylesheet") {
+        if (holdCSS && route.request().resourceType() === "stylesheet") {
           await new Promise(resolve => cssWaiters.push(resolve));
         }
         return route.continue();
@@ -42,6 +44,7 @@ export default async function verifyThemeFirstPaint(page, baseURL = "http://127.
       await cdp.send("Network.setCacheDisabled", { cacheDisabled: true });
       try {
         for (const kind of ["initial", "reload"]) {
+          holdCSS = true;
           if (kind === "initial") await tab.goto(baseURL + "/blog/", { waitUntil: "commit" });
           else await tab.reload({ waitUntil: "commit" });
           await tab.waitForFunction(
