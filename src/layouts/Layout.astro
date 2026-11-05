@@ -105,13 +105,16 @@ const isDev = import.meta.env.DEV;
         return "light";
       };
 
-      const applyTheme = () => {
+      const applyTheme = (root = document.documentElement) => {
         const theme = getThemePreference();
 
-        document.documentElement.classList.toggle("dark", theme === "dark");
+        root.classList.toggle("dark", theme === "dark");
       };
 
-      document.addEventListener("astro:after-swap", applyTheme);
+      document.addEventListener("astro:before-swap", (event) => {
+        // Keep the incoming page dark throughout the DOM swap.
+        applyTheme(event.newDocument.documentElement);
+      });
       applyTheme();
     </script>
   </head>
@@ -274,6 +277,7 @@ const isDev = import.meta.env.DEV;
 
   /* Light theme */
   :root {
+    color-scheme: light;
     --color-text: #1a1a1a;
     --color-text-sub: rgba(26, 26, 26, 0.75);
     --color-background: #ffffff;
@@ -296,6 +300,7 @@ const isDev = import.meta.env.DEV;
 
   /* Dark theme */
   .dark {
+    color-scheme: dark;
     --color-text: #f0f0f0;
     --color-text-sub: rgba(240, 240, 240, 0.75);
     --color-background: #1a1a1a;
