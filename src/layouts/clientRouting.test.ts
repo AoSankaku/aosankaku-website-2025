@@ -66,18 +66,6 @@ describe("Astro client-side routing", () => {
     }
   });
 
-  test("article TOC setup reads the current page data on every navigation", async () => {
-    const articleLayout = await readProjectFile(
-      "src/layouts/BlogArticleLayout.astro",
-    );
-
-    expect(articleLayout).toContain("data-toc={JSON.stringify(toc)}");
-    expect(articleLayout).toContain('container.dataset.toc');
-    expect(articleLayout).toMatch(
-      /document\.addEventListener\([\s\S]*?["']astro:page-load["'][\s\S]*?setupTableOfContents/,
-    );
-  });
-
   test("analytics records client-routed page views without duplicating the initial view", async () => {
     const analytics = await readProjectFile(
       "src/components/GoogleAnalytics.astro",

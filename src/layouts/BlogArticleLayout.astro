@@ -5,7 +5,6 @@ import Footer from "@/components/Footer.astro";
 import { Image } from "astro:assets";
 import formatToJSTDate from "@/utils/formatToJSTDate";
 import { Icon } from "astro-icon/components";
-import type { MarkdownHeading } from "astro";
 import { getIcon } from "@/consts/categoryIcons";
 import ShareButtons from "@/components/ShareButtons.astro";
 import GooglePreferredSourceButton from "@/components/GooglePreferredSourceButton.astro";
@@ -25,12 +24,11 @@ import {
 
 interface Props {
   frontmatter: any;
-  headings: MarkdownHeading[];
   slug?: string;
   postId?: string;
 }
 
-const { frontmatter, headings, slug, postId = slug } = Astro.props;
+const { frontmatter, slug, postId = slug } = Astro.props;
 const routeInfo = postId ? getBlogRouteInfo(postId) : null;
 const articleLocale = (routeInfo?.locale ?? Astro.currentLocale) as Lang;
 const tagFilterLocale = articleLocale;
@@ -61,10 +59,6 @@ const originalDateTime = frontmatter.originalDate
 const lastUpdateDateTime = frontmatter.lastUpdate
   ? toDateTime(frontmatter.lastUpdate)
   : undefined;
-
-// TOC generation
-
-const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 ---
 
 <Layout
@@ -120,7 +114,7 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
       }
     </div>
   </div>
-  <div class="container" data-toc={JSON.stringify(toc)}>
+  <div class="container">
     <ShareButtons
       title={frontmatter.title}
       locale={articleLocale}
@@ -150,53 +144,6 @@ const toc = headings.filter((h) => h.depth > 1 && h.depth < 4);
 </Layout>
 
 <script>
-  function setupTableOfContents() {
-    const container = document.getElementById("article-toc-trigger");
-    if (!container || container.dataset.tocInitialized === "true") return;
-
-    const articleContainer = container.closest<HTMLElement>("[data-toc]");
-    const toc = JSON.parse(articleContainer?.dataset.toc ?? "[]") as Array<{
-      depth: number;
-      slug: string;
-      text: string;
-    }>;
-    if (toc.length === 0) return;
-
-    container.dataset.tocInitialized = "true";
-    const title = document.createElement("h2");
-    title.innerText = "Table of Contents";
-
-    const list = document.createElement("ul");
-    toc.forEach((h) => {
-      const li = document.createElement("li");
-      li.style.marginLeft = `${(h.depth - 2) * 20}px`;
-      const a = document.createElement("a");
-      a.href = `#${h.slug}`;
-
-      // --- Emoji Integration ---
-      // Find the actual heading in the article using the slug
-      const actualHeading = document.getElementById(h.slug);
-      if (actualHeading) {
-        // Clone content to remove any nested anchor links (#)
-        const clone = actualHeading.cloneNode(true);
-        clone.querySelectorAll("a, .anchor-link").forEach((el) => el.remove());
-        // Set HTML to preserve the <img> tags from twemoji
-        a.innerHTML = clone.innerHTML;
-      } else {
-        a.innerText = h.text; // Fallback to plain text
-      }
-      // -------------------------
-
-      li.appendChild(a);
-      list.appendChild(li);
-    });
-
-    container.appendChild(title);
-    container.appendChild(list);
-  }
-
-  document.addEventListener("astro:page-load", setupTableOfContents);
-
   const katexFontUrls = import.meta.glob("/node_modules/katex/dist/fonts/*", {
     eager: true,
     import: "default",

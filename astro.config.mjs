@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
+import { unified, rehypeHeadingIds } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import sitemap from '@astrojs/sitemap';
@@ -8,6 +8,8 @@ import icon from 'astro-icon';
 import yaml from '@rollup/plugin-yaml'
 import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/i18n/locales';
 import { remarkTocTrigger } from './src/plugins/remark-toc-trigger.mjs';
+import { rehypeTableOfContents } from './src/plugins/rehype-table-of-contents.mjs';
+import rehypeRaw from 'rehype-raw';
 import { remarkYoutube } from './src/plugins/remark-youtube.mjs';
 import gemoji from 'remark-gemoji';
 import { rehypeTwemoji } from 'rehype-twemoji';
@@ -122,6 +124,11 @@ export default defineConfig({
           className: 'twemoji'
         }],
         [rehypeExpressiveCode, expressiveCodeOptions],
+        // Resolve existing anchors and raw HTML before building the static TOC.
+        // Keep this after emoji processing so heading URLs stay unchanged.
+        rehypeHeadingIds,
+        rehypeRaw,
+        rehypeTableOfContents,
       ],
       gfm: true,
     }),

@@ -25,12 +25,11 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const routeInfo = getBlogRouteInfo(post.id);
-const { Content, headings } = await render(post);
+const { Content } = await render(post);
 ---
 
 <BlogArticleLayout
   frontmatter={post.data}
-  headings={headings}
   slug={routeInfo.slug}
   postId={post.id}
 >
