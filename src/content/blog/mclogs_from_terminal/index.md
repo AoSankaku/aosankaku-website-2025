@@ -2,6 +2,7 @@
 title: "【mclo.gs】サーバーのログファイルを簡単に共有する方法【更新あり】"
 category: "Minecraft"
 date: "2024-08-28T12:00:00+09:00"
+lastUpdate: "2026-11-06T21:00:00+09:00"
 desc: "マインクラフトでクラッシュした時やトラブルが起きた時に、簡単にクラッシュログやサーバーログなどのファイルを共有するやり方を紹介する記事です。長いログにも対応しています。"
 tags:
   - Ubuntu
@@ -11,27 +12,39 @@ tags:
 
 `latest.log`のところをログファイルへのパスに置き換えれば使えます。
 
-### 最新版（更新：2025/01/02）
+### 令和最新版（更新：2026/11/06）
 
-「旧版」のコマンドを使用すると、ログが長すぎる場合`-bash: /usr/bin/curl: Argument list too long`と出て怒られてしまうことがあります。以下のコマンドは、AI（Microsoft Copilot）を引き続き問い詰めて出させたものです。なぜか動くのですが、原理不明です。そのうち追記します。
-
-```bash
-curl -X POST --data-urlencode "content@latest.log" https://api.mclo.gs/1/log
-```
-
-### 旧版
-
-短いログ（例えばほぼバニラのサーバーなど）の場合は、こちらでも問題なく動作すると思います。
+これが本当の最新版です。`latest.log`以外のgzipファイルでも名前を変えるだけで使え、URLだけ出ます。ちゃっぴーってすげー。
 
 ```bash
-curl -X POST -d "content=$(<latest.log)" https://api.mclo.gs/1/log
+gzip -cdf -- latest.log | curl -sS --data-urlencode 'content@-' https://api.mclo.gs/1/log | grep -oE '"(url|raw)"[[:space:]]*:[[:space:]]*"[^"]+"' | cut -d '"' -f4
 ```
 
-または
+<details>
+  <summary>古いコマンド</summary>
 
-```bash
-curl -X POST -d "content=$(cat latest.log)" https://api.mclo.gs/1/log
-```
+  ### 最新版（更新：2025/01/02）
+
+  「旧版」のコマンドを使用すると、ログが長すぎる場合`-bash: /usr/bin/curl: Argument list too long`と出て怒られてしまうことがあります。以下のコマンドは、AI（Microsoft Copilot）を引き続き問い詰めて出させたものです。なぜか動くのですが、原理不明です。そのうち追記します。
+
+  ```bash
+  curl -X POST --data-urlencode "content@latest.log" https://api.mclo.gs/1/log
+  ```
+
+  ### 初期版
+
+  短いログ（例えばほぼバニラのサーバーなど）の場合は、こちらでも問題なく動作すると思います。
+
+  ```bash
+  curl -X POST -d "content=$(<latest.log)" https://api.mclo.gs/1/log
+  ```
+
+  または
+
+  ```bash
+  curl -X POST -d "content=$(cat latest.log)" https://api.mclo.gs/1/log
+  ```
+</details>
 
 ## どうしてログファイルの共有を簡単にやりたかったのか
 
